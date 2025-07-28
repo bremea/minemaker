@@ -69,3 +69,5 @@ const app = new Elysia({ adapter: node() })
 	.listen(3000);
 
 export type ElysiaApp = typeof app;
+
+console.log('API running :3');
