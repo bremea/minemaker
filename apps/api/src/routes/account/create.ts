@@ -2,7 +2,7 @@ import { ElysiaApp } from '$src/app';
 import { t } from 'elysia';
 import bcrypt from 'bcrypt';
 import { createAccount, InternalApiError } from '@minemaker/db';
-import * as disposableEmail from 'disposable-email-domains-js'
+import * as disposableEmail from 'disposable-email-domains-js';
 
 export default (app: ElysiaApp) =>
 	app.post(
@@ -14,13 +14,13 @@ export default (app: ElysiaApp) =>
 
 			// check if email is disposable
 			if (disposableEmail.isDisposableEmail(body.email)) {
-				throw new InternalApiError(400, 'Invalid email')
+				throw new InternalApiError(400, 'Invalid email');
 			}
 
 			const hash = await bcrypt.hash(body.password, 10);
 			const id = snowflake.nextId().toString();
 
-			const account = await createAccount(id, body.email, hash);
+			const account = await createAccount(id, body.email, hash, body.birthday);
 
 			return account;
 		},
@@ -36,7 +36,8 @@ export default (app: ElysiaApp) =>
 					minLength: 8,
 					error: 'Invalid password',
 					pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).{8,200}$'
-				})
+				}),
+				birthday: t.Date()
 			})
 		}
 	);

@@ -6,3 +6,5 @@ export { default as Tags } from './tags.svelte';
 export { default as ImageUpload } from './imageUpload.svelte';
 export { default as FileSelect } from './fileSelect.svelte';
 export { default as SelectFilter } from './selectFilter.svelte';
+export { default as DOB } from './dob.svelte';
+export { default as Password } from './password.svelte';

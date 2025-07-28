@@ -171,10 +171,10 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	return user;
 }
 
-export async function createAccount(id: string, email: string, password: string): Promise<Account> {
+export async function createAccount(id: string, email: string, password: string, birthday: Date): Promise<Account> {
 	const res = await pool.query({
-		text: `INSERT INTO accounts (id, email, password) VALUES($1, $2, $3) RETURNING *`,
-		values: [id, email, password]
+		text: `INSERT INTO accounts (id, email, password, birthday) VALUES($1, $2, $3, $4) RETURNING *`,
+		values: [id, email, password, birthday]
 	});
 
 	return parseDatabaseAccount(res.rows[0]);
