@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input, LinkButton, NavLink } from '@minemaker/ui';
+	import { Input, Link, LinkButton, NavLink } from '@minemaker/ui';
 
 	import FluentTextAlignJustify20Filled from '~icons/fluent/text-align-justify-20-filled';
 	import FluentDismiss20Filled from '~icons/fluent/dismiss-20-filled';
@@ -54,7 +54,8 @@
 	</div>
 
 	<div class="flex w-max items-center space-x-4">
-		<LinkButton color="darkgray" size="md" href="/login">Login</LinkButton>
+		<Link href="/login" class="no-underline! text-white hover:underline!">Login</Link>
+		<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
 		{#if !sideNavOpen}
 			<button
 				class="cursor-pointer"
