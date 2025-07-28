@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
+	import { signup } from '$lib/api-client';
 	import { Button, Input, Error, Link, DOB, Password } from '@minemaker/ui';
 	import { Turnstile } from 'svelte-turnstile';
 
 	let email = $state('');
 	let password = $state('');
+	let birthdayMonth = $state(new Date().getMonth());
+	let birthdayDay = $state(new Date().getDate());
+	let birthdayYear = $state(new Date().getFullYear());
 	let error = $state('');
 	let loading = $state(false);
+	let waitingForTurnstile = $state(true);
+	let turnstileToken: string | undefined = $state();
 	let allOk = $state(false);
 
 	const pattern = /^(?=(?:.*\d){2,})(?=.*[^\w\s])(?=.*[a-z])(?=.*[A-Z]).{8,255}$/;
@@ -19,7 +25,15 @@
 	];
 
 	const callback = (e: CustomEvent<{ token: string; preClearanceObtained: boolean }>) => {
-		console.log(e.detail);
+		waitingForTurnstile = false;
+		turnstileToken = e.detail.token;
+	};
+
+	const waitForTurnstile = async () => {
+		while (waitingForTurnstile) {
+			await new Promise(async (re) => setTimeout(re, 100));
+		}
+		return;
 	};
 
 	async function onsubmit(event: SubmitEvent) {
@@ -29,11 +43,31 @@
 			return;
 		}
 		loading = true;
+		error = '';
+
+		if (waitingForTurnstile) {
+			await waitForTurnstile();
+		}
+		
+		if (turnstileToken == undefined) {
+			loading = false;
+			error = 'CAPTCHA failed - try again';
+			return;
+		}
 
 		try {
-			//await login(PUBLIC_API_URL, email, password, true);
+			const res = await signup({
+				email,
+				password,
+				birthday: `${birthdayYear}-${birthdayMonth.toString().padStart(2, '0')}-${birthdayDay.toString().padStart(2, '0')}`,
+				turnstileToken
+			});
 
-			window.location.href = '/';
+			if (res.status != 200) {
+				throw res.data;
+			}
+
+			//window.location.href = '/';
 		} catch (e: any) {
 			loading = false;
 			if (e.message) {
@@ -57,10 +91,12 @@
 		<Error>{error}</Error>
 	{/if}
 	<Input type="email" class="w-full" required bind:value={email}>Email Address</Input>
-	<Password class="w-full" required bind:value={password} regex={pattern} rules={passwordRules}
-		>Password</Password
-	>
-	<DOB required>Birthday</DOB>
+	<Password class="w-full" required bind:value={password} regex={pattern} rules={passwordRules}>
+		Password
+	</Password>
+	<DOB required bind:month={birthdayMonth} bind:day={birthdayDay} bind:year={birthdayYear}>
+		Birthday
+	</DOB>
 	<Turnstile
 		siteKey={env.PUBLIC_CF_TURNSTILE_KEY}
 		theme="dark"
@@ -75,8 +111,8 @@
 		acknowledge the <Link href="/policies/privacy" target="_blank">Privacy Policy</Link>.
 	</p>
 	<div class="flex w-full">
-		<Button {loading} type="submit" class="w-full! justify-center" disabled={!allOk}
-			>Create Account</Button
-		>
+		<Button {loading} type="submit" class="w-full! justify-center" disabled={!allOk}>
+			Create Account
+		</Button>
 	</div>
 </form>

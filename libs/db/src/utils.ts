@@ -1,3 +1,5 @@
+import { t, TSchema } from 'elysia';
+
 export class InternalApiError extends Error {
 	public status: number;
 
@@ -8,4 +10,8 @@ export class InternalApiError extends Error {
 		super(message);
 		this.status = status;
 	}
+}
+
+export function generateBitfieldValues(max: number) {
+	return t.Union(Array.from({ length: max + 1 }, (_, i) => t.Literal(i)) as TSchema[]);
 }

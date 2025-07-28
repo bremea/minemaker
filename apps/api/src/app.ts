@@ -8,6 +8,7 @@ import Cloudflare from 'cloudflare';
 import { InternalApiError } from '@minemaker/db';
 import { S3Client } from '@aws-sdk/client-s3';
 import node from '@elysiajs/node';
+import { swagger } from '@elysiajs/swagger';
 import 'dotenv/config';
 
 const app = new Elysia({ adapter: node() })
@@ -33,6 +34,7 @@ const app = new Elysia({ adapter: node() })
 			}
 		}
 	})
+	.use(swagger())
 	.use(cors({ origin: '*' }))
 	.use(ip())
 	.use(

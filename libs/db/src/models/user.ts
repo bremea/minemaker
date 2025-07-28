@@ -1,26 +1,6 @@
 import { pool } from '../connection';
-import { InternalApiError } from '../utils';
-
-export interface User {
-	account?: Account;
-	player?: Player;
-}
-
-export interface Account {
-	id: string;
-	email: string;
-	emailVerified: boolean;
-	lastLogin: string;
-}
-
-export interface Player {
-	uuid: string;
-	username: string;
-	flags: PlayerFlags;
-	permissions: PlayerPermissions;
-	firstLogin: string;
-	lastSeen: string;
-}
+import { generateBitfieldValues, InternalApiError } from '../utils';
+import { t } from 'elysia';
 
 enum PlayerFlags {
 	None = 0,
@@ -40,6 +20,34 @@ enum PlayerPermissions {
 	StudioBan = 1 << 5, // 100000
 	All = ~(~0 << 6) // 111111
 }
+
+export const AccountSchema = t.Object({
+	id: t.String(),
+	email: t.String(),
+	emailVerified: t.Boolean(),
+	lastLogin: t.Date()
+});
+
+const PlayerFlagsSchema = generateBitfieldValues(PlayerFlags.All);
+const PlayerPermissionsSchema = generateBitfieldValues(PlayerPermissions.All);
+
+export const PlayerSchema = t.Object({
+	uuid: t.String(),
+	username: t.String(),
+	flags: PlayerFlagsSchema,
+	permissions: PlayerPermissionsSchema,
+	firstLogin: t.Date(),
+	lastSeen: t.Date()
+});
+
+export const UserSchema = t.Object({
+	account: t.Optional(AccountSchema),
+	player: t.Optional(PlayerSchema)
+});
+
+export type User = typeof UserSchema.static;
+export type Account = typeof AccountSchema.static;
+export type Player = typeof PlayerSchema.static;
 
 function parseDatabasePlayer(data: any): Player {
 	return {
@@ -171,7 +179,12 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	return user;
 }
 
-export async function createAccount(id: string, email: string, password: string, birthday: Date): Promise<Account> {
+export async function createAccount(
+	id: string,
+	email: string,
+	password: string,
+	birthday: Date
+): Promise<Account> {
 	const res = await pool.query({
 		text: `INSERT INTO accounts (id, email, password, birthday) VALUES($1, $2, $3, $4) RETURNING *`,
 		values: [id, email, password, birthday]

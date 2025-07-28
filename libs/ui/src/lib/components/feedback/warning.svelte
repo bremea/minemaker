@@ -22,7 +22,7 @@
 </script>
 
 <div
-	class={`group relative flex h-min w-full items-center justify-center space-x-2 rounded-full ${sizeClasses[componentSize]} border-2 border-yellow-600 bg-gray-700 outline-0 ${className}`}
+	class={`group relative flex h-min w-full items-center justify-center space-x-2 rounded-lg ${sizeClasses[componentSize]} border-2 border-yellow-600 bg-gray-700 outline-0 ${className}`}
 	{...others}
 >
 	<FluentWarning20Filled class="text-yellow-600 size-8" />

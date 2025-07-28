@@ -1,7 +1,8 @@
 {
 	"name": "@minemaker/api",
 	"packageManager": "yarn@4.9.2",
-	"private": true,
+	"module": "./src/app.ts",
+	"main": "./src/app.ts",
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {

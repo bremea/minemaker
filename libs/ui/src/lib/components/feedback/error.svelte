@@ -22,7 +22,7 @@
 </script>
 
 <div
-	class={`group relative flex h-min w-full items-center text-red-400 rounded-full ${sizeClasses[componentSize]} border-2 border-red-400 outline-0 ${className}`}
+	class={`group relative flex h-min w-full items-center text-red-400 rounded-lg ${sizeClasses[componentSize]} border-2 border-red-400 outline-0 ${className}`}
 	{...others}
 >
 	<FluentErrorCircle20Filled class="size-8 min-h-8 min-w-8 mr-2" />
