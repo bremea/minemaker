@@ -1,7 +1,11 @@
 {
 	"name": "@minemaker/db",
-	"module": "src/index.ts",
+	"module": "./src/index.ts",
 	"main": "./src/index.ts",
 	"version": "0.0.1",
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@types/pg": "^8.15.4",
+		"pg": "^8.16.3"
+	}
 }

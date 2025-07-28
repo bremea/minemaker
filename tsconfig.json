@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"target": "es2022",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	},
+
+	"files": [],
+	"references": [
+		{
+			"path": "apps/website"
+		},
+		{
+			"path": "apps/api"
+		},
+		{
+			"path": "apps/studio"
+		},
+		{
+			"path": "libs/db"
+		},
+		{
+			"path": "libs/ui"
+		}
+	]
+}

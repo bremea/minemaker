@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"$src": ["src"],
+			"$src/*": ["src/*"],
+			"$lib": ["src/lib"],
+			"$lib/*": ["src/lib/*"],
+			"$types/*": ["src/lib/types/*"]
+		},
+		"target": "ES2022",
+		"module": "preserve",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true
+	}
+}
