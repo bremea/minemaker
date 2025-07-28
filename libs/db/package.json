@@ -1,0 +1,7 @@
+{
+	"name": "@minemaker/db",
+	"module": "src/index.ts",
+	"main": "./src/index.ts",
+	"version": "0.0.1",
+	"type": "module"
+}

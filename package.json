@@ -1,0 +1,19 @@
+{
+	"name": "minemaker",
+	"private": true,
+	"version": "0.0.1",
+	"packageManager": "yarn@4.9.2",
+	"license": "AGPL-3.0-only",
+	"workspaces": [
+		"apps/*",
+		"libs/*"
+	],
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.49.0",
+		"@typescript-eslint/parser": "^5.49.0",
+		"eslint": "^8.33.0",
+		"eslint-config-prettier": "^8.6.0",
+		"prettier": "3.6.2",
+		"typescript": "^4.9.5"
+	}
+}
