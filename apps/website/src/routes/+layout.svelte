@@ -1,7 +1,8 @@
 <script lang="ts">
-	import '../app.css';
+	import { GlobalStyles } from '@minemaker/ui';
 
 	let { children } = $props();
 </script>
 
+<GlobalStyles />
 {@render children()}
