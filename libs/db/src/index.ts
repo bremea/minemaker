@@ -1,2 +1,3 @@
-export * from './connection.js';
-export * from './utils.js';
+export * from './connection';
+export * from './utils';
+export * from './models';
