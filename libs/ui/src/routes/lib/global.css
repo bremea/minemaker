@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+	--color-mm-blue: rgb(0 173 255);
+	--color-mm-blue-light: rgb(102 206 255);
+	--color-mm-purple: rgb(179 114 247);
+	--color-mm-purple-light: rgb(203 157 252);
+}
+
+@layer base {
+	body {
+		@apply bg-gray-800 text-white;
+	}
+}
