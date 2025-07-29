@@ -1,8 +1,9 @@
 import { pool } from '../connection';
-import { generateBitfieldValues, InternalApiError } from '../utils';
+import { InternalApiError } from '../utils';
 import { t } from 'elysia';
+import bcrypt from 'bcrypt';
 
-enum PlayerFlags {
+export enum PlayerFlags {
 	None = 0,
 	Staff = 1 << 0, // 001
 	Partner = 1 << 1, // 010
@@ -10,7 +11,7 @@ enum PlayerFlags {
 	All = ~(~0 << 3) // 111
 }
 
-enum PlayerPermissions {
+export enum PlayerPermissions {
 	None = 0,
 	Warn = 1 << 0, // 000001
 	Mute = 1 << 1, // 000010
@@ -25,17 +26,15 @@ export const AccountSchema = t.Object({
 	id: t.String(),
 	email: t.String(),
 	emailVerified: t.Boolean(),
-	lastLogin: t.Date()
+	lastLogin: t.Date(),
+	gems: t.Number()
 });
-
-const PlayerFlagsSchema = generateBitfieldValues(PlayerFlags.All);
-const PlayerPermissionsSchema = generateBitfieldValues(PlayerPermissions.All);
 
 export const PlayerSchema = t.Object({
 	uuid: t.String(),
 	username: t.String(),
-	flags: PlayerFlagsSchema,
-	permissions: PlayerPermissionsSchema,
+	flags: t.Number({ minimum: PlayerFlags.None, maximum: PlayerFlags.All }),
+	permissions: t.Number({ minimum: PlayerPermissions.None, maximum: PlayerPermissions.All }),
 	firstLogin: t.Date(),
 	lastSeen: t.Date()
 });
@@ -53,8 +52,8 @@ function parseDatabasePlayer(data: any): Player {
 	return {
 		uuid: data.uuid ?? data.mc_uuid,
 		username: data.username,
-		flags: data.flags,
-		permissions: data.permissions,
+		flags: parseInt(data.flags),
+		permissions: parseInt(data.permissions),
 		firstLogin: data.first_login,
 		lastSeen: data.last_seen
 	};
@@ -65,7 +64,8 @@ function parseDatabaseAccount(data: any): Account {
 		id: data.id,
 		email: data.email,
 		emailVerified: data.email_verified,
-		lastLogin: data.last_login
+		lastLogin: data.last_login,
+		gems: data.gems
 	};
 }
 
@@ -76,7 +76,7 @@ export async function getAccountById(id: string): Promise<Account> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No account exists with id ${id}`);
+		throw new InternalApiError(404, `No account exists with id ${id}`);
 	}
 
 	return parseDatabaseAccount(res.rows[0]);
@@ -89,7 +89,7 @@ export async function getPlayerByUUID(uuid: string): Promise<Player> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No player exists with uuid ${uuid}`);
+		throw new InternalApiError(404, `No player exists with uuid ${uuid}`);
 	}
 
 	return parseDatabasePlayer(res.rows[0]);
@@ -98,7 +98,7 @@ export async function getPlayerByUUID(uuid: string): Promise<Player> {
 export async function getUserByAccountId(id: string): Promise<User> {
 	const res = await pool.query({
 		text: `SELECT 
-					u.*,
+					a.*,
 					p.*
 				FROM accounts a
 				LEFT JOIN players p ON a.mc_uuid = p.uuid
@@ -107,7 +107,7 @@ export async function getUserByAccountId(id: string): Promise<User> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No account exists with id ${id}`);
+		throw new InternalApiError(404, `No account exists with id ${id}`);
 	}
 
 	const data = res.rows[0];
@@ -126,7 +126,7 @@ export async function getUserByAccountId(id: string): Promise<User> {
 export async function getUserByAccountEmail(email: string): Promise<User> {
 	const res = await pool.query({
 		text: `SELECT 
-					u.*,
+					a.*,
 					p.*
 				FROM accounts a
 				LEFT JOIN players p ON a.mc_uuid = p.uuid
@@ -135,7 +135,7 @@ export async function getUserByAccountEmail(email: string): Promise<User> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No account exists with email ${email}`);
+		throw new InternalApiError(404, `No account exists with email ${email}`);
 	}
 
 	const data = res.rows[0];
@@ -155,7 +155,7 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	const res = await pool.query({
 		text: `SELECT 
 					p.*,
-					u.*
+					a.*
 				FROM players p
 				LEFT JOIN accounts a ON p.uuid = a.mc_uuid
 				WHERE p.uuid = $1`,
@@ -163,7 +163,7 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No player exists with uuid ${uuid}`);
+		throw new InternalApiError(404, `No player exists with uuid ${uuid}`);
 	}
 
 	const data = res.rows[0];
@@ -191,4 +191,44 @@ export async function createAccount(
 	});
 
 	return parseDatabaseAccount(res.rows[0]);
+}
+
+export async function createPlayer(uuid: string, username: string): Promise<Player> {
+	const res = await pool.query({
+		text: `INSERT INTO players (uuid, username) VALUES($1, $2) RETURNING *`,
+		values: [uuid, username]
+	});
+
+	return parseDatabasePlayer(res.rows[0]);
+}
+
+export async function createOrUpdatePlayer(uuid: string, username: string): Promise<Player> {
+	const res = await pool.query({
+		text: `INSERT INTO players (uuid, username) VALUES ($1, $2) ON CONFLICT (uuid) DO UPDATE SET username = $2 WHERE players.uuid = $1 RETURNING *`,
+		values: [uuid, username]
+	});
+
+	return parseDatabasePlayer(res.rows[0]);
+}
+
+export async function checkAccountPassword(email: string, password: string): Promise<boolean> {
+	const res = await pool.query({
+		text: `SELECT * FROM accounts WHERE email = $1`,
+		values: [email]
+	});
+
+	if (res.rows.length == 0) {
+		throw new InternalApiError(400, `Invalid email or password`);
+	}
+
+	return await bcrypt.compare(password, res.rows[0].password);
+}
+
+export async function linkPlayerToAccount(playerUUID: string, accountId: string): Promise<User> {
+	await pool.query({
+		text: `UPDATE accounts SET mc_uuid = $1 WHERE id = $2`,
+		values: [playerUUID, accountId]
+	});
+
+	return await getUserByPlayerUUID(playerUUID);
 }

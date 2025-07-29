@@ -2,7 +2,7 @@
 	import type { HTMLAnchorAttributes } from 'svelte/elements';
 
 	export interface LinkButtonPropOptions {
-		color: 'blue' | 'purple' | 'gray' | 'darkgray';
+		color: 'blue' | 'purple' | 'gray' | 'darkgray' | 'white';
 		size: 'sm' | 'md' | 'lg' | 'xl';
 	}
 
@@ -16,7 +16,8 @@
 		blue: 'bg-mm-blue hover:bg-mm-blue-light outline-mm-blue text-black',
 		purple: 'bg-mm-purple hover:bg-mm-purple-light outline-mm-purple text-black',
 		gray: 'bg-gray-600 hover:bg-gray-500 outline-gray-600 text-white',
-		darkgray: 'bg-gray-800 hover:bg-gray-700 outline-gray-800 text-white'
+		darkgray: 'bg-gray-800 hover:bg-gray-700 outline-gray-800 text-white',
+		white: 'bg-white hover:bg-gray-200 outline-white text-black'
 	};
 
 	const sizeClasses: { [K in LinkButtonPropOptions['size']]: string } = {

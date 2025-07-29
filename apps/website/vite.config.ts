@@ -13,14 +13,6 @@ export default defineConfig({
 		}),
 		devtoolsJson()
 	],
-	server: {
-		proxy: {
-			'/api': {
-				target: process.env.API_URL!,
-				changeOrigin: true
-			}
-		}
-	},
 	optimizeDeps: {
 		exclude: ['svelte-outside']
 	}

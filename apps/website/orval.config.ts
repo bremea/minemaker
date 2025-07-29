@@ -3,7 +3,13 @@ export default {
 		input: 'http://localhost:3000/swagger/json',
 		output: {
 			target: './src/lib/api-client.ts',
-			client: 'fetch'
+			client: 'fetch',
+			override: {
+				mutator: {
+					path: './src/lib/customFetch.ts',
+					name: 'customFetch'
+				}
+			}
 		}
 	}
 };

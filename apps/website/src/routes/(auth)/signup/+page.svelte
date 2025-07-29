@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import { signup } from '$lib/api-client';
+	import { setUser } from '$lib/state.svelte';
 	import { Button, Input, Error, Link, DOB, Password } from '@minemaker/ui';
 	import { Turnstile } from 'svelte-turnstile';
 
@@ -48,7 +49,7 @@
 		if (waitingForTurnstile) {
 			await waitForTurnstile();
 		}
-		
+
 		if (turnstileToken == undefined) {
 			loading = false;
 			error = 'CAPTCHA failed - try again';
@@ -67,7 +68,7 @@
 				throw res.data;
 			}
 
-			//window.location.href = '/';
+			window.location.href = '/';
 		} catch (e: any) {
 			loading = false;
 			if (e.message) {

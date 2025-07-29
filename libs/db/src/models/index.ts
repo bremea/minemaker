@@ -1,3 +1,6 @@
 export * from './user'
 export * from './ips'
+export * from './game'
+export * from './session'
 export * from './emailConf'
+export * from './link'

@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { getUser } from '$lib/state.svelte';
 	import { Input, Link, LinkButton, NavLink } from '@minemaker/ui';
 
 	import FluentTextAlignJustify20Filled from '~icons/fluent/text-align-justify-20-filled';
 	import FluentDismiss20Filled from '~icons/fluent/dismiss-20-filled';
 	import FluentHome20Filled from '~icons/fluent/home-20-filled';
 	import FluentPaintBrush20Filled from '~icons/fluent/paint-brush-20-filled';
+	import FluentSettings20Filled from '~icons/fluent/settings-20-filled';
 	import FluentSearch20Filled from '~icons/fluent/search-20-filled';
+import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled'
+
+	let user = $derived(getUser());
 
 	let sideNavOpen = $state(false);
 	let topNav: HTMLElement;
@@ -54,8 +59,36 @@
 	</div>
 
 	<div class="flex w-max items-center space-x-4">
-		<Link href="/login" class="no-underline! text-white hover:underline!">Login</Link>
-		<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
+		{#if user.player}
+			{#if user.account}
+				<div class="flex items-center">
+					<img src="/gem.png" alt="Gem icon" class="h-10" />
+					<span class="text-xl font-bold">
+						{user.account.gems}
+					</span>
+				</div>
+			{/if}
+			<a href={`/profile/${user.player.username}`} class="flex h-10 items-center">
+				<img
+					src={`https://mc-heads.net/avatar/${user.player.uuid}`}
+					alt="Player head"
+					title={user.player.username}
+					class="aspect-square size-8 select-none"
+				/>
+			</a>
+		{:else if user.account}
+			<a href={`/link`} class="flex h-10 items-center">
+				<img
+					src="https://mc-heads.net/avatar/MHF_Steve"
+					alt="Player head"
+					title={user.account.email}
+					class="aspect-square size-8 select-none"
+				/>
+			</a>
+		{:else}
+			<Link href="/login" class="no-underline! hover:underline! text-white">Login</Link>
+			<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
+		{/if}
 		{#if !sideNavOpen}
 			<button
 				class="cursor-pointer"
@@ -91,5 +124,29 @@
 			<FluentPaintBrush20Filled class="h-6 w-6" />
 			<span>Studio</span>
 		</NavLink>
+		{#if user.player}
+			<NavLink href="/profile">
+				<img
+					src={`https://mc-heads.net/avatar/${user.player.uuid}`}
+					alt="Player head"
+					title={user.player.username}
+					class="h-6"
+				/>
+				<span>Profile</span>
+			</NavLink>
+		{/if}
+		{#if user.account}
+			<NavLink href="/settings">
+				<FluentSettings20Filled class="h-6 w-6" />
+				<span>Settings</span>
+			</NavLink>
+		{/if}
+		{#if user.account || user.player} 
+
+			<NavLink href="/logout">
+				<FluentArrowExit20Filled class="h-6 w-6 text-red-400" />
+				<span>Log Out</span>
+			</NavLink>
+		{/if}
 	</nav>
 {/if}

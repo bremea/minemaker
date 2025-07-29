@@ -12,6 +12,4 @@ export class InternalApiError extends Error {
 	}
 }
 
-export function generateBitfieldValues(max: number) {
-	return t.Union(Array.from({ length: max + 1 }, (_, i) => t.Literal(i)) as TSchema[]);
-}
+export const UnauthorizedApiError = new InternalApiError(401, 'Unauthorized');

@@ -1,17 +1,14 @@
 import { ElysiaApp } from '$src/app';
-import { InternalServerError, t } from 'elysia';
-import bcrypt from 'bcrypt';
+import { t } from 'elysia';
 import {
-	AccountSchema,
-	createAccount,
-	createEmailVerificationRequest,
+	checkAccountPassword,
+	checkIpTrusted,
 	createSession,
+	getUserByAccountEmail,
 	InternalApiError,
-	trustIp
+	updateTrustedIpLastLogin,
+	UserSchema
 } from '@minemaker/db';
-import * as disposableEmail from 'disposable-email-domains-js';
-import { randomUUID } from 'crypto';
-import { sendEmailConfirmation } from '$src/lib/email/signup';
 import { TokenSchema } from '$src/lib/types';
 
 export default (app: ElysiaApp) =>
@@ -39,49 +36,57 @@ export default (app: ElysiaApp) =>
 				throw new InternalApiError(400, 'CF turnstile failed');
 			}
 
-			// check if email is disposable
-			if (disposableEmail.isDisposableEmail(body.email)) {
-				throw new InternalApiError(400, 'Invalid email');
+			if (!(await checkAccountPassword(body.email, body.password))) {
+				throw new InternalApiError(400, 'Invalid email or password');
 			}
 
-			const hash = await bcrypt.hash(body.password, 10);
-			const id = snowflake.nextId().toString();
+			const user = await getUserByAccountEmail(body.email);
 
-			const account = await createAccount(id, body.email, hash, new Date(body.birthday));
+			if (!user.account) {
+				throw new InternalApiError(400, 'Invalid email or password');
+			}
 
-			await trustIp(id, ip);
+			const ipTrusted = await checkIpTrusted(user.account.id, ip);
 
-			const emailCode = randomUUID();
-			const emailConfUrl = `https://minemaker.net/auth/verify?code=${emailCode}`;
+			if (!ipTrusted) {
+				throw new InternalApiError(400, 'Login from new IP detected - check your email');
+			}
 
-			await createEmailVerificationRequest(body.email, emailCode);
-
-		//	await sendEmailConfirmation(body.email, emailConfUrl);
+			await updateTrustedIpLastLogin(user.account.id, ip);
 
 			const sessionId = snowflake.nextId().toString();
 			const userAgent = headers['User-Agent'] ?? 'Unknown';
 
-			await createSession(sessionId, id, ip, userAgent);
+			await createSession(sessionId, user.account.id, ip, userAgent);
+
+			const accessClaims: any = {
+				exp: Math.floor(Date.now() / 1000) + 60 * 60 // expires in 1 hour
+			};
+
+			if (user.account) {
+				accessClaims.id = user.account.id;
+			}
+
+			if (user.player) {
+				accessClaims.uuid = user.player.uuid;
+			}
+
+			const access = await jwt.sign(accessClaims);
 
 			const refresh = await jwt.sign({
 				id: sessionId,
 				exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 // expires in 30 days
 			});
 
-			const access = await jwt.sign({
-				id,
-				exp: Math.floor(Date.now() / 1000) + 60 * 60 // expires in 1 hour
-			});
-
 			return {
-				account,
+				user,
 				tokens: { refresh, access }
 			};
 		},
 		{
 			detail: {
-				summary: 'Create an account',
-				operationId: 'Signup'
+				summary: 'Login to an account',
+				operationId: 'Login'
 			},
 			body: t.Object({
 				email: t.String({
@@ -91,19 +96,13 @@ export default (app: ElysiaApp) =>
 				}),
 				password: t.String({
 					maxLength: 255,
-					minLength: 8,
-					error: 'Invalid password',
-					pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).{8,200}$'
-				}),
-				birthday: t.String({
-					error: 'Invalid birthday',
-					format: 'date'
+					error: 'Invalid password'
 				}),
 				turnstileToken: t.String({ error: 'Missing turnstile' })
 			}),
 			response: {
 				200: t.Object({
-					account: AccountSchema,
+					user: UserSchema,
 					tokens: TokenSchema
 				})
 			},

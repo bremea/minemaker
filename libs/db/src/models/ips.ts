@@ -33,3 +33,21 @@ export async function trustIp(accountId: string, ip: string): Promise<TrustedIp>
 
 	return parseTrustedIp(res.rows[0]);
 }
+
+export async function checkIpTrusted(accountId: string, ip: string): Promise<boolean> {
+	const res = await pool.query({
+		text: `SELECT 1 FROM trusted_ips WHERE account_id = $1 AND ip = $2`,
+		values: [accountId, ip]
+	});
+
+	return res.rows.length > 0;
+}
+
+export async function updateTrustedIpLastLogin(accountId: string, ip: string): Promise<TrustedIp> {
+	const res = await pool.query({
+		text: `UPDATE trusted_ips SET last_login = now() WHERE account_id = $1 AND ip = $2 RETURNING *`,
+		values: [accountId, ip]
+	});
+
+	return parseTrustedIp(res.rows[0]);
+}

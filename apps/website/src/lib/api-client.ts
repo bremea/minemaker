@@ -5,6 +5,129 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import { customFetch } from './customFetch';
+export type CreateGameBody = {
+  /** @maxLength 255 */
+  name: string;
+  turnstileToken: string;
+};
+
+export type CreateGame200LastUpdated = unknown | string | string | number;
+
+export type CreateGame200Tags = string | string[];
+
+export type CreateGame200 = {
+  id: string;
+  owner: string;
+  name: string;
+  thumbnail?: string;
+  description: string;
+  currentBuildId?: string;
+  discoverable: boolean;
+  lastUpdated: CreateGame200LastUpdated;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  tags: CreateGame200Tags;
+};
+
+export type RefreshAccess200 = {
+  refresh: string;
+  access: string;
+};
+
+export type LoginBody = {
+  /** @maxLength 255 */
+  email: string;
+  /** @maxLength 255 */
+  password: string;
+  turnstileToken: string;
+};
+
+export type Login200UserAccountLastLogin = unknown | string | string | number;
+
+export type Login200UserAccount = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: Login200UserAccountLastLogin;
+  gems: number;
+};
+
+export type Login200UserPlayerFirstLogin = unknown | string | string | number;
+
+export type Login200UserPlayerLastSeen = unknown | string | string | number;
+
+export type Login200UserPlayer = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: Login200UserPlayerFirstLogin;
+  lastSeen: Login200UserPlayerLastSeen;
+};
+
+export type Login200User = {
+  account?: Login200UserAccount;
+  player?: Login200UserPlayer;
+};
+
+export type Login200Tokens = {
+  refresh: string;
+  access: string;
+};
+
+export type Login200 = {
+  user: Login200User;
+  tokens: Login200Tokens;
+};
+
+export type Me200AccountLastLogin = unknown | string | string | number;
+
+export type Me200Account = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: Me200AccountLastLogin;
+  gems: number;
+};
+
+export type Me200PlayerFirstLogin = unknown | string | string | number;
+
+export type Me200PlayerLastSeen = unknown | string | string | number;
+
+export type Me200Player = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: Me200PlayerFirstLogin;
+  lastSeen: Me200PlayerLastSeen;
+};
+
+export type Me200 = {
+  account?: Me200Account;
+  player?: Me200Player;
+};
+
 export type SignupBody = {
   /** @maxLength 255 */
   email: string;
@@ -18,50 +141,296 @@ export type SignupBody = {
   turnstileToken: string;
 };
 
-export type Signup200LastLogin = unknown | string | string | number;
+export type Signup200AccountLastLogin = unknown | string | string | number;
 
-export type Signup200 = {
+export type Signup200Account = {
   id: string;
   email: string;
   emailVerified: boolean;
-  lastLogin: Signup200LastLogin;
+  lastLogin: Signup200AccountLastLogin;
+  gems: number;
 };
 
-export type getApiAuthResponse200 = {
-  data: void
+export type Signup200Tokens = {
+  refresh: string;
+  access: string;
+};
+
+export type Signup200 = {
+  account: Signup200Account;
+  tokens: Signup200Tokens;
+};
+
+export type ConfirmLinkBody = {
+  code: string;
+};
+
+export type ConfirmLink200AccountLastLogin = unknown | string | string | number;
+
+export type ConfirmLink200Account = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: ConfirmLink200AccountLastLogin;
+  gems: number;
+};
+
+export type ConfirmLink200PlayerFirstLogin = unknown | string | string | number;
+
+export type ConfirmLink200PlayerLastSeen = unknown | string | string | number;
+
+export type ConfirmLink200Player = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: ConfirmLink200PlayerFirstLogin;
+  lastSeen: ConfirmLink200PlayerLastSeen;
+};
+
+export type ConfirmLink200 = {
+  account?: ConfirmLink200Account;
+  player?: ConfirmLink200Player;
+};
+
+export type LoginWithMicrosoftParams = {
+code: string;
+};
+
+export type LoginWithMicrosoft200UserAccountLastLogin = unknown | string | string | number;
+
+export type LoginWithMicrosoft200UserAccount = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: LoginWithMicrosoft200UserAccountLastLogin;
+  gems: number;
+};
+
+export type LoginWithMicrosoft200UserPlayerFirstLogin = unknown | string | string | number;
+
+export type LoginWithMicrosoft200UserPlayerLastSeen = unknown | string | string | number;
+
+export type LoginWithMicrosoft200UserPlayer = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: LoginWithMicrosoft200UserPlayerFirstLogin;
+  lastSeen: LoginWithMicrosoft200UserPlayerLastSeen;
+};
+
+export type LoginWithMicrosoft200User = {
+  account?: LoginWithMicrosoft200UserAccount;
+  player?: LoginWithMicrosoft200UserPlayer;
+};
+
+export type LoginWithMicrosoft200Tokens = {
+  refresh: string;
+  access: string;
+};
+
+export type LoginWithMicrosoft200 = {
+  user: LoginWithMicrosoft200User;
+  tokens: LoginWithMicrosoft200Tokens;
+};
+
+export type LinkOauthParams = {
+code: string;
+};
+
+export type LinkOauth200AccountLastLogin = unknown | string | string | number;
+
+export type LinkOauth200Account = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: LinkOauth200AccountLastLogin;
+  gems: number;
+};
+
+export type LinkOauth200PlayerFirstLogin = unknown | string | string | number;
+
+export type LinkOauth200PlayerLastSeen = unknown | string | string | number;
+
+export type LinkOauth200Player = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: LinkOauth200PlayerFirstLogin;
+  lastSeen: LinkOauth200PlayerLastSeen;
+};
+
+export type LinkOauth200 = {
+  account?: LinkOauth200Account;
+  player?: LinkOauth200Player;
+};
+
+/**
+ * @summary Create a new game
+ */
+export type createGameResponse200 = {
+  data: CreateGame200
   status: 200
 }
     
-export type getApiAuthResponseComposite = getApiAuthResponse200;
+export type createGameResponseComposite = createGameResponse200;
     
-export type getApiAuthResponse = getApiAuthResponseComposite & {
+export type createGameResponse = createGameResponseComposite & {
   headers: Headers;
 }
 
-export const getGetApiAuthUrl = () => {
+export const getCreateGameUrl = () => {
 
 
   
 
-  return `/api/auth/`
+  return `/api/games/create/`
 }
 
-export const getApiAuth = async ( options?: RequestInit): Promise<getApiAuthResponse> => {
+export const createGame = async (createGameBody: CreateGameBody, options?: RequestInit): Promise<createGameResponse> => {
   
-  const res = await fetch(getGetApiAuthUrl(),
+  return customFetch<createGameResponse>(getCreateGameUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createGameBody,)
+  }
+);}
+
+
+
+/**
+ * Get a new access token if your current one expired. Use your refresh token instead of the expired access token for the Authorization header.
+ * @summary Get a new access token
+ */
+export type refreshAccessResponse200 = {
+  data: RefreshAccess200
+  status: 200
+}
+    
+export type refreshAccessResponseComposite = refreshAccessResponse200;
+    
+export type refreshAccessResponse = refreshAccessResponseComposite & {
+  headers: Headers;
+}
+
+export const getRefreshAccessUrl = () => {
+
+
+  
+
+  return `/api/auth/refresh/`
+}
+
+export const refreshAccess = async ( options?: RequestInit): Promise<refreshAccessResponse> => {
+  
+  return customFetch<refreshAccessResponse>(getRefreshAccessUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
+);}
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: getApiAuthResponse['data'] = body ? JSON.parse(body) : {}
 
-  return { data, status: res.status, headers: res.headers } as getApiAuthResponse
+
+/**
+ * @summary Login to an account
+ */
+export type loginResponse200 = {
+  data: Login200
+  status: 200
 }
+    
+export type loginResponseComposite = loginResponse200;
+    
+export type loginResponse = loginResponseComposite & {
+  headers: Headers;
+}
+
+export const getLoginUrl = () => {
+
+
+  
+
+  return `/api/account/login/`
+}
+
+export const login = async (loginBody: LoginBody, options?: RequestInit): Promise<loginResponse> => {
+  
+  return customFetch<loginResponse>(getLoginUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      loginBody,)
+  }
+);}
+
+
+
+/**
+ * @summary Get current account info
+ */
+export type meResponse200 = {
+  data: Me200
+  status: 200
+}
+    
+export type meResponseComposite = meResponse200;
+    
+export type meResponse = meResponseComposite & {
+  headers: Headers;
+}
+
+export const getMeUrl = () => {
+
+
+  
+
+  return `/api/account/me/`
+}
+
+export const me = async ( options?: RequestInit): Promise<meResponse> => {
+  
+  return customFetch<meResponse>(getMeUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
 
 
 
@@ -89,7 +458,7 @@ export const getSignupUrl = () => {
 
 export const signup = async (signupBody: SignupBody, options?: RequestInit): Promise<signupResponse> => {
   
-  const res = await fetch(getSignupUrl(),
+  return customFetch<signupResponse>(getSignupUrl(),
   {      
     ...options,
     method: 'POST',
@@ -97,10 +466,124 @@ export const signup = async (signupBody: SignupBody, options?: RequestInit): Pro
     body: JSON.stringify(
       signupBody,)
   }
-)
+);}
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: signupResponse['data'] = body ? JSON.parse(body) : {}
 
-  return { data, status: res.status, headers: res.headers } as signupResponse
+
+/**
+ * @summary Confirm linking Minecraft & Minemaker accounts
+ */
+export type confirmLinkResponse200 = {
+  data: ConfirmLink200
+  status: 200
 }
+    
+export type confirmLinkResponseComposite = confirmLinkResponse200;
+    
+export type confirmLinkResponse = confirmLinkResponseComposite & {
+  headers: Headers;
+}
+
+export const getConfirmLinkUrl = () => {
+
+
+  
+
+  return `/api/account/link/confirm/`
+}
+
+export const confirmLink = async (confirmLinkBody: ConfirmLinkBody, options?: RequestInit): Promise<confirmLinkResponse> => {
+  
+  return customFetch<confirmLinkResponse>(getConfirmLinkUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      confirmLinkBody,)
+  }
+);}
+
+
+
+/**
+ * @summary Login using Microsoft OAuth
+ */
+export type loginWithMicrosoftResponse200 = {
+  data: LoginWithMicrosoft200
+  status: 200
+}
+    
+export type loginWithMicrosoftResponseComposite = loginWithMicrosoftResponse200;
+    
+export type loginWithMicrosoftResponse = loginWithMicrosoftResponseComposite & {
+  headers: Headers;
+}
+
+export const getLoginWithMicrosoftUrl = (params: LoginWithMicrosoftParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/account/link/login/?${stringifiedParams}` : `/api/account/link/login/`
+}
+
+export const loginWithMicrosoft = async (params: LoginWithMicrosoftParams, options?: RequestInit): Promise<loginWithMicrosoftResponse> => {
+  
+  return customFetch<loginWithMicrosoftResponse>(getLoginWithMicrosoftUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Link a Minecraft account via oauth code
+ */
+export type linkOauthResponse200 = {
+  data: LinkOauth200
+  status: 200
+}
+    
+export type linkOauthResponseComposite = linkOauthResponse200;
+    
+export type linkOauthResponse = linkOauthResponseComposite & {
+  headers: Headers;
+}
+
+export const getLinkOauthUrl = (params: LinkOauthParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/account/link/oauth/?${stringifiedParams}` : `/api/account/link/oauth/`
+}
+
+export const linkOauth = async (params: LinkOauthParams, options?: RequestInit): Promise<linkOauthResponse> => {
+  
+  return customFetch<linkOauthResponse>(getLinkOauthUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}

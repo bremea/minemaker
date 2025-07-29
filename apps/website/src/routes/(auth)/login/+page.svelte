@@ -1,23 +1,63 @@
 <script lang="ts">
-	import { Button, Input, Error, Link } from '@minemaker/ui';
+	import { env } from '$env/dynamic/public';
+	import { login } from '$lib/api-client';
+	import { Button, Input, Error, Link, MicrosoftLoginButton, Password } from '@minemaker/ui';
+	import { Turnstile } from 'svelte-turnstile';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 
 	let email = $state('');
 	let password = $state('');
 	let error = $state('');
 	let loading = $state(false);
+	let msLoading = $state(false);
+	let waitingForTurnstile = $state(false);
+	let turnstileToken: string | undefined = $state();
+
+	const callback = (e: CustomEvent<{ token: string; preClearanceObtained: boolean }>) => {
+		waitingForTurnstile = false;
+		turnstileToken = e.detail.token;
+	};
+
+	const waitForTurnstile = async () => {
+		while (waitingForTurnstile) {
+			await new Promise(async (re) => setTimeout(re, 100));
+		}
+		return;
+	};
 
 	async function onsubmit(event: SubmitEvent) {
 		event.preventDefault();
 
-		if (password.length == 0) {
+		if (email.length == 0 || password.length == 0) {
 			return;
 		}
 		loading = true;
+		error = '';
+
+		if (waitingForTurnstile) {
+			await waitForTurnstile();
+		}
+
+		if (turnstileToken == undefined) {
+			loading = false;
+			error = 'CAPTCHA failed - try again';
+			return;
+		}
 
 		try {
-			//await login(PUBLIC_API_URL, email, password, true);
+			const res = await login({
+				email,
+				password,
+				turnstileToken
+			});
 
-			//window.location.href = '/';
+			if (res.status != 200) {
+				throw res.data;
+			}
+
+			window.location.href = '/';
 		} catch (e: any) {
 			loading = false;
 			if (e.message) {
@@ -36,11 +76,19 @@
 	{#if error !== ''}
 		<Error>{error}</Error>
 	{/if}
+	<MicrosoftLoginButton href={data.authLink} />
+	<hr class="text-gray-700" />
 	<Input type="email" class="w-full" required bind:value={email}>Email Address</Input>
 	<div class="flex w-full flex-col space-y-2">
-		<Input type="password" class="w-full" required bind:value={password}>Password</Input>
+		<Password class="w-full" required bind:value={password}>Password</Password>
 		<p class="text-xs text-gray-400"><Link href="/resetpass">Forgot password?</Link></p>
 	</div>
+	<Turnstile
+		siteKey={env.PUBLIC_CF_TURNSTILE_KEY}
+		theme="dark"
+		size="invisible"
+		on:callback={callback}
+	/>
 	<div class="flex w-full flex-col space-y-2">
 		<Button {loading} type="submit" class="w-full! justify-center">Login</Button>
 		<p class="text-xs text-gray-400">
