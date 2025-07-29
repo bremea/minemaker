@@ -1,6 +1,10 @@
 <script lang="ts">
-	import LandingHeader from '$lib/components/landing.svelte';
-	let { data } = $props();
+	import LinkNotice from '$lib/components/linkNotice.svelte';
+	import { getUser } from '$lib/state.svelte';
+
+	let user = $derived(getUser());
 </script>
 
-<LandingHeader />
+{#if user.account && !user.player}
+	<LinkNotice />
+{/if}

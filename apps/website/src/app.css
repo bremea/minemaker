@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+@import '../../../libs/ui/dist/global.css';
 
 @theme {
 	--color-mm-blue: rgb(0 173 255);

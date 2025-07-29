@@ -1,9 +1,13 @@
 <script lang="ts">
 	import FluentChevronRight24Filled from '~icons/fluent/chevron-right-24-filled';
 	import type { LinkButtonPropOptions, LinkButtonProps } from './linkButton.svelte';
-	import LinkButton from './linkButton.svelte';
+	import { LinkButton } from '.';
 
-	let props: LinkButtonProps = $props();
+	export interface ArrowLinkRightProps extends LinkButtonProps {
+		animate?: boolean;
+	}
+
+	let { animate = false, ...props }: ArrowLinkRightProps = $props();
 
 	const textMarginClasses: { [K in LinkButtonPropOptions['size']]: string } = {
 		sm: 'mr-4',
@@ -23,6 +27,6 @@
 <LinkButton {...props}>
 	<span class={textMarginClasses[props.size ?? 'lg']}>{@render props.children?.()}</span>
 	<FluentChevronRight24Filled
-		class={`absolute transition-all ${arrowMarginClasses[props.size ?? 'lg']}`}
+		class={`absolute mt-px transition-all ${arrowMarginClasses[props.size ?? 'lg']} ${animate ? 'motion-safe:animate-bounce-right group-hover:animate-none' : ''}`}
 	/>
 </LinkButton>

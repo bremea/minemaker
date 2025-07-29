@@ -8,7 +8,7 @@
 	import FluentPaintBrush20Filled from '~icons/fluent/paint-brush-20-filled';
 	import FluentSettings20Filled from '~icons/fluent/settings-20-filled';
 	import FluentSearch20Filled from '~icons/fluent/search-20-filled';
-import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled'
+	import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled';
 
 	let user = $derived(getUser());
 
@@ -85,6 +85,7 @@ import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled'
 					class="aspect-square size-8 select-none"
 				/>
 			</a>
+			<LinkButton color="darkgray" size="md" href="/link">Link</LinkButton>
 		{:else}
 			<Link href="/login" class="no-underline! hover:underline! text-white">Login</Link>
 			<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
@@ -141,8 +142,7 @@ import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled'
 				<span>Settings</span>
 			</NavLink>
 		{/if}
-		{#if user.account || user.player} 
-
+		{#if user.account || user.player}
 			<NavLink href="/logout">
 				<FluentArrowExit20Filled class="h-6 w-6 text-red-400" />
 				<span>Log Out</span>

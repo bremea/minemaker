@@ -14,3 +14,42 @@
 		@apply bg-gray-800 text-white;
 	}
 }
+
+@theme {
+	--animate-bounce-right: bounce-right 1.5s infinite;
+
+	@keyframes bounce-right {
+		0%,
+		30%,
+		60%,
+		100% {
+			transform: none;
+			animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+		}
+		15%,
+		45% {
+			transform: translateX(25%);
+			animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+		}
+	}
+}
+
+
+@theme {
+	--animate-bounce-left: bounce-left 1.5s infinite;
+
+	@keyframes bounce-left {
+		0%,
+		30%,
+		60%,
+		100% {
+			transform: none;
+			animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+		}
+		15%,
+		45% {
+			transform: translateX(-25%);
+			animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+		}
+	}
+}
