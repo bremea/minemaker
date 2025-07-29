@@ -2,6 +2,8 @@
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import FluentDismiss12Filled from '~icons/fluent/dismiss-12-filled';
 	import FluentCheckmark12Filled from '~icons/fluent/checkmark-12-filled';
+	import FluentEye20Filled from '~icons/fluent/eye-20-filled';
+	import FluentEyeHide20Filled from '~icons/fluent/eye-hide-20-filled';
 
 	interface Props {
 		size: 'sm' | 'md' | 'lg' | 'xl';
@@ -28,6 +30,8 @@
 		}
 	});
 
+	let showing = $state(false);
+
 	let {
 		children,
 		componentSize = 'md',
@@ -51,16 +55,29 @@
 
 <div class={`flex flex-col ${stretchHeight ? 'h-full' : ''}`}>
 	{#if children != undefined}
-		<label class="mb-1.5 text-base"
-			>{@render children?.()}{#if required}<span class="ml-1 text-red-400">*</span>{/if}</label
-		>
+		<label class="mb-1.5 text-base">
+			{@render children?.()}{#if required}<span class="ml-1 text-red-400">*</span>{/if}
+		</label>
 	{/if}
-	<input
-		bind:value
-		type="password"
-		class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} text-nowrap border-2 ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all hover:shadow-lg focus:bg-gray-900 ${className}`}
-		{...others}
-	/>
+	<div class="relative w-full">
+		<input
+			bind:value
+			type={showing ? 'text' : 'password'}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} text-nowrap border-2 ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all hover:shadow-lg focus:bg-gray-900 ${className}`}
+			{...others}
+		/>
+		<button
+			type="button"
+			onclick={() => (showing = !showing)}
+			class="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-400/50 active:scale-95"
+		>
+			{#if showing}
+				<FluentEyeHide20Filled />
+			{:else}
+				<FluentEye20Filled />
+			{/if}
+		</button>
+	</div>
 	<ul class="pl-2 pt-2">
 		{#each rules as rule}
 			<li class="flex items-end space-x-1 text-sm">
