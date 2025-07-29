@@ -79,7 +79,7 @@
 	<MicrosoftLoginButton href={data.authLink} />
 	<hr class="text-gray-700" />
 	<Input type="email" class="w-full" required bind:value={email}>Email Address</Input>
-	<div class="flex w-full flex-col space-y-2">
+	<div class="flex w-full flex-col">
 		<Password class="w-full" required bind:value={password}>Password</Password>
 		<p class="text-xs text-gray-400"><Link href="/resetpass">Forgot password?</Link></p>
 	</div>
