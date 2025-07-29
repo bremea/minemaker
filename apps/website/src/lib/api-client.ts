@@ -31,6 +31,7 @@ export type CreateGame200 = {
    */
   flags: number;
   tags: CreateGame200Tags;
+  online: number;
 };
 
 export type RefreshAccess200 = {
