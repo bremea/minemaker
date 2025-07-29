@@ -63,7 +63,7 @@
 		<input
 			bind:value
 			type={showing ? 'text' : 'password'}
-			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} text-nowrap border-2 ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all hover:shadow-lg focus:bg-gray-900 ${className}`}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} text-nowrap border-2 ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all hover:shadow-lg focus:bg-gray-900 autofill:bg-gray-900! ${className}`}
 			{...others}
 		/>
 		<button
