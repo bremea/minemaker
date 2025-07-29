@@ -21,7 +21,8 @@ export const GameSchemaWithOwner = t.Object({
 	discoverable: t.Boolean(),
 	lastUpdated: t.Date(),
 	flags: t.Number({ minimum: GameFlags.None, maximum: GameFlags.All }),
-	tags: t.ArrayString()
+	tags: t.ArrayString(),
+	online: t.Number()
 });
 
 export const GameSchemaWithoutOwner = t.Object({
@@ -34,7 +35,8 @@ export const GameSchemaWithoutOwner = t.Object({
 	discoverable: t.Boolean(),
 	lastUpdated: t.Date(),
 	flags: t.Number({ minimum: GameFlags.None, maximum: GameFlags.All }),
-	tags: t.ArrayString()
+	tags: t.ArrayString(),
+	online: t.Number()
 });
 
 export type GameWithOwner = typeof GameSchemaWithOwner.static;
@@ -46,13 +48,14 @@ function parseDatabaseGame(data: any, owner: User | undefined = undefined): Game
 		id: data.id,
 		owner: owner ?? data.owner,
 		name: data.name,
-		thumbnail: data.thumbnail,
+		thumbnail: data.thumbnail ?? 'e2300692-29ef-4ad4-c815-a759c59a8c00', // default thumbnail image id
 		description: data.description,
 		currentBuildId: data.current_build,
 		discoverable: data.discoverable,
 		lastUpdated: data.last_updated,
 		flags: data.flags,
-		tags: data.tags
+		tags: data.tags,
+		online: data.online ?? 0
 	};
 }
 
