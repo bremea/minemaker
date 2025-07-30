@@ -1,7 +1,8 @@
 import { pool } from '../connection';
-import { InternalApiError } from '../utils';
+import { InternalApiError, Nullable } from '../utils';
 import { t } from 'elysia';
-import { AccountSchema, getUserByAccountId, User, UserSchema } from './user';
+import { getUserByAccountId, User, UserSchema } from './user';
+import { TString } from '@sinclair/typebox';
 
 export enum GameFlags {
 	None = 0,
@@ -15,13 +16,13 @@ export const GameSchemaWithOwner = t.Object({
 	id: t.String(),
 	owner: UserSchema,
 	name: t.String(),
-	thumbnail: t.Optional(t.String()),
+	thumbnail: Nullable(t.String()),
 	description: t.String(),
-	currentBuildId: t.Optional(t.String()),
+	currentBuildId: Nullable(t.String()),
 	discoverable: t.Boolean(),
 	lastUpdated: t.Date(),
 	flags: t.Number({ minimum: GameFlags.None, maximum: GameFlags.All }),
-	tags: t.ArrayString(),
+	tags: t.Array(t.String()),
 	online: t.Number()
 });
 
@@ -29,13 +30,13 @@ export const GameSchemaWithoutOwner = t.Object({
 	id: t.String(),
 	owner: t.String(),
 	name: t.String(),
-	thumbnail: t.Optional(t.String()),
+	thumbnail: Nullable(t.String()),
 	description: t.String(),
-	currentBuildId: t.Optional(t.String()),
+	currentBuildId: Nullable(t.String()),
 	discoverable: t.Boolean(),
 	lastUpdated: t.Date(),
 	flags: t.Number({ minimum: GameFlags.None, maximum: GameFlags.All }),
-	tags: t.ArrayString(),
+	tags: t.Array(t.String()),
 	online: t.Number()
 });
 
@@ -53,8 +54,8 @@ function parseDatabaseGame(data: any, owner: User | undefined = undefined): Game
 		currentBuildId: data.current_build,
 		discoverable: data.discoverable,
 		lastUpdated: data.last_updated,
-		flags: data.flags,
-		tags: data.tags,
+		flags: parseInt(data.flags),
+		tags: data.tags ?? [],
 		online: data.online ?? 0
 	};
 }
@@ -87,4 +88,17 @@ export async function createGame(
 	});
 
 	return parseDatabaseGame(res.rows[0]) as GameWithoutOwner;
+}
+
+export async function getUserGamesByCreationDate(
+	id: string,
+	start?: number,
+	limit?: number
+): Promise<GameWithoutOwner[]> {
+	const res = await pool.query({
+		text: `SELECT * FROM games WHERE owner = $1 ORDER BY last_updated DESC LIMIT $2 OFFSET $3`,
+		values: [id, limit ?? 25, start ?? 0]
+	});
+
+	return res.rows.map((e) => parseDatabaseGame(e) as GameWithoutOwner);
 }

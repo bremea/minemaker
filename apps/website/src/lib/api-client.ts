@@ -12,17 +12,19 @@ export type CreateGameBody = {
   turnstileToken: string;
 };
 
-export type CreateGame200LastUpdated = unknown | string | string | number;
+export type CreateGame200Thumbnail = null | string;
 
-export type CreateGame200Tags = string | string[];
+export type CreateGame200CurrentBuildId = null | string;
+
+export type CreateGame200LastUpdated = unknown | string | string | number;
 
 export type CreateGame200 = {
   id: string;
   owner: string;
   name: string;
-  thumbnail?: string;
+  thumbnail: CreateGame200Thumbnail;
   description: string;
-  currentBuildId?: string;
+  currentBuildId: CreateGame200CurrentBuildId;
   discoverable: boolean;
   lastUpdated: CreateGame200LastUpdated;
   /**
@@ -30,7 +32,43 @@ export type CreateGame200 = {
    * @maximum 7
    */
   flags: number;
-  tags: CreateGame200Tags;
+  tags: string[];
+  online: number;
+};
+
+export type GetMyGamesParams = {
+/**
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * @minimum 0
+ */
+start?: number;
+};
+
+export type GetMyGames200ItemThumbnail = null | string;
+
+export type GetMyGames200ItemCurrentBuildId = null | string;
+
+export type GetMyGames200ItemLastUpdated = unknown | string | string | number;
+
+export type GetMyGames200Item = {
+  id: string;
+  owner: string;
+  name: string;
+  thumbnail: GetMyGames200ItemThumbnail;
+  description: string;
+  currentBuildId: GetMyGames200ItemCurrentBuildId;
+  discoverable: boolean;
+  lastUpdated: GetMyGames200ItemLastUpdated;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  tags: string[];
   online: number;
 };
 
@@ -292,6 +330,66 @@ export type LinkOauth200 = {
   player?: LinkOauth200Player;
 };
 
+export type GetGame200OwnerAccountLastLogin = unknown | string | string | number;
+
+export type GetGame200OwnerAccount = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  lastLogin: GetGame200OwnerAccountLastLogin;
+  gems: number;
+};
+
+export type GetGame200OwnerPlayerFirstLogin = unknown | string | string | number;
+
+export type GetGame200OwnerPlayerLastSeen = unknown | string | string | number;
+
+export type GetGame200OwnerPlayer = {
+  uuid: string;
+  username: string;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  /**
+   * @minimum 0
+   * @maximum 63
+   */
+  permissions: number;
+  firstLogin: GetGame200OwnerPlayerFirstLogin;
+  lastSeen: GetGame200OwnerPlayerLastSeen;
+};
+
+export type GetGame200Owner = {
+  account?: GetGame200OwnerAccount;
+  player?: GetGame200OwnerPlayer;
+};
+
+export type GetGame200Thumbnail = null | string;
+
+export type GetGame200CurrentBuildId = null | string;
+
+export type GetGame200LastUpdated = unknown | string | string | number;
+
+export type GetGame200 = {
+  id: string;
+  owner: GetGame200Owner;
+  name: string;
+  thumbnail: GetGame200Thumbnail;
+  description: string;
+  currentBuildId: GetGame200CurrentBuildId;
+  discoverable: boolean;
+  lastUpdated: GetGame200LastUpdated;
+  /**
+   * @minimum 0
+   * @maximum 7
+   */
+  flags: number;
+  tags: string[];
+  online: number;
+};
+
 /**
  * @summary Create a new game
  */
@@ -323,6 +421,48 @@ export const createGame = async (createGameBody: CreateGameBody, options?: Reque
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(
       createGameBody,)
+  }
+);}
+
+
+
+/**
+ * @summary Get games of current user
+ */
+export type getMyGamesResponse200 = {
+  data: GetMyGames200Item[]
+  status: 200
+}
+    
+export type getMyGamesResponseComposite = getMyGamesResponse200;
+    
+export type getMyGamesResponse = getMyGamesResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetMyGamesUrl = (params?: GetMyGamesParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/games/mine/?${stringifiedParams}` : `/api/games/mine/`
+}
+
+export const getMyGames = async (params?: GetMyGamesParams, options?: RequestInit): Promise<getMyGamesResponse> => {
+  
+  return customFetch<getMyGamesResponse>(getGetMyGamesUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
 );}
 
@@ -581,6 +721,41 @@ export const getLinkOauthUrl = (params: LinkOauthParams,) => {
 export const linkOauth = async (params: LinkOauthParams, options?: RequestInit): Promise<linkOauthResponse> => {
   
   return customFetch<linkOauthResponse>(getLinkOauthUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Get a game by ID
+ */
+export type getGameResponse200 = {
+  data: GetGame200
+  status: 200
+}
+    
+export type getGameResponseComposite = getGameResponse200;
+    
+export type getGameResponse = getGameResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetGameUrl = (id: string,) => {
+
+
+  
+
+  return `/api/games/${id}/`
+}
+
+export const getGame = async (id: string, options?: RequestInit): Promise<getGameResponse> => {
+  
+  return customFetch<getGameResponse>(getGetGameUrl(id),
   {      
     ...options,
     method: 'GET'

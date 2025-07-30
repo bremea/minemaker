@@ -31,7 +31,6 @@ export default (app: ElysiaApp) =>
 			const id = snowflake.nextId().toString();
 
 			const newGame = await createGame(id, user.account.id, body.name);
-
 			return newGame;
 		},
 		{

@@ -14,7 +14,7 @@
 
 <a
 	class="group basis-64 rounded-lg p-2 transition-all hover:bg-gray-700 active:scale-95 active:bg-gray-600"
-	href={`game/${game.id}`}
+	{href}
 	{...others}
 >
 	<img
