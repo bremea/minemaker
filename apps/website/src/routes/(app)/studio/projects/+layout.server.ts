@@ -13,3 +13,5 @@ export const load: LayoutServerLoad = async ({ parent }) => {
 
 	return parentData;
 };
+
+export const ssr = false;

@@ -10,7 +10,7 @@
 {:then}
 	{@render children?.()}
 {:catch e}
-	<div class="flex h-full w-full min-h-[200px] flex-col items-center justify-center space-y-2">
+	<div class="flex h-full min-h-[200px] w-full flex-col items-center justify-center space-y-2">
 		<FluentErrorCircle20Filled class="size-12 text-gray-400" />
 		<p class="text-center italic text-gray-400">
 			{#if e.message}
