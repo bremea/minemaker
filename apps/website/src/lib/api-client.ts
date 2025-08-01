@@ -41,11 +41,11 @@ export type GetMyGamesParams = {
  * @minimum 1
  * @maximum 100
  */
-limit?: string | number;
+limit?: number;
 /**
  * @minimum 0
  */
-start?: string | number;
+start?: number;
 };
 
 export type GetMyGames200ItemThumbnail = null | string;

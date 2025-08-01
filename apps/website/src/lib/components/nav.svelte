@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { getUser } from '$lib/state.svelte';
 	import { Input, Link, LinkButton, NavLink } from '@minemaker/ui';
+	import { type User } from '@minemaker/db';
+	import { page } from '$app/state';
+	import GemDisplay from './gemDisplay.svelte';
 
 	import FluentTextAlignJustify20Filled from '~icons/fluent/text-align-justify-20-filled';
 	import FluentDismiss20Filled from '~icons/fluent/dismiss-20-filled';
@@ -9,8 +11,11 @@
 	import FluentSettings20Filled from '~icons/fluent/settings-20-filled';
 	import FluentSearch20Filled from '~icons/fluent/search-20-filled';
 	import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled';
+	import FluentChat20Filled from '~icons/fluent/chat-20-filled';
+	import FluentPeople20Filled from '~icons/fluent/people-20-filled';
+	import FluentBuildingShop20Filled from '~icons/fluent/building-shop-20-filled';
 
-	let user = $derived(getUser());
+	let { user }: { user: User } = $props();
 
 	let sideNavOpen = $state(false);
 	let topNav: HTMLElement;
@@ -33,7 +38,7 @@
 </script>
 
 <nav
-	class="relative z-50 flex h-14 w-screen justify-end bg-gray-600 px-12 py-2 shadow-lg"
+	class={`relative z-50 flex h-14 w-screen justify-end px-12 py-2 ${page.url.pathname.endsWith('/gems') || page.url.pathname.endsWith('/gems/') ? '' : 'bg-gray-700 shadow-lg'}`}
 	bind:this={topNav}
 >
 	<a
@@ -61,12 +66,14 @@
 	<div class="flex w-max items-center space-x-4">
 		{#if user.player}
 			{#if user.account}
-				<div class="flex items-center">
-					<img src="/gem.png" alt="Gem icon" class="h-10" />
-					<span class="text-xl font-bold">
-						{user.account.gems}
-					</span>
-				</div>
+				<a href="/gems">
+					<GemDisplay size="lg">
+						{new Intl.NumberFormat('en-US', {
+							notation: 'compact',
+							maximumFractionDigits: 1
+						}).format(user.account.gems)}
+					</GemDisplay>
+				</a>
 			{/if}
 			<a href={`/profile/${user.player.username}`} class="flex h-10 items-center">
 				<img
@@ -114,17 +121,43 @@
 
 {#if sideNavOpen}
 	<nav
-		class="absolute right-0 z-40 flex h-full w-64 flex-col items-end space-y-2 bg-gray-700 pt-16 shadow-2xl"
+		class="absolute right-0 z-40 flex h-full min-w-[300px] flex-col items-end bg-gray-700 pt-16 shadow-2xl"
 		use:clickOutside
 	>
 		<NavLink href="/">
 			<FluentHome20Filled class="h-6 w-6" />
 			<span>Home</span>
 		</NavLink>
+		<NavLink href="/gems">
+			<img src="/gem.png" alt="Gem icon" class="pointer-events-none aspect-auto h-6 select-none" />
+			<span>Gem Shop</span>
+		</NavLink>
+
+		{#if user.player}
+			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CONNECT</span>
+			<NavLink href="/friends">
+				<FluentPeople20Filled class="h-6 w-6" />
+				<span>Friends</span>
+			</NavLink>
+			<NavLink href="/messages">
+				<FluentChat20Filled class="h-6 w-6" />
+				<span>Messages</span>
+			</NavLink>
+		{/if}
+
+		<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CREATE</span>
 		<NavLink href="/studio/projects">
 			<FluentPaintBrush20Filled class="h-6 w-6" />
 			<span>Studio</span>
 		</NavLink>
+		<NavLink href="/marketplace">
+			<FluentBuildingShop20Filled class="h-6 w-6" />
+			<span>Marketplace</span>
+		</NavLink>
+
+		{#if user.account || user.player}
+			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">ACCOUNT</span>
+		{/if}
 		{#if user.player}
 			<NavLink href="/profile">
 				<img
@@ -142,6 +175,7 @@
 				<span>Settings</span>
 			</NavLink>
 		{/if}
+		<div class="flex-1"></div>
 		{#if user.account || user.player}
 			<NavLink href="/logout">
 				<FluentArrowExit20Filled class="h-6 w-6 text-red-400" />
