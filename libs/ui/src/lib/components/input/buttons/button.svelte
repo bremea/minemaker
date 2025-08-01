@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { HTMLButtonAttributes } from 'svelte/elements';
-	import FluentSpinnerIos16Filled from '~icons/fluent/spinner-ios-16-filled';
+	import SvgSpinnersBlocksShuffle3 from '~icons/svg-spinners/blocks-shuffle-3';
 
 	interface Props {
-		color: 'blue' | 'purple' | 'gray' | 'darkgray' | 'red';
+		color: 'blue' | 'purple' | 'gray' | 'darkgray' | 'red' | 'green';
 		size: 'sm' | 'md' | 'lg' | 'xl';
 	}
 
@@ -19,7 +19,8 @@
 		purple: 'bg-mm-purple enabled:hover:bg-mm-purple-light outline-mm-purple text-black',
 		red: 'bg-red-500 enabled:hover:bg-red-400 outline-red-500 text-black',
 		gray: 'bg-gray-600 enabled:hover:bg-gray-500 outline-gray-600 text-white',
-		darkgray: 'bg-gray-800 enabled:hover:bg-gray-700 outline-gray-800 text-white'
+		darkgray: 'bg-gray-800 enabled:hover:bg-gray-700 outline-gray-800 text-white',
+		green: 'bg-mm-green enabled:hover:bg-mm-green-light outline-mm-green text-black',
 	};
 
 	const sizeClasses: { [K in Props['size']]: string } = {
@@ -45,7 +46,7 @@
 >
 	{#if loading}
 		<div class="flex w-full h-full justify-center items-center left-0 top-0 absolute z-10">
-			<FluentSpinnerIos16Filled class={`animate-spin`} />
+			<SvgSpinnersBlocksShuffle3 />
 		</div>
 	{/if}
 	<div class={`${loading ? 'opacity-0' : 'opacity-100'} flex items-center text-nowrap space-x-2`}>
