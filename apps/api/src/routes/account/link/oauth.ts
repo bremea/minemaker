@@ -170,10 +170,10 @@ export default (app: ElysiaApp) =>
 				operationId: 'LinkOauth'
 			},
 			query: t.Object({
-				code: t.String()
+				code: t.String({ error: 'Missing or invalid code' })
 			}),
 			response: {
-				200: UserSchema // it doesnt like flags?
+				200: UserSchema
 			},
 			parse: 'application/json'
 		}

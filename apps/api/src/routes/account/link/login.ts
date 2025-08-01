@@ -207,7 +207,7 @@ export default (app: ElysiaApp) =>
 				operationId: 'LoginWithMicrosoft'
 			},
 			query: t.Object({
-				code: t.String()
+				code: t.String({ error: 'Missing or invalid code' })
 			}),
 			response: {
 				200: t.Object({
