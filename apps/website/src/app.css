@@ -3,19 +3,43 @@
 @plugin '@tailwindcss/typography';
 @import '../../../libs/ui/dist/global.css';
 
+@font-face {
+	font-family: 'MinecraftTen';
+	src: url('/MinecraftTen.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
 @theme {
+	--font-minecraft: 'MinecraftTen', sans-serif;
+
 	--color-mm-blue: rgb(0 173 255);
 	--color-mm-blue-light: rgb(102 206 255);
 	--color-mm-purple: rgb(179 114 247);
 	--color-mm-purple-light: rgb(203 157 252);
+	--color-mm-green: rgb(5 252 91);
+	--color-mm-green-light: rgb(107 255 159);
+
+	--animate-shimmer: shimmer 2.5s infinite;
 }
 
 @layer base {
 	body {
 		@apply flex min-h-screen flex-col overflow-x-clip bg-gray-800 text-white;
 	}
+
 	.crisp-bg {
 		image-rendering: pixelated;
+	}
+
+	.shimmer {
+		@apply relative inline-block animate-shimmer mask-linear-[-60deg,black_40%,rgb(255,255,255,0.25),black_60%] mask-luminance mask-size-[350%_100%] mask-right;
+	}
+}
+
+@keyframes shimmer {
+	100% {
+		mask-position: left;
 	}
 }
 
