@@ -14,4 +14,5 @@ export class InternalApiError extends Error {
 
 export const UnauthorizedApiError = new InternalApiError(401, 'Unauthorized');
 
-export const Nullable = <T extends TSchema>(schema: T) => t.Union([t.Null(), schema]);
+export const Nullable = <T extends TSchema>(schema: T) =>
+	t.Union([t.Undefined(), t.Null(), schema]);
