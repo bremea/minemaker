@@ -4,43 +4,63 @@
 	let today = new Date();
 </script>
 
-<footer class="w-full space-y-8 bg-gray-900 p-12">
-	<div class="flex w-full justify-between">
-		<ul>
-			<li>Studio</li>
-			<li>
-				<a class="text-gray-400 hover:underline" href="/studio/download">Download</a>
-			</li>
-			<li>
-				<a
-					class="flex items-center space-x-0.5 text-gray-400 hover:underline"
-					href="https://docs.minemaker.net/"
-					target="_blank"
-				>
-					<span>Documentation</span>
-					<FluentOpen20Filled class="size-4" />
-				</a>
-			</li>
-			<li>
-				<a class="text-gray-400 hover:underline" href="/resources/privacy">Partner Program</a>
-			</li>
-		</ul>
-		<ul>
-			<li>Resources</li>
-			<li><a class="text-gray-400 hover:underline" href="/support">Support</a></li>
-			<li><a class="text-gray-400 hover:underline" href="/news">News</a></li>
-		</ul>
-		<ul>
-			<li>Policies</li>
-			<li>
-				<a class="text-gray-400 hover:underline" href="/resources/guidelines">
-					Community Guidelines
-				</a>
-			</li>
-			<li><a class="text-gray-400 hover:underline" href="/resources/terms">Terms of Service</a></li>
-			<li><a class="text-gray-400 hover:underline" href="/resources/privacy">Privacy Policy</a></li>
-			<li><a class="text-gray-400 hover:underline" href="/resources/cookies">Cookies</a></li>
-		</ul>
+<footer class="flex w-full flex-col items-center space-y-8 bg-gray-900 p-12">
+	<div class="flex w-full justify-center space-x-12">
+		<div class="flex max-w-[1000px] flex-1 justify-between">
+			<ul>
+				<li>Platform</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/studio/download">Download</a>
+				</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/privacy">Partner Program</a>
+				</li>
+			</ul>
+			<ul>
+				<li>Studio</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/studio/download">Download</a>
+				</li>
+				<li>
+					<a
+						class="flex items-center space-x-0.5 text-gray-400 hover:underline"
+						href="https://docs.minemaker.net/"
+						target="_blank"
+					>
+						<span>Documentation</span>
+						<FluentOpen20Filled class="size-4" />
+					</a>
+				</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/privacy">Partner Program</a>
+				</li>
+			</ul>
+			<ul>
+				<li>Resources</li>
+				<li><a class="text-gray-400 hover:underline" href="/support">Support</a></li>
+				<li><a class="text-gray-400 hover:underline" href="/news">News</a></li>
+			</ul>
+			<ul>
+				<li>Policies</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/guidelines">
+						Community Guidelines
+					</a>
+				</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/terms">Terms of Service</a>
+				</li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/privacy">Privacy Policy</a>
+				</li>
+				<li><a class="text-gray-400 hover:underline" href="/resources/cookies">Cookies</a></li>
+				<li>
+					<a class="text-gray-400 hover:underline" href="/resources/gameguidelines">
+						Game Guidelines
+					</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 	<div class="w-full space-y-1">
 		<p class="text-center text-xs text-gray-500">
