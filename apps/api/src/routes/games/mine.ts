@@ -1,6 +1,6 @@
 import { ElysiaApp } from '$src/app';
-import { NotFoundError, t } from 'elysia';
-import { GameSchemaWithoutOwner, getUserGamesByCreationDate } from '@minemaker/db';
+import { t } from 'elysia';
+import { GameSchema, getUserGamesByCreationDate } from '@minemaker/db';
 import { requireAccountAndPlayer } from '$src/lib/middleware/auth';
 
 export default (app: ElysiaApp) =>
@@ -24,7 +24,7 @@ export default (app: ElysiaApp) =>
 				start: t.Optional(t.Number({ minimum: 0, error: 'Invalid start position' }))
 			}),
 			response: {
-				200: t.Array(GameSchemaWithoutOwner)
+				200: t.Array(t.Omit(GameSchema, ['owner']))
 			},
 			parse: 'application/json'
 		}

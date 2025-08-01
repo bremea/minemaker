@@ -1,6 +1,6 @@
 import { ElysiaApp } from '$src/app';
 import { t } from 'elysia';
-import { createGame, GameSchemaWithoutOwner, InternalApiError } from '@minemaker/db';
+import { createGame, GameSchema, InternalApiError } from '@minemaker/db';
 import { requireAccountAndPlayer } from '$src/lib/middleware/auth';
 
 export default (app: ElysiaApp) =>
@@ -46,7 +46,7 @@ export default (app: ElysiaApp) =>
 				turnstileToken: t.String({ error: 'Missing turnstile' })
 			}),
 			response: {
-				200: GameSchemaWithoutOwner
+				200: t.Omit(GameSchema, ['owner'])
 			},
 			parse: 'application/json'
 		}

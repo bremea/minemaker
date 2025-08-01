@@ -1,10 +1,5 @@
 import { ElysiaApp } from '$src/app';
-import {
-	GameSchemaWithOwner,
-	GameWithOwner,
-	getGameById,
-	UnauthorizedApiError
-} from '@minemaker/db';
+import { GameSchema, getGameById, UnauthorizedApiError } from '@minemaker/db';
 import { checkAuth } from '$src/lib/middleware/auth';
 import { t } from 'elysia';
 
@@ -12,9 +7,9 @@ export default (app: ElysiaApp) =>
 	app.use(checkAuth).get(
 		'/',
 		async ({ user, params }) => {
-			const game = (await getGameById(params.id, true)) as GameWithOwner;
+			const game = await getGameById(params.id);
 
-			if (!game.discoverable && game.owner.account?.id !== user.account?.id) {
+			if (!game.discoverable && game.owner?.account?.id !== user.account?.id) {
 				throw UnauthorizedApiError;
 			}
 
@@ -26,10 +21,10 @@ export default (app: ElysiaApp) =>
 				operationId: 'GetGame'
 			},
 			params: t.Object({
-				id: t.String()
+				id: t.String({ error: 'Invalid game id' })
 			}),
 			response: {
-				200: GameSchemaWithOwner
+				200: GameSchema
 			},
 			parse: 'application/json'
 		}
