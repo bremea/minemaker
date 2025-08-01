@@ -33,10 +33,19 @@ export const AccountSchema = t.Object({
 export const PlayerSchema = t.Object({
 	uuid: t.String(),
 	username: t.String(),
-	flags: t.Number({ minimum: PlayerFlags.None, maximum: PlayerFlags.All }),
-	permissions: t.Number({ minimum: PlayerPermissions.None, maximum: PlayerPermissions.All }),
+	flags: t.Enum(PlayerFlags),
+	permissions: t.Enum(PlayerPermissions),
 	firstLogin: t.Date(),
 	lastSeen: t.Date()
+});
+
+export const ProfileSchema = t.Object({
+	uuid: t.String(),
+	username: t.String(),
+	flags: t.Enum(PlayerFlags),
+	firstLogin: t.Date(),
+	lastSeen: t.Date(),
+	account: t.Optional(t.Object({ id: t.String() }))
 });
 
 export const UserSchema = t.Object({
@@ -47,6 +56,7 @@ export const UserSchema = t.Object({
 export type User = typeof UserSchema.static;
 export type Account = typeof AccountSchema.static;
 export type Player = typeof PlayerSchema.static;
+export type Profile = typeof ProfileSchema.static;
 
 function parseDatabasePlayer(data: any): Player {
 	return {
@@ -54,18 +64,53 @@ function parseDatabasePlayer(data: any): Player {
 		username: data.username,
 		flags: parseInt(data.flags),
 		permissions: parseInt(data.permissions),
-		firstLogin: data.first_login,
-		lastSeen: data.last_seen
+		firstLogin:
+			typeof data['first_login'] == 'string'
+				? new Date(data['first_login'])
+				: data['first_login'],
+		lastSeen:
+			typeof data['last_seen'] == 'string' ? new Date(data['last_seen']) : data['last_seen']
 	};
 }
 
 function parseDatabaseAccount(data: any): Account {
 	return {
-		id: data.id,
+		id: data.id.toString(),
 		email: data.email,
 		emailVerified: data.email_verified,
-		lastLogin: data.last_login,
+		lastLogin:
+			typeof data['last_login'] == 'string'
+				? new Date(data['last_login'])
+				: data['last_login'],
 		gems: data.gems
+	};
+}
+
+export function parseDatabaseUser(data: any): User {
+	const user: User = {};
+
+	if (data.account) user.account = parseDatabaseAccount(data.account);
+	if (data.player) user.player = parseDatabasePlayer(data.player);
+
+	return user;
+}
+
+export function parseProfileFromUser(user: any): Profile {
+	if (!user.player) throw new InternalApiError(500, 'Tried to get profile of a non-player');
+
+	return {
+		uuid: user.player.uuid,
+		username: user.player.username,
+		flags: parseInt(user.player.flags),
+		firstLogin:
+			typeof user.player['first_login'] == 'string'
+				? new Date(user.player['first_login'])
+				: user.player['first_login'],
+		lastSeen:
+			typeof user.player['last_seen'] == 'string'
+				? new Date(user.player['last_seen'])
+				: user.player['last_seen'],
+		account: user.account ? { id: user.account.id.toString() } : undefined
 	};
 }
 
@@ -97,9 +142,7 @@ export async function getPlayerByUUID(uuid: string): Promise<Player> {
 
 export async function getUserByAccountId(id: string): Promise<User> {
 	const res = await pool.query({
-		text: `SELECT 
-					a.*,
-					p.*
+		text: `SELECT jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) as user
 				FROM accounts a
 				LEFT JOIN players p ON a.mc_uuid = p.uuid
 				WHERE a.id = $1`,
@@ -110,24 +153,12 @@ export async function getUserByAccountId(id: string): Promise<User> {
 		throw new InternalApiError(404, `No account exists with id ${id}`);
 	}
 
-	const data = res.rows[0];
-
-	const user: User = {
-		account: parseDatabaseAccount(data)
-	};
-
-	if (res.rows[0].mc_uuid) {
-		user.player = parseDatabasePlayer(data);
-	}
-
-	return user;
+	return parseDatabaseUser(res.rows[0].user);
 }
 
 export async function getUserByAccountEmail(email: string): Promise<User> {
 	const res = await pool.query({
-		text: `SELECT 
-					a.*,
-					p.*
+		text: `SELECT jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) as user
 				FROM accounts a
 				LEFT JOIN players p ON a.mc_uuid = p.uuid
 				WHERE a.email = $1`,
@@ -138,24 +169,12 @@ export async function getUserByAccountEmail(email: string): Promise<User> {
 		throw new InternalApiError(404, `No account exists with email ${email}`);
 	}
 
-	const data = res.rows[0];
-
-	const user: User = {
-		account: parseDatabaseAccount(data)
-	};
-
-	if (res.rows[0].mc_uuid) {
-		user.player = parseDatabasePlayer(data);
-	}
-
-	return user;
+	return parseDatabaseUser(res.rows[0].user);
 }
 
 export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	const res = await pool.query({
-		text: `SELECT 
-					p.*,
-					a.*
+		text: `SELECT jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) as user
 				FROM players p
 				LEFT JOIN accounts a ON p.uuid = a.mc_uuid
 				WHERE p.uuid = $1`,
@@ -166,17 +185,7 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 		throw new InternalApiError(404, `No player exists with uuid ${uuid}`);
 	}
 
-	const data = res.rows[0];
-
-	const user: User = {
-		player: parseDatabasePlayer(data)
-	};
-
-	if (res.rows[0].mc_uuid) {
-		user.account = parseDatabaseAccount(data);
-	}
-
-	return user;
+	return parseDatabaseUser(res.rows[0].user);
 }
 
 export async function createAccount(
