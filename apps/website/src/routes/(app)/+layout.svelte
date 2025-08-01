@@ -11,7 +11,7 @@
 	});
 </script>
 
-<Navbar />
+<Navbar user={data.user} />
 <div class="h-full grow">
 	{@render children()}
 </div>
