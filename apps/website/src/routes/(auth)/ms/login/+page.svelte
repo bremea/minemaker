@@ -27,7 +27,7 @@
 </script>
 
 <div
-	class="flex h-min min-h-[600px] w-[500px] flex-col items-center justify-center space-y-8 rounded-lg bg-gray-800 p-8 shadow-lg"
+	class="flex h-min min-h-[600px] w-[500px] flex-col items-center justify-center space-y-4 rounded-lg bg-gray-800 p-8 shadow-lg"
 >
 	{#if error != ''}
 		<div class="flex flex-col items-center justify-center space-y-4">
