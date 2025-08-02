@@ -2,6 +2,7 @@
 	import type { HTMLAnchorAttributes } from 'svelte/elements';
 	import FluentCircle20Filled from '~icons/fluent/circle-20-filled';
 	import { type Game } from '@minemaker/db';
+	import GameThumbnail from './gameThumbnail.svelte';
 
 	export interface GameTileProps extends HTMLAnchorAttributes {
 		class?: string;
@@ -17,11 +18,7 @@
 	{href}
 	{...others}
 >
-	<img
-		src={`https://cdn.minemaker.net/images/${game.thumbnail}/thumbnail`}
-		alt="icon"
-		class="w-full rounded"
-	/>
+	<GameThumbnail {game} class="w-full rounded" />
 	<p class="mt-1 text-lg font-bold">{game.name}</p>
 	<p class="mt-1 flex items-center space-x-1.5 text-xs text-gray-400">
 		<FluentCircle20Filled class="size-2.5 text-green-400" />

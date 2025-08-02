@@ -1,5 +1,5 @@
-import { Elysia, NotFoundError } from 'elysia';
-import { jwt, JWTPayloadSpec } from '@elysiajs/jwt';
+import { Elysia } from 'elysia';
+import { jwt } from '@elysiajs/jwt';
 import {
 	Account,
 	getUserByAccountId,
@@ -20,21 +20,27 @@ export const checkAuth = new Elysia()
 		})
 	)
 	.use(bearer())
-	.resolve({ as: 'global' }, async ({ bearer, jwt }): Promise<{ user: User }> => {
-		if (bearer) {
-			return {
-				user: await checkToken(bearer, jwt)
-			};
-		} else {
-			return {
-				user: {}
-			};
+	.resolve(
+		{ as: 'global' },
+		async ({ bearer, jwt }): Promise<{ validAuth: boolean; user: User }> => {
+			if (bearer) {
+				return await checkToken(bearer, jwt);
+			} else {
+				return {
+					validAuth: false,
+					user: {}
+				};
+			}
 		}
-	});
+	);
 
 export const requireAccountOrPlayer = new Elysia()
 	.use(checkAuth)
-	.resolve({ as: 'scoped' }, async ({ user }) => {
+	.resolve({ as: 'scoped' }, async ({ user, validAuth }) => {
+		if (!validAuth) {
+			throw new InternalApiError(401, 'Invalid authorization');
+		}
+
 		if (user.account || user.player) {
 			return { user };
 		} else {
@@ -44,7 +50,11 @@ export const requireAccountOrPlayer = new Elysia()
 
 export const requireAccountAndPlayer = new Elysia()
 	.use(checkAuth)
-	.resolve({ as: 'scoped' }, async ({ user }) => {
+	.resolve({ as: 'scoped' }, async ({ user, validAuth }) => {
+		if (!validAuth) {
+			throw new InternalApiError(401, 'Invalid authorization');
+		}
+
 		if (user.account && user.player) {
 			return { user } as { user: { account: Account; player: Player } };
 		} else {
@@ -54,7 +64,11 @@ export const requireAccountAndPlayer = new Elysia()
 
 export const RequireAccount = new Elysia()
 	.use(checkAuth)
-	.resolve({ as: 'scoped' }, async ({ user }) => {
+	.resolve({ as: 'scoped' }, async ({ user, validAuth }) => {
+		if (!validAuth) {
+			throw new InternalApiError(401, 'Invalid authorization');
+		}
+
 		if (user.account) {
 			return { user } as { user: { account: Account; player: Player | undefined } };
 		} else {
@@ -64,7 +78,11 @@ export const RequireAccount = new Elysia()
 
 export const RequirePlayer = new Elysia()
 	.use(checkAuth)
-	.resolve({ as: 'scoped' }, async ({ user }) => {
+	.resolve({ as: 'scoped' }, async ({ user, validAuth }) => {
+		if (!validAuth) {
+			throw new InternalApiError(401, 'Invalid authorization');
+		}
+
 		if (user.player) {
 			return { user } as { user: { account: Account | undefined; player: Player } };
 		} else {
@@ -77,18 +95,18 @@ const checkToken = async (
 	jwt: {
 		verify: any;
 	}
-): Promise<User> => {
+): Promise<{ validAuth: boolean; user: User }> => {
 	const userData = await jwt.verify(token);
 
 	if (!userData) {
-		return {};
+		return { validAuth: false, user: {} };
 	}
 
 	if (userData.id) {
-		return await getUserByAccountId(userData.id);
+		return { validAuth: true, user: await getUserByAccountId(userData.id) };
 	} else if (userData.uuid) {
-		return await getUserByPlayerUUID(userData.uuid);
+		return { validAuth: true, user: await getUserByPlayerUUID(userData.uuid) };
 	} else {
-		return {};
+		return { validAuth: false, user: {} };
 	}
 };

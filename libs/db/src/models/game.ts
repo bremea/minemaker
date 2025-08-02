@@ -39,7 +39,7 @@ export function parseDatabaseGameExcludeOwner(data: any): Omit<Game, 'owner'> {
 	return {
 		id: data.id.toString(),
 		name: data['name'],
-		thumbnail: data['thumbnail'] ?? 'e2300692-29ef-4ad4-c815-a759c59a8c00', // default thumbnail image id
+		thumbnail: data['thumbnail'],
 		description: data['description'],
 		currentBuild: data['current_build'] ? { id: data['current_build'] } : null,
 		discoverable: data['discoverable'],
@@ -93,10 +93,29 @@ export async function getUserGamesByCreationDate(
 }
 
 export async function checkGameOwner(gameId: string, accountId: string): Promise<boolean> {
-		const res = await pool.query({
+	const res = await pool.query({
 		text: `SELECT 1 FROM games WHERE id = $1 AND owner = $2 LIMIT 1`,
 		values: [gameId, accountId]
 	});
 
 	return res.rows.length > 0;
+}
+
+export function getGameReleaseEligibility(game: Game) {
+	const thumbnailUploaded = typeof game.thumbnail == 'string';
+	const liveBuild = typeof game.currentBuild == 'string';
+
+	return {
+		eligible: thumbnailUploaded && liveBuild,
+		requirements: { thumbnailUploaded, liveBuild }
+	};
+}
+
+export async function makeGameDiscoverable(id: string): Promise<boolean> {
+	const res = await pool.query({
+		text: `UPDATE games SET discoverable = true WHERE id = $1 RETURNING discoverable`,
+		values: [id]
+	});
+
+	return res.rows[0].discoverable;
 }

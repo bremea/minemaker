@@ -42,6 +42,7 @@
 
 <button
 	class={`${colorClasses[color]} group relative flex h-min w-min cursor-pointer items-center space-x-2 rounded-lg ${sizeClasses[size]} text-nowrap outline-0 transition-all enabled:hover:shadow-lg enabled:focus:outline-2 enabled:focus:outline-offset-2 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold ${className}`}
+	disabled={loading || others.disabled}
 	{...others}
 >
 	{#if loading}

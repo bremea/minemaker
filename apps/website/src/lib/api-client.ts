@@ -356,6 +356,17 @@ export type GetGame200 = {
   online: number;
 };
 
+export type GetGameReleaseEligibility200Requirements = {
+  thumbnailUploaded: boolean;
+  liveBuild: boolean;
+};
+
+export type GetGameReleaseEligibility200 = {
+  eligible: boolean;
+  requirements: GetGameReleaseEligibility200Requirements;
+  restrictions?: string[];
+};
+
 /**
  * Type for this artifact
  */
@@ -1019,6 +1030,76 @@ export const getGame = async (id: string, options?: RequestInit): Promise<getGam
   {      
     ...options,
     method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Get's a game's release eligibility
+ */
+export type getGameReleaseEligibilityResponse200 = {
+  data: GetGameReleaseEligibility200
+  status: 200
+}
+    
+export type getGameReleaseEligibilityResponseComposite = getGameReleaseEligibilityResponse200;
+    
+export type getGameReleaseEligibilityResponse = getGameReleaseEligibilityResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetGameReleaseEligibilityUrl = (id: string,) => {
+
+
+  
+
+  return `/api/games/${id}/release/`
+}
+
+export const getGameReleaseEligibility = async (id: string, options?: RequestInit): Promise<getGameReleaseEligibilityResponse> => {
+  
+  return customFetch<getGameReleaseEligibilityResponse>(getGetGameReleaseEligibilityUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Releases a game
+ */
+export type releaseGameResponse200 = {
+  data: boolean
+  status: 200
+}
+    
+export type releaseGameResponseComposite = releaseGameResponse200;
+    
+export type releaseGameResponse = releaseGameResponseComposite & {
+  headers: Headers;
+}
+
+export const getReleaseGameUrl = (id: string,) => {
+
+
+  
+
+  return `/api/games/${id}/release/`
+}
+
+export const releaseGame = async (id: string, options?: RequestInit): Promise<releaseGameResponse> => {
+  
+  return customFetch<releaseGameResponse>(getReleaseGameUrl(id),
+  {      
+    ...options,
+    method: 'POST'
     
     
   }
