@@ -19,23 +19,6 @@ export default (app: ElysiaApp) =>
 				ip = '127.0.0.1';
 			}
 
-			const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					secret: process.env.CF_TURNSTILE_SECRET,
-					response: body.turnstileToken
-				})
-			});
-
-			const data = await res.json();
-
-			if (!data.success) {
-				throw new InternalApiError(400, 'CF turnstile failed');
-			}
-
 			if (!(await checkAccountPassword(body.email, body.password))) {
 				throw new InternalApiError(400, 'Invalid email or password');
 			}
@@ -97,8 +80,7 @@ export default (app: ElysiaApp) =>
 				password: t.String({
 					maxLength: 255,
 					error: 'Invalid password'
-				}),
-				turnstileToken: t.String({ error: 'Missing turnstile' })
+				})
 			}),
 			response: {
 				200: t.Object({

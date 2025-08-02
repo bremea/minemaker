@@ -1,40 +1,17 @@
 <script lang="ts">
-	import { env } from '$env/dynamic/public';
 	import { login } from '$lib/api-client';
 	import {
 		Button,
 		Input,
 		Error,
-		Link,
-		MicrosoftLoginButton,
-		Password,
-		DiscordLoginButton
+		Password
 	} from '@minemaker/ui';
-	import type { PageProps } from './$types';
-
-	let { data }: PageProps = $props();
-
+	
 	let email = $state('');
 	let password = $state('');
 	let error = $state('');
 	let loading = $state(false);
-	let msLoading = $state(false);
-	let dcLoading = $state(false);
-	let waitingForTurnstile = $state(false);
-	let turnstileToken: string | undefined = $state();
-
-	const callback = (e: CustomEvent<{ token: string; preClearanceObtained: boolean }>) => {
-		waitingForTurnstile = false;
-		turnstileToken = e.detail.token;
-	};
-
-	const waitForTurnstile = async () => {
-		while (waitingForTurnstile) {
-			await new Promise(async (re) => setTimeout(re, 100));
-		}
-		return;
-	};
-
+	
 	async function onsubmit(event: SubmitEvent) {
 		event.preventDefault();
 
@@ -44,21 +21,10 @@
 		loading = true;
 		error = '';
 
-		if (waitingForTurnstile) {
-			await waitForTurnstile();
-		}
-
-		if (turnstileToken == undefined) {
-			loading = false;
-			error = 'CAPTCHA failed - try again';
-			return;
-		}
-
 		try {
 			const res = await login({
 				email,
-				password,
-				turnstileToken
+				password
 			});
 
 			if (res.status != 200) {

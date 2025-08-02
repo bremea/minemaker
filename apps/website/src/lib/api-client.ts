@@ -84,7 +84,6 @@ export type LoginBody = {
   email: string;
   /** @maxLength 255 */
   password: string;
-  turnstileToken: string;
 };
 
 export type Login200UserAccountLastLogin = unknown | string | string | number;
