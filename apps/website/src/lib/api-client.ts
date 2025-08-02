@@ -12,26 +12,27 @@ export type CreateGameBody = {
   turnstileToken: string;
 };
 
-export type CreateGame200Thumbnail = null | string;
+export type CreateGame200Thumbnail = unknown | null | string;
 
-export type CreateGame200CurrentBuildId = null | string;
+export type CreateGame200CurrentBuildAnyOf = {
+  id: string;
+};
+
+export type CreateGame200CurrentBuild = unknown | null | CreateGame200CurrentBuildAnyOf;
 
 export type CreateGame200LastUpdated = unknown | string | string | number;
 
+export type CreateGame200Flags = 0 | 1 | 2 | 4 | 7;
+
 export type CreateGame200 = {
   id: string;
-  owner: string;
   name: string;
   thumbnail: CreateGame200Thumbnail;
   description: string;
-  currentBuildId: CreateGame200CurrentBuildId;
+  currentBuild: CreateGame200CurrentBuild;
   discoverable: boolean;
   lastUpdated: CreateGame200LastUpdated;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
+  flags: CreateGame200Flags;
   tags: string[];
   online: number;
 };
@@ -48,26 +49,27 @@ limit?: number;
 start?: number;
 };
 
-export type GetMyGames200ItemThumbnail = null | string;
+export type GetMyGames200ItemThumbnail = unknown | null | string;
 
-export type GetMyGames200ItemCurrentBuildId = null | string;
+export type GetMyGames200ItemCurrentBuildAnyOf = {
+  id: string;
+};
+
+export type GetMyGames200ItemCurrentBuild = unknown | null | GetMyGames200ItemCurrentBuildAnyOf;
 
 export type GetMyGames200ItemLastUpdated = unknown | string | string | number;
 
+export type GetMyGames200ItemFlags = 0 | 1 | 2 | 4 | 7;
+
 export type GetMyGames200Item = {
   id: string;
-  owner: string;
   name: string;
   thumbnail: GetMyGames200ItemThumbnail;
   description: string;
-  currentBuildId: GetMyGames200ItemCurrentBuildId;
+  currentBuild: GetMyGames200ItemCurrentBuild;
   discoverable: boolean;
   lastUpdated: GetMyGames200ItemLastUpdated;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
+  flags: GetMyGames200ItemFlags;
   tags: string[];
   online: number;
 };
@@ -95,6 +97,10 @@ export type Login200UserAccount = {
   gems: number;
 };
 
+export type Login200UserPlayerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type Login200UserPlayerPermissions = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 63;
+
 export type Login200UserPlayerFirstLogin = unknown | string | string | number;
 
 export type Login200UserPlayerLastSeen = unknown | string | string | number;
@@ -102,16 +108,8 @@ export type Login200UserPlayerLastSeen = unknown | string | string | number;
 export type Login200UserPlayer = {
   uuid: string;
   username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
+  flags: Login200UserPlayerFlags;
+  permissions: Login200UserPlayerPermissions;
   firstLogin: Login200UserPlayerFirstLogin;
   lastSeen: Login200UserPlayerLastSeen;
 };
@@ -141,6 +139,10 @@ export type Me200Account = {
   gems: number;
 };
 
+export type Me200PlayerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type Me200PlayerPermissions = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 63;
+
 export type Me200PlayerFirstLogin = unknown | string | string | number;
 
 export type Me200PlayerLastSeen = unknown | string | string | number;
@@ -148,16 +150,8 @@ export type Me200PlayerLastSeen = unknown | string | string | number;
 export type Me200Player = {
   uuid: string;
   username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
+  flags: Me200PlayerFlags;
+  permissions: Me200PlayerPermissions;
   firstLogin: Me200PlayerFirstLogin;
   lastSeen: Me200PlayerLastSeen;
 };
@@ -214,6 +208,10 @@ export type ConfirmLink200Account = {
   gems: number;
 };
 
+export type ConfirmLink200PlayerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type ConfirmLink200PlayerPermissions = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 63;
+
 export type ConfirmLink200PlayerFirstLogin = unknown | string | string | number;
 
 export type ConfirmLink200PlayerLastSeen = unknown | string | string | number;
@@ -221,16 +219,8 @@ export type ConfirmLink200PlayerLastSeen = unknown | string | string | number;
 export type ConfirmLink200Player = {
   uuid: string;
   username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
+  flags: ConfirmLink200PlayerFlags;
+  permissions: ConfirmLink200PlayerPermissions;
   firstLogin: ConfirmLink200PlayerFirstLogin;
   lastSeen: ConfirmLink200PlayerLastSeen;
 };
@@ -254,6 +244,10 @@ export type LoginWithMicrosoft200UserAccount = {
   gems: number;
 };
 
+export type LoginWithMicrosoft200UserPlayerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type LoginWithMicrosoft200UserPlayerPermissions = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 63;
+
 export type LoginWithMicrosoft200UserPlayerFirstLogin = unknown | string | string | number;
 
 export type LoginWithMicrosoft200UserPlayerLastSeen = unknown | string | string | number;
@@ -261,16 +255,8 @@ export type LoginWithMicrosoft200UserPlayerLastSeen = unknown | string | string 
 export type LoginWithMicrosoft200UserPlayer = {
   uuid: string;
   username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
+  flags: LoginWithMicrosoft200UserPlayerFlags;
+  permissions: LoginWithMicrosoft200UserPlayerPermissions;
   firstLogin: LoginWithMicrosoft200UserPlayerFirstLogin;
   lastSeen: LoginWithMicrosoft200UserPlayerLastSeen;
 };
@@ -304,6 +290,10 @@ export type LinkOauth200Account = {
   gems: number;
 };
 
+export type LinkOauth200PlayerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type LinkOauth200PlayerPermissions = 0 | 1 | 2 | 4 | 8 | 16 | 32 | 63;
+
 export type LinkOauth200PlayerFirstLogin = unknown | string | string | number;
 
 export type LinkOauth200PlayerLastSeen = unknown | string | string | number;
@@ -311,16 +301,8 @@ export type LinkOauth200PlayerLastSeen = unknown | string | string | number;
 export type LinkOauth200Player = {
   uuid: string;
   username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
+  flags: LinkOauth200PlayerFlags;
+  permissions: LinkOauth200PlayerPermissions;
   firstLogin: LinkOauth200PlayerFirstLogin;
   lastSeen: LinkOauth200PlayerLastSeen;
 };
@@ -330,47 +312,36 @@ export type LinkOauth200 = {
   player?: LinkOauth200Player;
 };
 
-export type GetGame200OwnerAccountLastLogin = unknown | string | string | number;
+export type GetGame200OwnerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type GetGame200OwnerFirstLogin = unknown | string | string | number;
+
+export type GetGame200OwnerLastSeen = unknown | string | string | number;
 
 export type GetGame200OwnerAccount = {
   id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: GetGame200OwnerAccountLastLogin;
-  gems: number;
-};
-
-export type GetGame200OwnerPlayerFirstLogin = unknown | string | string | number;
-
-export type GetGame200OwnerPlayerLastSeen = unknown | string | string | number;
-
-export type GetGame200OwnerPlayer = {
-  uuid: string;
-  username: string;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
-  /**
-   * @minimum 0
-   * @maximum 63
-   */
-  permissions: number;
-  firstLogin: GetGame200OwnerPlayerFirstLogin;
-  lastSeen: GetGame200OwnerPlayerLastSeen;
 };
 
 export type GetGame200Owner = {
+  uuid: string;
+  username: string;
+  flags: GetGame200OwnerFlags;
+  firstLogin: GetGame200OwnerFirstLogin;
+  lastSeen: GetGame200OwnerLastSeen;
   account?: GetGame200OwnerAccount;
-  player?: GetGame200OwnerPlayer;
 };
 
-export type GetGame200Thumbnail = null | string;
+export type GetGame200Thumbnail = unknown | null | string;
 
-export type GetGame200CurrentBuildId = null | string;
+export type GetGame200CurrentBuildAnyOf = {
+  id: string;
+};
+
+export type GetGame200CurrentBuild = unknown | null | GetGame200CurrentBuildAnyOf;
 
 export type GetGame200LastUpdated = unknown | string | string | number;
+
+export type GetGame200Flags = 0 | 1 | 2 | 4 | 7;
 
 export type GetGame200 = {
   id: string;
@@ -378,16 +349,130 @@ export type GetGame200 = {
   name: string;
   thumbnail: GetGame200Thumbnail;
   description: string;
-  currentBuildId: GetGame200CurrentBuildId;
+  currentBuild: GetGame200CurrentBuild;
   discoverable: boolean;
   lastUpdated: GetGame200LastUpdated;
-  /**
-   * @minimum 0
-   * @maximum 7
-   */
-  flags: number;
+  flags: GetGame200Flags;
   tags: string[];
   online: number;
+};
+
+export type GetBuilds200ItemAuthorFlags = 0 | 1 | 2 | 4 | 7;
+
+export type GetBuilds200ItemAuthorFirstLogin = unknown | string | string | number;
+
+export type GetBuilds200ItemAuthorLastSeen = unknown | string | string | number;
+
+export type GetBuilds200ItemAuthorAccount = {
+  id: string;
+};
+
+export type GetBuilds200ItemAuthor = {
+  uuid: string;
+  username: string;
+  flags: GetBuilds200ItemAuthorFlags;
+  firstLogin: GetBuilds200ItemAuthorFirstLogin;
+  lastSeen: GetBuilds200ItemAuthorLastSeen;
+  account?: GetBuilds200ItemAuthorAccount;
+};
+
+export type GetBuilds200ItemDescription = unknown | null | string;
+
+export type GetBuilds200Item = {
+  id: string;
+  author: GetBuilds200ItemAuthor;
+  description: GetBuilds200ItemDescription;
+  authorIp: string;
+  live: boolean;
+};
+
+export type GetBuild200GameOwnerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type GetBuild200GameOwnerFirstLogin = unknown | string | string | number;
+
+export type GetBuild200GameOwnerLastSeen = unknown | string | string | number;
+
+export type GetBuild200GameOwnerAccount = {
+  id: string;
+};
+
+export type GetBuild200GameOwner = {
+  uuid: string;
+  username: string;
+  flags: GetBuild200GameOwnerFlags;
+  firstLogin: GetBuild200GameOwnerFirstLogin;
+  lastSeen: GetBuild200GameOwnerLastSeen;
+  account?: GetBuild200GameOwnerAccount;
+};
+
+export type GetBuild200GameThumbnail = unknown | null | string;
+
+export type GetBuild200GameCurrentBuildAnyOf = {
+  id: string;
+};
+
+export type GetBuild200GameCurrentBuild = unknown | null | GetBuild200GameCurrentBuildAnyOf;
+
+export type GetBuild200GameLastUpdated = unknown | string | string | number;
+
+export type GetBuild200GameFlags = 0 | 1 | 2 | 4 | 7;
+
+export type GetBuild200Game = {
+  id: string;
+  owner: GetBuild200GameOwner;
+  name: string;
+  thumbnail: GetBuild200GameThumbnail;
+  description: string;
+  currentBuild: GetBuild200GameCurrentBuild;
+  discoverable: boolean;
+  lastUpdated: GetBuild200GameLastUpdated;
+  flags: GetBuild200GameFlags;
+  tags: string[];
+  online: number;
+};
+
+export type GetBuild200AuthorFlags = 0 | 1 | 2 | 4 | 7;
+
+export type GetBuild200AuthorFirstLogin = unknown | string | string | number;
+
+export type GetBuild200AuthorLastSeen = unknown | string | string | number;
+
+export type GetBuild200AuthorAccount = {
+  id: string;
+};
+
+export type GetBuild200Author = {
+  uuid: string;
+  username: string;
+  flags: GetBuild200AuthorFlags;
+  firstLogin: GetBuild200AuthorFirstLogin;
+  lastSeen: GetBuild200AuthorLastSeen;
+  account?: GetBuild200AuthorAccount;
+};
+
+export type GetBuild200Description = unknown | null | string;
+
+export type GetBuild200ArtifactsItemType = 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
+
+export type GetBuild200ArtifactsItemUploaded = unknown | string | string | number;
+
+export type GetBuild200ArtifactsItem = {
+  uuid: string;
+  type: GetBuild200ArtifactsItemType;
+  key: string;
+  checksum: string;
+  uploaded: GetBuild200ArtifactsItemUploaded;
+};
+
+export type GetBuild200 = {
+  id: string;
+  game: GetBuild200Game;
+  author: GetBuild200Author;
+  description: GetBuild200Description;
+  authorIp: string;
+  live: boolean;
+  manifest: unknown;
+  artifacts: GetBuild200ArtifactsItem[];
 };
 
 /**
@@ -756,6 +841,78 @@ export const getGetGameUrl = (id: string,) => {
 export const getGame = async (id: string, options?: RequestInit): Promise<getGameResponse> => {
   
   return customFetch<getGameResponse>(getGetGameUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Gets a game's builds
+ */
+export type getBuildsResponse200 = {
+  data: GetBuilds200Item[]
+  status: 200
+}
+    
+export type getBuildsResponseComposite = getBuildsResponse200;
+    
+export type getBuildsResponse = getBuildsResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetBuildsUrl = (id: string,) => {
+
+
+  
+
+  return `/api/games/${id}/builds/`
+}
+
+export const getBuilds = async (id: string, options?: RequestInit): Promise<getBuildsResponse> => {
+  
+  return customFetch<getBuildsResponse>(getGetBuildsUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+
+
+
+/**
+ * @summary Gets a game build by its id
+ */
+export type getBuildResponse200 = {
+  data: GetBuild200
+  status: 200
+}
+    
+export type getBuildResponseComposite = getBuildResponse200;
+    
+export type getBuildResponse = getBuildResponseComposite & {
+  headers: Headers;
+}
+
+export const getGetBuildUrl = (id: string,
+    buildId: string,) => {
+
+
+  
+
+  return `/api/games/${id}/builds/${buildId}/`
+}
+
+export const getBuild = async (id: string,
+    buildId: string, options?: RequestInit): Promise<getBuildResponse> => {
+  
+  return customFetch<getBuildResponse>(getGetBuildUrl(id,buildId),
   {      
     ...options,
     method: 'GET'
