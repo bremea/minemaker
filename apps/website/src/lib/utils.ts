@@ -1,4 +1,4 @@
-import { MINEMAKER_EPOCH } from '@minemaker/db';
+export const MINEMAKER_EPOCH = 1588651200000n;
 
 export function getRelativeTime(date: Date): string {
 	const units = {
