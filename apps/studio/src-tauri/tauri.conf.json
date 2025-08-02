@@ -1,6 +1,6 @@
 {
 	"$schema": "https://schema.tauri.app/config/2",
-	"productName": "studio",
+	"productName": "MinemakerStudio",
 	"version": "0.1.0",
 	"identifier": "net.minemaker.studio",
 	"build": {
@@ -12,9 +12,13 @@
 	"app": {
 		"windows": [
 			{
-				"title": "studio",
-				"width": 800,
-				"height": 600
+				"title": "Minemaker Studio",
+				"width": 1250,
+				"height": 750,
+				"resizable": true,
+				"maximized": true,
+				"visible": true,
+				"label": "main"
 			}
 		],
 		"security": {
@@ -31,5 +35,8 @@
 			"icons/icon.icns",
 			"icons/icon.ico"
 		]
+	},
+	"plugins": {
+
 	}
 }
