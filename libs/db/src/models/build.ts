@@ -33,6 +33,7 @@ export const BuildSchema = t.Object({
 
 export type Build = typeof BuildSchema.static;
 export type Artifact = typeof ArtifactSchema.static;
+export type BuildOmitGameArtifacts = Omit<Build, 'game' | 'artifacts'>;
 
 function parseDatabaseBuild(data: any): Build {
 	return {
@@ -42,7 +43,7 @@ function parseDatabaseBuild(data: any): Build {
 	};
 }
 
-function parseDatabasePartialBuild(data: any): Omit<Build, 'game' | 'artifacts'> {
+function parseDatabasePartialBuild(data: any): BuildOmitGameArtifacts {
 	return {
 		id: data.id.toString(),
 		description: data['description'],
@@ -124,12 +125,12 @@ export async function getBuildById(id: string): Promise<Build> {
 		throw new InternalApiError(400, `No build exists with id ${id}`);
 	}
 
-	console.log(res.rows[0])
+	console.log(res.rows[0]);
 
 	return parseDatabaseBuild(res.rows[0]);
 }
 
-export async function getBuildsByGameId(id: string): Promise<Omit<Build, 'game' | 'artifacts'>[]> {
+export async function getBuildsByGameId(id: string): Promise<BuildOmitGameArtifacts[]> {
 	const res = await pool.query({
 		text: `SELECT b.*,				
 				jsonb_build_object(
