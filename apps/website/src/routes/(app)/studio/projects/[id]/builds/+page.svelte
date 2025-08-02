@@ -49,11 +49,11 @@
 		<table class="w-full">
 			<thead class="border-b-2 border-gray-600">
 				<tr class="text-left">
-					<th class="w-1/4 pb-4">Build ID</th>
-					<th class="w-1/4">Description</th>
-					<th class="w-1/8">Author</th>
-					<th class="w-1/8">Created</th>
-					<th class="w-1/8"></th>
+					<th class="w-1/4 pb-4 pl-4">Build ID</th>
+					<th class="w-1/4 pb-4">Description</th>
+					<th class="w-1/8 pb-4">Author</th>
+					<th class="w-1/8 pb-4">Created</th>
+					<th class="w-1/8 pb-4"></th>
 				</tr>
 			</thead>
 			<tbody>
