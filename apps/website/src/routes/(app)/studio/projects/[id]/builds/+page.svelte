@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { Button, CopyCode, Link, Loader } from '@minemaker/ui';
-	import { onMount } from 'svelte';
-	import FluentSpinnerIos20Filled from '~icons/fluent/spinner-ios-20-filled';
-	import FluentCheckmarkCircle12Filled from '~icons/fluent/checkmark-circle-12-filled';
+	import { Button, CopyCode, Loader } from '@minemaker/ui';
 	import FluentChevronRight20Filled from '~icons/fluent/chevron-right-20-filled';
-	import FluentErrorCircle12Filled from '~icons/fluent/error-circle-12-filled';
 	import FluentArrowSync20Filled from '~icons/fluent/arrow-sync-20-filled';
 	import { getRelativeTime, getTimeFromSnowflake } from '$lib/utils';
 	import type { BuildOmitGameArtifacts } from '@minemaker/db';
 	import { getBuilds } from '$lib/api-client.js';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	let error = $state('');
@@ -35,6 +32,8 @@
 			}
 		}
 	};
+
+	onMount(fetchBuilds);
 </script>
 
 <div class="flex flex-col space-y-4">
@@ -72,6 +71,11 @@
 					{#each builds as build}
 						<tr class="group h-12 border-b-2 border-gray-600/25 transition-all hover:bg-gray-700">
 							<td class="flex h-12 items-center space-x-2 pl-4">
+								{#if build.live}
+									<span class="bg-mm-blue rounded-lg p-1 px-2 text-sm font-bold text-black">
+										LIVE
+									</span>
+								{/if}
 								<CopyCode value={build.id} canCopy />
 							</td>
 							<td>
@@ -81,7 +85,17 @@
 									<span class="select-none text-gray-500">&mdash;</span>
 								{/if}
 							</td>
-							<td>{getRelativeTime(getTimeFromSnowflake(build.id))}</td>
+							<td>
+								<div class="flex h-12 items-center space-x-2">
+									<img
+										src={`https://mc-heads.net/avatar/${build.author.uuid}`}
+										alt="Player head"
+										title={build.author.username}
+										class="aspect-square size-6 select-none"
+									/>
+									<p>{build.author.username}</p>
+								</div>
+							</td>
 							<td>{getRelativeTime(getTimeFromSnowflake(build.id))}</td>
 							<td class="w-42 h-12">
 								<a

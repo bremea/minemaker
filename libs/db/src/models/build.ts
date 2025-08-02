@@ -5,6 +5,7 @@ import { GameSchema, parseDatabaseGame } from './game';
 import { getUserByAccountId, parseProfileFromUser, Profile, ProfileSchema } from './user';
 
 export enum ArtifactType {
+	Manifest = 'MANIFEST',
 	Plugin = 'PLUGIN',
 	Level = 'LEVEL',
 	ResourcePack = 'RESOURCE_PACK',
@@ -12,12 +13,22 @@ export enum ArtifactType {
 	PluginData = 'PLUGIN_DATA'
 }
 
+export enum ArtifactUploadStatus {
+	Uploading = 'UPLOADING',
+	Available = 'AVAILABLE'
+}
+
+export const ArtifactMetadataSchema = Nullable(t.Union([t.String(), t.Array(t.String())]));
+
 export const ArtifactSchema = t.Object({
 	uuid: t.String(),
+	name: t.String(),
 	type: t.Enum(ArtifactType),
+	status: t.Enum(ArtifactUploadStatus),
 	key: t.String(),
-	checksum: t.String(),
-	uploaded: t.Date()
+	checksum: Nullable(t.String()),
+	uploaded: Nullable(t.Date()),
+	metadata: ArtifactMetadataSchema
 });
 
 export const BuildSchema = t.Object({
@@ -27,12 +38,12 @@ export const BuildSchema = t.Object({
 	description: Nullable(t.String()),
 	authorIp: t.String(),
 	live: t.Boolean(),
-	manifest: t.Any(),
 	artifacts: t.Array(ArtifactSchema)
 });
 
 export type Build = typeof BuildSchema.static;
 export type Artifact = typeof ArtifactSchema.static;
+export type ArtifactMetadata = typeof ArtifactMetadataSchema.static;
 export type BuildOmitGameArtifacts = Omit<Build, 'game' | 'artifacts'>;
 
 function parseDatabaseBuild(data: any): Build {
@@ -49,19 +60,24 @@ function parseDatabasePartialBuild(data: any): BuildOmitGameArtifacts {
 		description: data['description'],
 		author: parseProfileFromUser(data['author']),
 		live: data['live'],
-		authorIp: data['author_ip'],
-		manifest: data['manifest']
+		authorIp: data['author_ip']
 	};
 }
 
 function parseDatabaseArtifact(data: any): Artifact {
 	return {
 		uuid: data['uuid'],
+		name: data['name'],
 		type: data['type'],
 		key: data['key'],
 		checksum: data['checksum'],
-		uploaded:
-			typeof data['uploaded'] == 'string' ? new Date(data['uploaded']) : data['uploaded']
+		status: data['status'],
+		uploaded: data['uploaded']
+			? typeof data['uploaded'] == 'string'
+				? new Date(data['uploaded'])
+				: data['uploaded']
+			: undefined,
+		metadata: data['metadata']
 	};
 }
 
@@ -151,4 +167,58 @@ export async function getBuildsByGameId(id: string): Promise<BuildOmitGameArtifa
 	});
 
 	return res.rows.map((b) => parseDatabasePartialBuild(b));
+}
+
+export async function createBuild(
+	id: string,
+	gameId: string,
+	authorId: string,
+	authorIp: string,
+	description: string | null
+): Promise<BuildOmitGameArtifacts> {
+	const res = await pool.query({
+		text: `WITH build AS 
+					(INSERT INTO builds (id, game_id, author_id, author_ip, description) VALUES($1, $2, $3, $4, $5) RETURNING *) 
+				SELECT b.*,
+				jsonb_build_object(
+					'account', to_jsonb(au),
+					'player', to_jsonb(ap)
+				) AS author,
+
+				COALESCE(g.current_build = b.id, false) AS live
+
+				FROM build b
+
+				LEFT JOIN accounts au ON au.id = b.author_id
+				LEFT JOIN players ap ON ap.uuid = au.mc_uuid
+				LEFT JOIN games g ON g.id = b.game_id`,
+		values: [id, gameId, authorId, authorIp, description]
+	});
+
+	return parseDatabasePartialBuild(res.rows[0]);
+}
+
+export async function createArtifact(
+	buildId: string,
+	uuid: string,
+	name: string,
+	type: string,
+	key: string,
+	metadata: any | null
+): Promise<Artifact> {
+	const res = await pool.query({
+		text: `INSERT INTO artifacts (uuid, name, type, key, metadata) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+		values: [uuid, name, type, key, metadata]
+	});
+
+	await linkArtifactToBuild(buildId, uuid);
+
+	return parseDatabaseArtifact(res.rows[0]);
+}
+
+export async function linkArtifactToBuild(buildId: string, artifactUUID: string): Promise<void> {
+	await pool.query({
+		text: `INSERT INTO build_artifacts (build_id, artifact_uuid) VALUES ($1, $2)`,
+		values: [buildId, artifactUUID]
+	});
 }
