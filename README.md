@@ -1,3 +1,7 @@
+<div align="center" style="background-color: #fff3cd; padding: 1em; border: 1px solid #ffeeba; border-radius: 6px; color: #856404; font-weight: bold;">
+🚧 Minemaker is a currently a work in progress. The website will be unavailable until it reaches a more stable version. You are welcome to browse and contribute to this repo in the meantime :)
+</div>
+
 <p align="center">
   <p align="center">
    <img height="100" src="assets/logo.png" alt="Logo">
