@@ -356,6 +356,170 @@ export type GetGame200 = {
   online: number;
 };
 
+/**
+ * Type for this artifact
+ */
+export type CreateBuildBodyArtifactsItemType = 'MANIFEST' | 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
+
+export type CreateBuildBodyArtifactsItemMetadataAnyOf = string | string[];
+
+export type CreateBuildBodyArtifactsItemMetadata = unknown | null | CreateBuildBodyArtifactsItemMetadataAnyOf;
+
+export type CreateBuildBodyArtifactsItem = {
+  /** Name for this artifact */
+  name: string;
+  /** Type for this artifact */
+  type: CreateBuildBodyArtifactsItemType;
+  metadata?: CreateBuildBodyArtifactsItemMetadata;
+};
+
+export type CreateBuildBody = {
+  /**
+   * Optional description for the build
+   * @maxLength 255
+   */
+  description?: string;
+  /** An array of artifacts associated with this build */
+  artifacts: CreateBuildBodyArtifactsItem[];
+};
+
+export type CreateBuild200BuildGameOwnerFlags = 0 | 1 | 2 | 4 | 7;
+
+export type CreateBuild200BuildGameOwnerFirstLogin = unknown | string | string | number;
+
+export type CreateBuild200BuildGameOwnerLastSeen = unknown | string | string | number;
+
+export type CreateBuild200BuildGameOwnerAccount = {
+  id: string;
+};
+
+export type CreateBuild200BuildGameOwner = {
+  uuid: string;
+  username: string;
+  flags: CreateBuild200BuildGameOwnerFlags;
+  firstLogin: CreateBuild200BuildGameOwnerFirstLogin;
+  lastSeen: CreateBuild200BuildGameOwnerLastSeen;
+  account?: CreateBuild200BuildGameOwnerAccount;
+};
+
+export type CreateBuild200BuildGameThumbnail = unknown | null | string;
+
+export type CreateBuild200BuildGameCurrentBuildAnyOf = {
+  id: string;
+};
+
+export type CreateBuild200BuildGameCurrentBuild = unknown | null | CreateBuild200BuildGameCurrentBuildAnyOf;
+
+export type CreateBuild200BuildGameLastUpdated = unknown | string | string | number;
+
+export type CreateBuild200BuildGameFlags = 0 | 1 | 2 | 4 | 7;
+
+export type CreateBuild200BuildGame = {
+  id: string;
+  owner: CreateBuild200BuildGameOwner;
+  name: string;
+  thumbnail: CreateBuild200BuildGameThumbnail;
+  description: string;
+  currentBuild: CreateBuild200BuildGameCurrentBuild;
+  discoverable: boolean;
+  lastUpdated: CreateBuild200BuildGameLastUpdated;
+  flags: CreateBuild200BuildGameFlags;
+  tags: string[];
+  online: number;
+};
+
+export type CreateBuild200BuildAuthorFlags = 0 | 1 | 2 | 4 | 7;
+
+export type CreateBuild200BuildAuthorFirstLogin = unknown | string | string | number;
+
+export type CreateBuild200BuildAuthorLastSeen = unknown | string | string | number;
+
+export type CreateBuild200BuildAuthorAccount = {
+  id: string;
+};
+
+export type CreateBuild200BuildAuthor = {
+  uuid: string;
+  username: string;
+  flags: CreateBuild200BuildAuthorFlags;
+  firstLogin: CreateBuild200BuildAuthorFirstLogin;
+  lastSeen: CreateBuild200BuildAuthorLastSeen;
+  account?: CreateBuild200BuildAuthorAccount;
+};
+
+export type CreateBuild200BuildDescription = unknown | null | string;
+
+export type CreateBuild200BuildArtifactsItemType = 'MANIFEST' | 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
+
+export type CreateBuild200BuildArtifactsItemStatus = 'UPLOADING' | 'AVAILABLE';
+
+export type CreateBuild200BuildArtifactsItemChecksum = unknown | null | string;
+
+export type CreateBuild200BuildArtifactsItemUploadedAnyOf = unknown | string | string | number;
+
+export type CreateBuild200BuildArtifactsItemUploaded = unknown | null | CreateBuild200BuildArtifactsItemUploadedAnyOf;
+
+export type CreateBuild200BuildArtifactsItemMetadataAnyOf = string | string[];
+
+export type CreateBuild200BuildArtifactsItemMetadata = unknown | null | CreateBuild200BuildArtifactsItemMetadataAnyOf;
+
+export type CreateBuild200BuildArtifactsItem = {
+  uuid: string;
+  name: string;
+  type: CreateBuild200BuildArtifactsItemType;
+  status: CreateBuild200BuildArtifactsItemStatus;
+  key: string;
+  checksum: CreateBuild200BuildArtifactsItemChecksum;
+  uploaded: CreateBuild200BuildArtifactsItemUploaded;
+  metadata: CreateBuild200BuildArtifactsItemMetadata;
+};
+
+export type CreateBuild200Build = {
+  id: string;
+  game: CreateBuild200BuildGame;
+  author: CreateBuild200BuildAuthor;
+  description: CreateBuild200BuildDescription;
+  authorIp: string;
+  live: boolean;
+  artifacts: CreateBuild200BuildArtifactsItem[];
+};
+
+export type CreateBuild200ArtifactsItemAllOfType = 'MANIFEST' | 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
+
+export type CreateBuild200ArtifactsItemAllOfStatus = 'UPLOADING' | 'AVAILABLE';
+
+export type CreateBuild200ArtifactsItemAllOfChecksum = unknown | null | string;
+
+export type CreateBuild200ArtifactsItemAllOfUploadedAnyOf = unknown | string | string | number;
+
+export type CreateBuild200ArtifactsItemAllOfUploaded = unknown | null | CreateBuild200ArtifactsItemAllOfUploadedAnyOf;
+
+export type CreateBuild200ArtifactsItemAllOfMetadataAnyOf = string | string[];
+
+export type CreateBuild200ArtifactsItemAllOfMetadata = unknown | null | CreateBuild200ArtifactsItemAllOfMetadataAnyOf;
+
+export type CreateBuild200ArtifactsItemAllOf = {
+  uuid: string;
+  name: string;
+  type: CreateBuild200ArtifactsItemAllOfType;
+  status: CreateBuild200ArtifactsItemAllOfStatus;
+  key: string;
+  checksum: CreateBuild200ArtifactsItemAllOfChecksum;
+  uploaded: CreateBuild200ArtifactsItemAllOfUploaded;
+  metadata: CreateBuild200ArtifactsItemAllOfMetadata;
+};
+
+export type CreateBuild200ArtifactsItemAllOfNine = {
+  uploadUrl: string;
+};
+
+export type CreateBuild200ArtifactsItem = CreateBuild200ArtifactsItemAllOf & CreateBuild200ArtifactsItemAllOfNine;
+
+export type CreateBuild200 = {
+  build: CreateBuild200Build;
+  artifacts: CreateBuild200ArtifactsItem[];
+};
+
 export type GetBuilds200ItemAuthorFlags = 0 | 1 | 2 | 4 | 7;
 
 export type GetBuilds200ItemAuthorFirstLogin = unknown | string | string | number;
@@ -451,16 +615,29 @@ export type GetBuild200Author = {
 
 export type GetBuild200Description = unknown | null | string;
 
-export type GetBuild200ArtifactsItemType = 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
+export type GetBuild200ArtifactsItemType = 'MANIFEST' | 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' | 'DATA_PACK' | 'PLUGIN_DATA';
 
-export type GetBuild200ArtifactsItemUploaded = unknown | string | string | number;
+export type GetBuild200ArtifactsItemStatus = 'UPLOADING' | 'AVAILABLE';
+
+export type GetBuild200ArtifactsItemChecksum = unknown | null | string;
+
+export type GetBuild200ArtifactsItemUploadedAnyOf = unknown | string | string | number;
+
+export type GetBuild200ArtifactsItemUploaded = unknown | null | GetBuild200ArtifactsItemUploadedAnyOf;
+
+export type GetBuild200ArtifactsItemMetadataAnyOf = string | string[];
+
+export type GetBuild200ArtifactsItemMetadata = unknown | null | GetBuild200ArtifactsItemMetadataAnyOf;
 
 export type GetBuild200ArtifactsItem = {
   uuid: string;
+  name: string;
   type: GetBuild200ArtifactsItemType;
+  status: GetBuild200ArtifactsItemStatus;
   key: string;
-  checksum: string;
+  checksum: GetBuild200ArtifactsItemChecksum;
   uploaded: GetBuild200ArtifactsItemUploaded;
+  metadata: GetBuild200ArtifactsItemMetadata;
 };
 
 export type GetBuild200 = {
@@ -470,7 +647,6 @@ export type GetBuild200 = {
   description: GetBuild200Description;
   authorIp: string;
   live: boolean;
-  manifest: unknown;
   artifacts: GetBuild200ArtifactsItem[];
 };
 
@@ -845,6 +1021,43 @@ export const getGame = async (id: string, options?: RequestInit): Promise<getGam
     method: 'GET'
     
     
+  }
+);}
+
+
+
+/**
+ * @summary Creates a new game build
+ */
+export type createBuildResponse200 = {
+  data: CreateBuild200
+  status: 200
+}
+    
+export type createBuildResponseComposite = createBuildResponse200;
+    
+export type createBuildResponse = createBuildResponseComposite & {
+  headers: Headers;
+}
+
+export const getCreateBuildUrl = (id: string,) => {
+
+
+  
+
+  return `/api/games/${id}/builds/create/`
+}
+
+export const createBuild = async (id: string,
+    createBuildBody: CreateBuildBody, options?: RequestInit): Promise<createBuildResponse> => {
+  
+  return customFetch<createBuildResponse>(getCreateBuildUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createBuildBody,)
   }
 );}
 
