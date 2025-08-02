@@ -6,7 +6,7 @@
 	import FluentGrid20Filled from '~icons/fluent/grid-20-filled';
 	import FluentEdit20Filled from '~icons/fluent/edit-20-filled';
 	import FluentDataHistogram20Filled from '~icons/fluent/data-histogram-20-filled';
-	import FluentCart20Filled from '~icons/fluent/cart-20-filled';
+	import FluentMoney20Filled from '~icons/fluent/money-20-filled';
 	import FluentPersonLock20Filled from '~icons/fluent/person-lock-20-filled';
 	import FluentKey20Filled from '~icons/fluent/key-20-filled';
 	import FluentGavel20Filled from '~icons/fluent/gavel-20-filled';
@@ -58,12 +58,12 @@
 						<span>Analytics</span>
 					</NavLink>
 					<NavLink href={`/studio/projects/${project.id}/store`}>
-						<FluentCart20Filled class="h-6 w-6" />
-						<span>Store</span>
+						<FluentMoney20Filled class="h-6 w-6" />
+						<span>Monetization</span>
 					</NavLink>
 					<NavLink href={`/studio/projects/${project.id}/db`}>
 						<FluentDatabase20Filled class="h-6 w-6" />
-						<span>K/V Database</span>
+						<span>Database</span>
 					</NavLink>
 					<NavLink href={`/studio/projects/${project.id}/access`}>
 						<FluentPersonLock20Filled class="h-6 w-6" />
