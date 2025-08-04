@@ -2,21 +2,8 @@ import { pool } from '../connection';
 import { InternalApiError, Nullable } from '../utils';
 import { t } from 'elysia';
 import { GameSchema, parseDatabaseGame } from './game';
-import { getUserByAccountId, parseProfileFromUser, Profile, ProfileSchema } from './user';
-
-export enum ArtifactType {
-	Manifest = 'MANIFEST',
-	Plugin = 'PLUGIN',
-	Level = 'LEVEL',
-	ResourcePack = 'RESOURCE_PACK',
-	DataPack = 'DATA_PACK',
-	PluginData = 'PLUGIN_DATA'
-}
-
-export enum ArtifactUploadStatus {
-	Uploading = 'UPLOADING',
-	Available = 'AVAILABLE'
-}
+import { parseProfileFromUser, ProfileSchema } from './user';
+import { ArtifactType, ArtifactUploadStatus } from '../enums';
 
 export const ArtifactMetadataSchema = Nullable(t.Union([t.String(), t.Array(t.String())]));
 
@@ -46,10 +33,10 @@ export type Artifact = typeof ArtifactSchema.static;
 export type ArtifactMetadata = typeof ArtifactMetadataSchema.static;
 export type BuildOmitGameArtifacts = Omit<Build, 'game' | 'artifacts'>;
 
-function parseDatabaseBuild(data: any): Build {
+async function parseDatabaseBuild(data: any): Promise<Build> {
 	return {
 		...parseDatabasePartialBuild(data),
-		game: parseDatabaseGame(data['game']),
+		game: (await parseDatabaseGame(data['game'])),
 		artifacts: data['artifacts'].map((a: any) => parseDatabaseArtifact(a))
 	};
 }
@@ -88,7 +75,7 @@ export async function getArtifactByUUID(uuid: string): Promise<Artifact> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No artifact exists with uuid ${uuid}`);
+		throw new InternalApiError(404, `No artifact exists with uuid ${uuid}`);
 	}
 
 	return parseDatabaseArtifact(res.rows[0]);
@@ -138,12 +125,10 @@ export async function getBuildById(id: string): Promise<Build> {
 	});
 
 	if (res.rows.length == 0) {
-		throw new InternalApiError(400, `No build exists with id ${id}`);
+		throw new InternalApiError(404, `No build exists with id ${id}`);
 	}
 
-	console.log(res.rows[0]);
-
-	return parseDatabaseBuild(res.rows[0]);
+	return await parseDatabaseBuild(res.rows[0]);
 }
 
 export async function getBuildsByGameId(id: string): Promise<BuildOmitGameArtifacts[]> {

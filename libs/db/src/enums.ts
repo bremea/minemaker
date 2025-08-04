@@ -24,3 +24,30 @@ export enum GameFlags {
 	Reserved = 1 << 2, // 100
 	All = ~(~0 << 3) // 111
 }
+
+export enum ArtifactType {
+	Manifest = 'MANIFEST',
+	Plugin = 'PLUGIN',
+	Level = 'LEVEL',
+	ResourcePack = 'RESOURCE_PACK',
+	DataPack = 'DATA_PACK',
+	PluginData = 'PLUGIN_DATA'
+}
+
+export enum ArtifactUploadStatus {
+	Uploading = 'UPLOADING',
+	Available = 'AVAILABLE'
+}
+
+export enum GameInstanceType {
+	Public = 'PUBLIC',
+	FriendsOfFriends = 'FRIENDS_OF_FRIENDS',
+	FriendsOnly = 'FRIENDS_ONLY',
+	InviteOnly = 'INVITE_ONLY'
+}
+
+export enum GameInstanceStatus {
+	Starting = 'STARTING',
+	Ready = 'READY',
+	Closing = 'CLOSING'
+}

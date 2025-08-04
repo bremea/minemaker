@@ -2,8 +2,10 @@ import { ElysiaApp } from '$src/app';
 import {
 	Game,
 	GameSchema,
+	getPlayerPresence,
 	getProfileByPlayerUsername,
 	getUserDiscoverableGamesByCreationDate,
+	PresenceSchema,
 	ProfileSchema
 } from '@minemaker/db';
 import { t } from 'elysia';
@@ -12,10 +14,12 @@ export default (app: ElysiaApp) =>
 	app.get(
 		'/',
 		async ({ params }) => {
+			const player = await getProfileByPlayerUsername(params.username);
+
 			const profile = {
-				...(await getProfileByPlayerUsername(params.username)),
+				...player,
 				creations: [] as Array<Omit<Game, 'owner'>>,
-				presence: undefined
+				presence: await getPlayerPresence(player.uuid)
 			};
 
 			if (profile.account) {
@@ -39,7 +43,7 @@ export default (app: ElysiaApp) =>
 					ProfileSchema,
 					t.Object({
 						creations: t.Array(t.Omit(GameSchema, ['owner'])),
-						presence: t.Any()
+						presence: t.Optional(PresenceSchema)
 					})
 				])
 			},

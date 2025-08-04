@@ -1,4 +1,4 @@
-import { pool } from '../connection';
+import { pool, valkey } from '../connection';
 import { InternalApiError, Nullable } from '../utils';
 import { t } from 'elysia';
 import { parseProfileFromUser, ProfileSchema } from './user';
@@ -20,14 +20,21 @@ export const GameSchema = t.Object({
 
 export type Game = typeof GameSchema.static;
 
-export function parseDatabaseGame(data: any): Game {
+export async function parseDatabaseGame(data: any): Promise<Game> {
 	return {
-		...parseDatabaseGameExcludeOwner(data),
+		...(await parseDatabaseGameExcludeOwner(data)),
 		owner: parseProfileFromUser(data.owner)
 	};
 }
 
-export function parseDatabaseGameExcludeOwner(data: any): Omit<Game, 'owner'> {
+export async function parseDatabaseGameExcludeOwner(data: any): Promise<Omit<Game, 'owner'>> {
+	let online = 0;
+	const instances = await valkey.smembers(`game:${data.id.toString()}:instances`);
+
+	for (const instance of instances) {
+		online += await valkey.scard(`instances:${instance.toString()}:online`);
+	}
+
 	return {
 		id: data.id.toString(),
 		name: data['name'],
@@ -41,7 +48,7 @@ export function parseDatabaseGameExcludeOwner(data: any): Omit<Game, 'owner'> {
 				: data['last_updated'],
 		flags: parseInt(data['flags'], 2) as GameFlags,
 		tags: data['tags'] ?? [],
-		online: data['online'] ?? 0
+		online
 	};
 }
 
@@ -99,7 +106,7 @@ export async function getUserGamesByCreationDate(
 		values: [id, limit ?? 25, start ?? 0]
 	});
 
-	return res.rows.map((e) => parseDatabaseGameExcludeOwner(e));
+	return await Promise.all(res.rows.map(async (e) => await parseDatabaseGameExcludeOwner(e)));
 }
 
 export async function checkGameOwner(gameId: string, accountId: string): Promise<boolean> {
@@ -145,5 +152,5 @@ export async function getUserDiscoverableGamesByCreationDate(
 		values: [id, limit ?? 25, start ?? 0]
 	});
 
-	return res.rows.map((e) => parseDatabaseGameExcludeOwner(e));
+	return await Promise.all(res.rows.map((e) => parseDatabaseGameExcludeOwner(e)));
 }
