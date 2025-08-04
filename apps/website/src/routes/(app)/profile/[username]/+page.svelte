@@ -76,7 +76,7 @@
 						<FluentCircle20Filled class="size-4 text-green-400" />
 						<span>
 							Playing
-							<span class="font-bold text-white">{data.profile.username}</span>
+							<span class="font-bold text-white">{data.profile.presence.properties.game.name}</span>
 						</span>
 					{:else}
 						<FluentCircle20Filled class="size-4 text-gray-400" />
