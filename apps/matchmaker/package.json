@@ -1,0 +1,22 @@
+{
+	"name": "@minemaker/matchmaker",
+	"packageManager": "yarn@4.9.2",
+	"module": "./src/index.ts",
+	"main": "./src/index.ts",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "NODE_ENV=dev tsx watch src/index.ts",
+		"build": "tsc src/index.ts --outDir dist",
+		"start": "NODE_ENV=production node dist/index.js"
+	},
+	"dependencies": {
+		"@minemaker/db": "workspace:*",
+		"dotenv": "^17.2.1"
+	},
+	"devDependencies": {
+		"@types/node": "^24.1.0",
+		"tsx": "^4.20.3",
+		"typescript": "^5.8.3"
+	}
+}
