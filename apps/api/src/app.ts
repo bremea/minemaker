@@ -65,7 +65,16 @@ const app = new Elysia({ adapter: node() })
 	.decorate('cf', new Cloudflare({ apiToken: process.env.CF_TOKEN! }))
 	.use(
 		await autoload({
-			prefix: '/api'
+			prefix: '/api',
+			schema: ({ url }) => {
+				const tag = url.split('/').at(1)!;
+
+				return {
+					detail: {
+						tags: [tag]
+					}
+				};
+			}
 		})
 	)
 	.listen(3000);
