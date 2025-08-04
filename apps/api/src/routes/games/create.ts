@@ -40,7 +40,7 @@ export default (app: ElysiaApp) =>
 			},
 			body: t.Object({
 				name: t.String({
-					maxLength: 255,
+					maxLength: 50,
 					error: 'Invalid name'
 				}),
 				turnstileToken: t.String({ error: 'Missing turnstile' })
