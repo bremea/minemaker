@@ -24,13 +24,7 @@ const getUrl = (url: string): string => {
 };
 
 export const customFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-	const requestUrl = getUrl(url);
-	const requestInit: RequestInit = {
-		...options
-	};
-
-	const request = new Request(requestUrl, requestInit);
-	const response = await fetch(request);
+	const response = await fetch(getUrl(url), options);
 	const data = await getBody<T>(response);
 
 	return { status: response.status, data } as T;
