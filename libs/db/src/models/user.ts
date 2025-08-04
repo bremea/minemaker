@@ -2,25 +2,7 @@ import { pool } from '../connection';
 import { InternalApiError } from '../utils';
 import { t } from 'elysia';
 import bcrypt from 'bcrypt';
-
-export enum PlayerFlags {
-	None = 0,
-	Staff = 1 << 0, // 001
-	Partner = 1 << 1, // 010
-	Reserved = 1 << 2, // 100
-	All = ~(~0 << 3) // 111
-}
-
-export enum PlayerPermissions {
-	None = 0,
-	Warn = 1 << 0, // 000001
-	Mute = 1 << 1, // 000010
-	Kick = 1 << 2, // 000100
-	Ban = 1 << 3, // 001000
-	IpBan = 1 << 4, // 010000
-	StudioBan = 1 << 5, // 100000
-	All = ~(~0 << 6) // 111111
-}
+import { PlayerFlags, PlayerPermissions } from '../enums';
 
 export const AccountSchema = t.Object({
 	id: t.String(),
@@ -33,8 +15,8 @@ export const AccountSchema = t.Object({
 export const PlayerSchema = t.Object({
 	uuid: t.String(),
 	username: t.String(),
-	flags: t.Enum(PlayerFlags),
-	permissions: t.Enum(PlayerPermissions),
+	flags: t.Number({ maximum: PlayerFlags.All }),
+	permissions: t.Number({ maximum: PlayerPermissions.All }),
 	firstLogin: t.Date(),
 	lastSeen: t.Date()
 });
@@ -42,7 +24,7 @@ export const PlayerSchema = t.Object({
 export const ProfileSchema = t.Object({
 	uuid: t.String(),
 	username: t.String(),
-	flags: t.Enum(PlayerFlags),
+	flags: t.Number({ maximum: PlayerFlags.All }),
 	firstLogin: t.Date(),
 	lastSeen: t.Date(),
 	account: t.Optional(t.Object({ id: t.String() }))
@@ -62,8 +44,8 @@ function parseDatabasePlayer(data: any): Player {
 	return {
 		uuid: data.uuid ?? data.mc_uuid,
 		username: data.username,
-		flags: parseInt(data.flags),
-		permissions: parseInt(data.permissions),
+		flags: parseInt(data.flags, 2) as PlayerFlags,
+		permissions: parseInt(data.permissions, 2) as PlayerPermissions,
 		firstLogin:
 			typeof data['first_login'] == 'string'
 				? new Date(data['first_login'])
@@ -101,7 +83,7 @@ export function parseProfileFromUser(user: any): Profile {
 	return {
 		uuid: user.player.uuid,
 		username: user.player.username,
-		flags: parseInt(user.player.flags),
+		flags: parseInt(user.player.flags, 2) as PlayerFlags,
 		firstLogin:
 			typeof user.player['first_login'] == 'string'
 				? new Date(user.player['first_login'])
@@ -170,6 +152,38 @@ export async function getUserByAccountEmail(email: string): Promise<User> {
 	}
 
 	return parseDatabaseUser(res.rows[0].user);
+}
+
+export async function getUserByPlayerUsername(username: string): Promise<User> {
+	const res = await pool.query({
+		text: `SELECT jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) as user
+				FROM players p
+				LEFT JOIN accounts a ON p.uuid = a.mc_uuid
+				WHERE p.username = $1`,
+		values: [username]
+	});
+
+	if (res.rows.length == 0) {
+		throw new InternalApiError(404, `No player exists with username ${username}`);
+	}
+
+	return parseDatabaseUser(res.rows[0].user);
+}
+
+export async function getProfileByPlayerUsername(username: string): Promise<Profile> {
+	const res = await pool.query({
+		text: `SELECT jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) as user
+				FROM players p
+				LEFT JOIN accounts a ON p.uuid = a.mc_uuid
+				WHERE p.username = $1`,
+		values: [username]
+	});
+
+	if (res.rows.length == 0) {
+		throw new InternalApiError(404, `No player exists with username ${username}`);
+	}
+
+	return parseProfileFromUser(res.rows[0].user);
 }
 
 export async function getUserByPlayerUUID(uuid: string): Promise<User> {
