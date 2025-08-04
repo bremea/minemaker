@@ -1,27 +1,19 @@
 import { pool } from '../connection';
 import { InternalApiError, Nullable } from '../utils';
 import { t } from 'elysia';
-import { getUserByAccountId, parseProfileFromUser, Profile, ProfileSchema } from './user';
-import { BuildSchema } from './build';
-
-export enum GameFlags {
-	None = 0,
-	Staff = 1 << 0, // 001
-	Partner = 1 << 1, // 010
-	Reserved = 1 << 2, // 100
-	All = ~(~0 << 3) // 111
-}
+import { parseProfileFromUser, ProfileSchema } from './user';
+import { GameFlags } from '../enums';
 
 export const GameSchema = t.Object({
 	id: t.String(),
 	owner: ProfileSchema,
 	name: t.String(),
-	thumbnail: Nullable(t.String()),
+	thumbnail: t.String(),
 	description: t.String(),
 	currentBuild: Nullable(t.Object({ id: t.String() })),
 	discoverable: t.Boolean(),
 	lastUpdated: t.Date(),
-	flags: t.Enum(GameFlags),
+	flags: t.Number({ maximum: GameFlags.All }),
 	tags: t.Array(t.String()),
 	online: t.Number()
 });
@@ -39,7 +31,7 @@ export function parseDatabaseGameExcludeOwner(data: any): Omit<Game, 'owner'> {
 	return {
 		id: data.id.toString(),
 		name: data['name'],
-		thumbnail: data['thumbnail'],
+		thumbnail: data['thumbnail'] ?? 'e2300692-29ef-4ad4-c815-a759c59a8c00', // default project thumbnail
 		description: data['description'],
 		currentBuild: data['current_build'] ? { id: data['current_build'] } : null,
 		discoverable: data['discoverable'],
@@ -47,7 +39,7 @@ export function parseDatabaseGameExcludeOwner(data: any): Omit<Game, 'owner'> {
 			typeof data['last_updated'] == 'string'
 				? new Date(data['last_updated'])
 				: data['last_updated'],
-		flags: parseInt(data['flags']),
+		flags: parseInt(data['flags'], 2) as GameFlags,
 		tags: data['tags'] ?? [],
 		online: data['online'] ?? 0
 	};
@@ -62,6 +54,24 @@ export async function getGameById(id: string): Promise<Game> {
 	if (res.rows.length == 0) {
 		throw new InternalApiError(400, `No game exists with id ${id}`);
 	}
+
+	return parseDatabaseGame(res.rows[0]);
+}
+
+export async function updateGame(
+	id: string,
+	name?: string,
+	description?: string,
+	thumbnail?: string
+): Promise<Game> {
+	const res = await pool.query({
+		text: `WITH game AS 
+					(UPDATE games SET name = COALESCE($2, name), description = COALESCE($3, description), thumbnail = COALESCE($4, thumbnail) WHERE id = $1 RETURNING *)
+				SELECT g.*, 
+					jsonb_build_object( 'account', to_jsonb(a), 'player', to_jsonb(p) ) AS owner 
+					FROM game g JOIN accounts a ON a.id = g.owner LEFT JOIN players p ON p.uuid = a.mc_uuid`,
+		values: [id, name, description, thumbnail]
+	});
 
 	return parseDatabaseGame(res.rows[0]);
 }
@@ -101,8 +111,13 @@ export async function checkGameOwner(gameId: string, accountId: string): Promise
 	return res.rows.length > 0;
 }
 
-export function getGameReleaseEligibility(game: Game) {
-	const thumbnailUploaded = typeof game.thumbnail == 'string';
+export async function getGameReleaseEligibility(game: Game) {
+	const res = await pool.query({
+		text: `SELECT 1 FROM games WHERE id = $1 AND thumbnail IS NOT NULL LIMIT 1`,
+		values: [game.id]
+	});
+
+	const thumbnailUploaded = res.rows.length > 0;
 	const liveBuild = typeof game.currentBuild == 'string';
 
 	return {
@@ -118,4 +133,17 @@ export async function makeGameDiscoverable(id: string): Promise<boolean> {
 	});
 
 	return res.rows[0].discoverable;
+}
+
+export async function getUserDiscoverableGamesByCreationDate(
+	id: string,
+	start?: number,
+	limit?: number
+): Promise<Omit<Game, 'owner'>[]> {
+	const res = await pool.query({
+		text: `SELECT * FROM games WHERE owner = $1 AND discoverable = true ORDER BY last_updated DESC LIMIT $2 OFFSET $3`,
+		values: [id, limit ?? 25, start ?? 0]
+	});
+
+	return res.rows.map((e) => parseDatabaseGameExcludeOwner(e));
 }

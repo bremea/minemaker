@@ -19,7 +19,7 @@ export default (app: ElysiaApp) =>
 				throw UnauthorizedApiError;
 			}
 
-			const eligibility = getGameReleaseEligibility(game);
+			const eligibility = await getGameReleaseEligibility(game);
 
 			if (!eligibility.eligible) {
 				throw new InternalApiError(403, 'This game is not eligible for release');

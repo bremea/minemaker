@@ -13,7 +13,7 @@ export default (app: ElysiaApp) =>
 				throw UnauthorizedApiError;
 			}
 
-			return getGameReleaseEligibility(game);
+			return await getGameReleaseEligibility(game);
 		},
 		{
 			detail: {
