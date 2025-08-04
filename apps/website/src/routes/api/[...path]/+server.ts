@@ -19,7 +19,7 @@ const reqHandler: RequestHandler = async ({ request, params, url, cookies }) => 
 		}
 		headers.delete('host');
 
-		const hasBody = !['GET', 'HEAD'].includes(request.method);
+		const hasBody = request.body != null;
 
 		return await fetch(apiUrl.toString(), {
 			method: request.method,
@@ -30,7 +30,6 @@ const reqHandler: RequestHandler = async ({ request, params, url, cookies }) => 
 	};
 
 	const res = await makeRequest(accessToken);
-
 	const contentType = res.headers.get('Content-Type') ?? '';
 	const responseHeaders = new Headers();
 

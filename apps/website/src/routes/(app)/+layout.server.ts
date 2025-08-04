@@ -14,13 +14,13 @@ export const load = async ({ cookies }) => {
 	const onRefresh = (access: string, refresh: string) => {
 		cookies.set('access', access, {
 			httpOnly: true,
-			secure: !process.env.DEVELOPMENT_MODE,
+			secure: process.env.NODE_ENV === 'production',
 			path: '/',
 			expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 		});
 		cookies.set('refresh', refresh, {
 			httpOnly: true,
-			secure: !process.env.DEVELOPMENT_MODE,
+			secure: process.env.NODE_ENV === 'production',
 			path: '/',
 			expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
 		});
@@ -52,7 +52,8 @@ export const load = async ({ cookies }) => {
 		return {
 			user: res.data as User
 		};
-	} catch {
+	} catch (e) {
+		console.log(e);
 		return { user: {} };
 	}
 };
