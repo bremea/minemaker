@@ -6,14 +6,14 @@
 		class?: string;
 		href?: string;
 		alt?: string;
-		game: Game;
+		game: Game | Omit<Game, 'owner'>;
 	}
 
 	let { game, class: className, alt = 'Game thumbnail', ...others }: GameTileProps = $props();
 </script>
 
 <img
-	src={`https://cdn.minemaker.net/images/${game.thumbnail ?? 'e2300692-29ef-4ad4-c815-a759c59a8c00'}/thumbnail`}
+	src={`https://cdn.minemaker.net/images/${game.thumbnail}/thumbnail`}
 	class={className}
 	{alt}
 	{...others}

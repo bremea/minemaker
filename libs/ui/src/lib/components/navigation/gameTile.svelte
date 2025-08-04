@@ -7,7 +7,7 @@
 	export interface GameTileProps extends HTMLAnchorAttributes {
 		class?: string;
 		href?: string;
-		game: Game;
+		game: Game | Omit<Game, 'owner'>;
 	}
 
 	let { game, href = `/game/${game.id}`, class: className, ...others }: GameTileProps = $props();
