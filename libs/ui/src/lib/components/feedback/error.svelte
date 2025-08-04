@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements';
-	import FluentErrorCircle20Filled from '~icons/fluent/error-circle-20-filled';
+	import FluentDismissSquare20Filled from '~icons/fluent/dismiss-square-20-filled';
 
 	interface Props {
 		size: 'sm' | 'md' | 'lg' | 'xl';
 	}
 
-	export interface InputProps extends HTMLAttributes<HTMLDivElement> {
+	export interface ErrorProps extends HTMLAttributes<HTMLDivElement> {
 		componentSize?: Props['size'];
 		class?: string;
 	}
@@ -18,13 +18,13 @@
 		xl: 'px-10 py-4 text-xl'
 	};
 
-	let { children, componentSize = 'md', class: className, ...others }: InputProps = $props();
+	let { children, componentSize = 'md', class: className, ...others }: ErrorProps = $props();
 </script>
 
 <div
-	class={`group relative flex h-min w-full items-center text-red-400 rounded-lg ${sizeClasses[componentSize]} border-2 border-red-400 outline-0 ${className}`}
+	class={`group relative flex h-min w-full items-center rounded-lg text-red-400 ${sizeClasses[componentSize]} border-2 border-red-400 outline-0 ${className}`}
 	{...others}
 >
-	<FluentErrorCircle20Filled class="size-8 min-h-8 min-w-8 mr-2" />
+	<FluentDismissSquare20Filled class="mr-2 size-8 min-h-8 min-w-8" />
 	{@render children?.()}
 </div>

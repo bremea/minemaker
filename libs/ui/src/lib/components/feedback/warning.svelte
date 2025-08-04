@@ -6,7 +6,7 @@
 		size: 'sm' | 'md' | 'lg' | 'xl';
 	}
 
-	export interface InputProps extends HTMLAttributes<HTMLDivElement> {
+	export interface WarningProps extends HTMLAttributes<HTMLDivElement> {
 		componentSize?: Props['size'];
 		class?: string;
 	}
@@ -18,7 +18,7 @@
 		xl: 'px-10 py-3 text-xl'
 	};
 
-	let { children, componentSize = 'md', class: className, ...others }: InputProps = $props();
+	let { children, componentSize = 'md', class: className, ...others }: WarningProps = $props();
 </script>
 
 <div
