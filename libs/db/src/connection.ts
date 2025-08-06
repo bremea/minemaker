@@ -2,7 +2,6 @@ import { Pool } from 'pg';
 import 'dotenv/config';
 import types from 'pg-types';
 import JSONbig from 'json-bigint';
-import { GlideClient } from '@valkey/valkey-glide';
 
 const JSON_OID = 114;
 const JSONB_OID = 3802;
@@ -24,13 +23,4 @@ export const pool = new Pool({
 	idleTimeoutMillis: 30000,
 	connectionTimeoutMillis: 2000,
 	maxLifetimeSeconds: 60
-});
-
-export const valkey = await GlideClient.createClient({
-	addresses: [
-		{
-			host: process.env.VALKEY_HOST ?? '127.0.0.1',
-			port: process.env.VALKEY_PORT ? parseInt(process.env.VALKEY_PORT) : 6379
-		}
-	]
 });

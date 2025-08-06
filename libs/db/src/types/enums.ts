@@ -49,5 +49,5 @@ export enum GameInstanceType {
 export enum GameInstanceStatus {
 	Starting = 'STARTING',
 	Ready = 'READY',
-	Closing = 'CLOSING'
+	Stopping = 'STOPPING'
 }

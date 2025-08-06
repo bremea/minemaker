@@ -35,12 +35,7 @@ export async function getSessionById(id: string): Promise<Session> {
 	return parseDatabaseSession(res.rows[0]);
 }
 
-export async function createSession(
-	id: string,
-	accountId: string,
-	lastIp: string,
-	userAgent: string
-): Promise<Session> {
+export async function createSession(id: string, accountId: string, lastIp: string, userAgent: string): Promise<Session> {
 	const res = await pool.query({
 		text: `INSERT INTO sessions (id, account_id, last_ip, user_agent) VALUES($1, $2, $3, $4) RETURNING *`,
 		values: [id, accountId, lastIp, userAgent]
