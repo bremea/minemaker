@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@minemaker/db": "workspace:*",
+		"@minemaker/valkey": "workspace:*",
 		"dotenv": "^17.2.1"
 	},
 	"devDependencies": {
