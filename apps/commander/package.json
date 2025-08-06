@@ -1,4 +1,25 @@
 {
 	"name": "@minemaker/commander",
-	"packageManager": "yarn@4.9.2"
+	"packageManager": "yarn@4.9.2",
+	"module": "./src/index.ts",
+	"main": "./src/index.ts",
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "NODE_ENV=dev tsx watch src/index.ts",
+		"build": "tsc src/index.ts --outDir dist",
+		"start": "NODE_ENV=production node dist/index.js"
+	},
+	"dependencies": {
+		"@minemaker/db": "workspace:*",
+		"@minemaker/valkey": "workspace:*",
+		"dockerode": "^4.0.7",
+		"dotenv": "^17.2.1"
+	},
+	"devDependencies": {
+		"@types/dockerode": "^3.3.42",
+		"@types/node": "^24.1.0",
+		"tsx": "^4.20.3",
+		"typescript": "^5.8.3"
+	}
 }
