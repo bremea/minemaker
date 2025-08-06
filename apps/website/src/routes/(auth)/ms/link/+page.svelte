@@ -91,7 +91,7 @@
 				>
 					<img src="/minecraft.svg" alt="Minecraft logo" class="z-20 h-8" />
 					<div
-						class="crisp-bg absolute left-0 top-0 z-0 h-full w-full bg-[url(/minecraftbg.png)] bg-center [background-size:72px]"
+						class="crisp-bg absolute top-0 left-0 z-0 h-full w-full bg-[url(/minecraftbg.png)] [background-size:72px] bg-center"
 					></div>
 				</div>
 				<div class="m-4 mx-8 flex h-12 w-full space-x-4">
@@ -111,7 +111,7 @@
 			<FluentContactCardLink20Regular class="my-2 size-12 text-gray-600/50" />
 
 			<div class="flex w-full flex-col overflow-hidden rounded-lg bg-gray-600">
-				<div class="bg-mm-blue flex h-12 w-full items-center justify-center overflow-hidden">
+				<div class="flex h-12 w-full items-center justify-center overflow-hidden bg-mm-blue">
 					<img src="/mmlogo.png" alt="Minemaker logo" class="h-8" />
 				</div>
 				<div class="m-4 mx-8 flex h-12 w-full space-x-4">

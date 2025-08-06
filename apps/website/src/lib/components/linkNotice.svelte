@@ -7,11 +7,13 @@
 >
 	<div class="pointer-events-none absolute inset-0 z-0">
 		<div
-			class="h-full w-full backdrop-blur-md [mask-image:linear-gradient(to_right,black_25%,transparent_75%)]"
+			class="h-full w-full [mask-image:linear-gradient(to_right,black_25%,transparent_75%)] backdrop-blur-md"
 		></div>
 	</div>
 
-	<div class="absolute inset-0 z-10 bg-gradient-to-r from-gray-700 from-10% to-black/0 to-75%"></div>
+	<div
+		class="absolute inset-0 z-10 bg-gradient-to-r from-gray-700 from-10% to-black/0 to-75%"
+	></div>
 
 	<div class="absolute z-10 h-full w-full p-8">
 		<div class="flex h-full max-w-[30%] flex-col justify-center space-y-4">

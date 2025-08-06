@@ -12,7 +12,7 @@
 {:catch e}
 	<div class="flex h-full min-h-[200px] w-full flex-col items-center justify-center space-y-2">
 		<FluentErrorCircle20Filled class="size-12 text-gray-400" />
-		<p class="text-center italic text-gray-400">
+		<p class="text-center text-gray-400 italic">
 			{#if e.message}
 				{e.message}
 			{:else}

@@ -1,8 +1,9 @@
-import { pool, valkey } from '../connection';
-import { InternalApiError, Nullable } from '../utils';
+import { valkey } from '@minemaker/valkey';
 import { t } from 'elysia';
+import { pool } from '../connection';
+import { GameFlags } from '../types/enums';
+import { InternalApiError, Nullable } from '../utils';
 import { parseProfileFromUser, ProfileSchema } from './user';
-import { GameFlags } from '../enums';
 
 export const GameSchema = t.Object({
 	id: t.String(),
@@ -42,10 +43,7 @@ export async function parseDatabaseGameExcludeOwner(data: any): Promise<Omit<Gam
 		description: data['description'],
 		currentBuild: data['current_build'] ? { id: data['current_build'] } : null,
 		discoverable: data['discoverable'],
-		lastUpdated:
-			typeof data['last_updated'] == 'string'
-				? new Date(data['last_updated'])
-				: data['last_updated'],
+		lastUpdated: typeof data['last_updated'] == 'string' ? new Date(data['last_updated']) : data['last_updated'],
 		flags: parseInt(data['flags'], 2) as GameFlags,
 		tags: data['tags'] ?? [],
 		online
@@ -65,12 +63,7 @@ export async function getGameById(id: string): Promise<Game> {
 	return parseDatabaseGame(res.rows[0]);
 }
 
-export async function updateGame(
-	id: string,
-	name?: string,
-	description?: string,
-	thumbnail?: string
-): Promise<Game> {
+export async function updateGame(id: string, name?: string, description?: string, thumbnail?: string): Promise<Game> {
 	const res = await pool.query({
 		text: `WITH game AS 
 					(UPDATE games SET name = COALESCE($2, name), description = COALESCE($3, description), thumbnail = COALESCE($4, thumbnail) WHERE id = $1 RETURNING *)
@@ -83,11 +76,7 @@ export async function updateGame(
 	return parseDatabaseGame(res.rows[0]);
 }
 
-export async function createGame(
-	id: string,
-	owner: string,
-	name: string
-): Promise<Omit<Game, 'owner'>> {
+export async function createGame(id: string, owner: string, name: string): Promise<Omit<Game, 'owner'>> {
 	const res = await pool.query({
 		text: `INSERT INTO games (id, owner, name) VALUES($1, $2, $3) RETURNING *`,
 		values: [id, owner, name]
@@ -96,11 +85,7 @@ export async function createGame(
 	return parseDatabaseGameExcludeOwner(res.rows[0]);
 }
 
-export async function getUserGamesByCreationDate(
-	id: string,
-	start?: number,
-	limit?: number
-): Promise<Omit<Game, 'owner'>[]> {
+export async function getUserGamesByCreationDate(id: string, start?: number, limit?: number): Promise<Omit<Game, 'owner'>[]> {
 	const res = await pool.query({
 		text: `SELECT * FROM games WHERE owner = $1 ORDER BY last_updated DESC LIMIT $2 OFFSET $3`,
 		values: [id, limit ?? 25, start ?? 0]
@@ -142,11 +127,7 @@ export async function makeGameDiscoverable(id: string): Promise<boolean> {
 	return res.rows[0].discoverable;
 }
 
-export async function getUserDiscoverableGamesByCreationDate(
-	id: string,
-	start?: number,
-	limit?: number
-): Promise<Omit<Game, 'owner'>[]> {
+export async function getUserDiscoverableGamesByCreationDate(id: string, start?: number, limit?: number): Promise<Omit<Game, 'owner'>[]> {
 	const res = await pool.query({
 		text: `SELECT * FROM games WHERE owner = $1 AND discoverable = true ORDER BY last_updated DESC LIMIT $2 OFFSET $3`,
 		values: [id, limit ?? 25, start ?? 0]

@@ -18,14 +18,14 @@
 </script>
 
 <LinkButton
-	class="w-full! relative flex items-end justify-center overflow-clip text-center"
+	class="relative flex w-full! items-end justify-center overflow-clip text-center"
 	{size}
 	{color}
 	{...others}
 >
 	{#if loading}
 		<div
-			class="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black/80 text-white"
+			class="absolute top-0 left-0 z-10 flex h-full w-full items-center justify-center bg-black/80 text-white"
 		>
 			<Loader {size} />
 		</div>

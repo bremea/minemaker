@@ -31,13 +31,13 @@
 		class="fixed top-0 left-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50"
 	>
 		<div
-			class={`relative min-w-[400px] max-w-[1000px] rounded-lg border-2 border-gray-600 bg-gray-800 p-8 shadow-lg space-y-2 ${className}`}
+			class={`relative max-w-[1000px] min-w-[400px] space-y-2 rounded-lg border-2 border-gray-600 bg-gray-800 p-8 shadow-lg ${className}`}
 			use:clickOutside
 			{...others}
 		>
 			<button
 				class="group absolute top-2 right-2 flex cursor-pointer items-center justify-center rounded-lg p-2 transition-all hover:bg-gray-500 active:scale-95"
-				onclick={() => open = false}
+				onclick={() => (open = false)}
 			>
 				<FluentDismiss20Filled class="text-gray-400 transition-all group-hover:text-white" />
 			</button>

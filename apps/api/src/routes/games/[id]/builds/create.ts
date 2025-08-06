@@ -1,17 +1,6 @@
 import { ElysiaApp } from '$src/app';
 import { t } from 'elysia';
-import {
-	Artifact,
-	ArtifactMetadataSchema,
-	ArtifactSchema,
-	ArtifactType,
-	BuildSchema,
-	checkGameOwner,
-	createArtifact,
-	createBuild,
-	getBuildById,
-	UnauthorizedApiError
-} from '@minemaker/db';
+import { Artifact, ArtifactMetadataSchema, ArtifactSchema, ArtifactType, BuildSchema, checkGameOwner, createArtifact, createBuild, getBuildById, UnauthorizedApiError } from '@minemaker/db';
 import { requireAccountAndPlayer } from '$src/lib/middleware/auth';
 import { randomUUID } from 'crypto';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
@@ -38,20 +27,9 @@ export default (app: ElysiaApp) =>
 			for (const artifact of body.artifacts) {
 				const uuid = randomUUID();
 
-				const newArtifact = await createArtifact(
-					id,
-					uuid,
-					artifact.name,
-					artifact.type,
-					uuid,
-					artifact.metadata ?? null
-				);
+				const newArtifact = await createArtifact(id, uuid, artifact.name, artifact.type, uuid, artifact.metadata ?? null);
 
-				const uploadUrl = await getSignedUrl(
-					r2,
-					new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: uuid }),
-					{ expiresIn: 3600 }
-				);
+				const uploadUrl = await getSignedUrl(r2, new PutObjectCommand({ Bucket: process.env.R2_BUCKET, Key: uuid }), { expiresIn: 3600 });
 
 				artifacts.push({ ...newArtifact, uploadUrl });
 			}
@@ -91,9 +69,7 @@ export default (app: ElysiaApp) =>
 			response: {
 				200: t.Object({
 					build: BuildSchema,
-					artifacts: t.Array(
-						t.Intersect([ArtifactSchema, t.Object({ uploadUrl: t.String() })])
-					)
+					artifacts: t.Array(t.Intersect([ArtifactSchema, t.Object({ uploadUrl: t.String() })]))
 				})
 			},
 			parse: 'application/json'

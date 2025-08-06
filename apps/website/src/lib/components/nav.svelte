@@ -46,13 +46,13 @@
 		class="absolute left-12 flex transition-all hover:scale-105 focus:scale-105 active:scale-95"
 	>
 		<img src="/mmlogo.png" alt="Minemaker Logo" class="h-10" />
-		<span class="text-mm-blue text-xs">beta</span>
+		<span class="text-xs text-mm-blue">beta</span>
 	</a>
 
-	<div class="pl-62 pointer-events-none flex h-10 w-full flex-1 items-center justify-center">
+	<div class="pointer-events-none flex h-10 w-full flex-1 items-center justify-center pl-62">
 		<div class="pointer-events-auto flex h-full w-full items-center justify-center space-x-2">
 			<Input
-				class="h-full! w-64! bg-gray-800! border-gray-800 text-white outline-gray-800 hover:bg-gray-700"
+				class="h-full! w-64! border-gray-800 bg-gray-800! text-white outline-gray-800 hover:bg-gray-700"
 				componentSize="sm"
 				stretchHeight={true}
 				placeholder="Search..."
@@ -94,7 +94,7 @@
 			</a>
 			<LinkButton color="darkgray" size="md" href="/link">Link</LinkButton>
 		{:else}
-			<Link href="/login" class="no-underline! hover:underline! text-white">Login</Link>
+			<Link href="/login" class="text-white no-underline! hover:underline!">Login</Link>
 			<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
 		{/if}
 		{#if !sideNavOpen}
@@ -134,7 +134,7 @@
 		</NavLink>
 
 		{#if user.player}
-			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CONNECT</span>
+			<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">CONNECT</span>
 			<NavLink href="/friends">
 				<FluentPeople20Filled class="h-6 w-6" />
 				<span>Friends</span>
@@ -145,7 +145,7 @@
 			</NavLink>
 		{/if}
 
-		<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CREATE</span>
+		<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">CREATE</span>
 		<NavLink href="/studio/projects">
 			<FluentPaintBrush20Filled class="h-6 w-6" />
 			<span>Studio</span>
@@ -156,7 +156,7 @@
 		</NavLink>
 
 		{#if user.account || user.player}
-			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">ACCOUNT</span>
+			<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">ACCOUNT</span>
 		{/if}
 		{#if user.player}
 			<NavLink href="/profile">

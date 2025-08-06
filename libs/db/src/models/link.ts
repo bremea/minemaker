@@ -20,11 +20,7 @@ function parseLinkRequest(data: any): LinkRequest {
 	};
 }
 
-export async function createLinkRequest(
-	code: string,
-	accountId: string,
-	playerUUID: string
-): Promise<LinkRequest> {
+export async function createLinkRequest(code: string, accountId: string, playerUUID: string): Promise<LinkRequest> {
 	const res = await pool.query({
 		text: `INSERT INTO link_requests (code, account_id, player_uuid) VALUES($1, $2, $3) RETURNING *`,
 		values: [code, accountId, playerUUID]

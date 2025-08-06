@@ -2,7 +2,7 @@ import { pool } from '../connection';
 import { InternalApiError } from '../utils';
 import { t } from 'elysia';
 import bcrypt from 'bcrypt';
-import { PlayerFlags, PlayerPermissions } from '../enums';
+import { PlayerFlags, PlayerPermissions } from '../types/enums';
 
 export const AccountSchema = t.Object({
 	id: t.String(),
@@ -46,12 +46,8 @@ function parseDatabasePlayer(data: any): Player {
 		username: data.username,
 		flags: parseInt(data.flags, 2) as PlayerFlags,
 		permissions: parseInt(data.permissions, 2) as PlayerPermissions,
-		firstLogin:
-			typeof data['first_login'] == 'string'
-				? new Date(data['first_login'])
-				: data['first_login'],
-		lastSeen:
-			typeof data['last_seen'] == 'string' ? new Date(data['last_seen']) : data['last_seen']
+		firstLogin: typeof data['first_login'] == 'string' ? new Date(data['first_login']) : data['first_login'],
+		lastSeen: typeof data['last_seen'] == 'string' ? new Date(data['last_seen']) : data['last_seen']
 	};
 }
 
@@ -60,10 +56,7 @@ function parseDatabaseAccount(data: any): Account {
 		id: data.id.toString(),
 		email: data.email,
 		emailVerified: data.email_verified,
-		lastLogin:
-			typeof data['last_login'] == 'string'
-				? new Date(data['last_login'])
-				: data['last_login'],
+		lastLogin: typeof data['last_login'] == 'string' ? new Date(data['last_login']) : data['last_login'],
 		gems: data.gems
 	};
 }
@@ -84,14 +77,8 @@ export function parseProfileFromUser(user: any): Profile {
 		uuid: user.player.uuid,
 		username: user.player.username,
 		flags: parseInt(user.player.flags, 2) as PlayerFlags,
-		firstLogin:
-			typeof user.player['first_login'] == 'string'
-				? new Date(user.player['first_login'])
-				: user.player['first_login'],
-		lastSeen:
-			typeof user.player['last_seen'] == 'string'
-				? new Date(user.player['last_seen'])
-				: user.player['last_seen'],
+		firstLogin: typeof user.player['first_login'] == 'string' ? new Date(user.player['first_login']) : user.player['first_login'],
+		lastSeen: typeof user.player['last_seen'] == 'string' ? new Date(user.player['last_seen']) : user.player['last_seen'],
 		account: user.account ? { id: user.account.id.toString() } : undefined
 	};
 }
@@ -202,12 +189,7 @@ export async function getUserByPlayerUUID(uuid: string): Promise<User> {
 	return parseDatabaseUser(res.rows[0].user);
 }
 
-export async function createAccount(
-	id: string,
-	email: string,
-	password: string,
-	birthday: Date
-): Promise<Account> {
+export async function createAccount(id: string, email: string, password: string, birthday: Date): Promise<Account> {
 	const res = await pool.query({
 		text: `INSERT INTO accounts (id, email, password, birthday) VALUES($1, $2, $3, $4) RETURNING *`,
 		values: [id, email, password, birthday]

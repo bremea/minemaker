@@ -1,12 +1,6 @@
 import type { ElysiaApp } from '$src/app';
 import { requireAccountOrPlayer } from '$src/lib/middleware/auth';
-import {
-	getLinkRequest,
-	InternalApiError,
-	linkPlayerToAccount,
-	UnauthorizedApiError,
-	UserSchema
-} from '@minemaker/db';
+import { getLinkRequest, InternalApiError, linkPlayerToAccount, UnauthorizedApiError, UserSchema } from '@minemaker/db';
 import { t } from 'elysia';
 
 export default (app: ElysiaApp) =>

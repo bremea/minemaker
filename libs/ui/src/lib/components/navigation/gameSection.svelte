@@ -38,7 +38,7 @@
 	{:else if error}
 		<div class="flex h-[200px] w-full flex-col items-center justify-center space-y-2">
 			<FluentErrorCircle20Filled class="size-10 text-gray-400" />
-			<p class="text-center text-sm italic text-gray-400">
+			<p class="text-center text-sm text-gray-400 italic">
 				{error}
 			</p>
 		</div>
@@ -50,7 +50,7 @@
 		</div>
 	{:else}
 		<div class="flex h-[200px] w-full items-center justify-center">
-			<p class="select-none text-sm italic text-gray-400">Nothing here!</p>
+			<p class="text-sm text-gray-400 italic select-none">Nothing here!</p>
 		</div>
 	{/if}
 </section>

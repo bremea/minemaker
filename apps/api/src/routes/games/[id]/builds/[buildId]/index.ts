@@ -22,7 +22,7 @@ export default (app: ElysiaApp) =>
 			},
 			params: t.Object({
 				buildId: t.String({ error: 'Invalid build id' }),
-				id: t.String({ error: 'Invalid game id' }),
+				id: t.String({ error: 'Invalid game id' })
 			}),
 			response: {
 				200: BuildSchema

@@ -1,14 +1,38 @@
-import { valkey } from '../connection';
-import { GameInstanceSchema, getInstanceById } from './instances';
+import { t } from 'elysia';
+import { getInstanceById } from './instances';
+import { GameSchema } from './game';
+import { GameInstanceType } from '../types';
+import { valkey } from '@minemaker/valkey';
 
-export const PresenceSchema = GameInstanceSchema;
+export const PresenceSchema = t.Object({
+	game: GameSchema,
+	instance: t.Object({
+		id: t.String(),
+		region: t.String(),
+		since: t.Optional(t.Date()),
+		type: t.Enum(GameInstanceType),
+		online: t.Number(),
+		max: t.Number()
+	})
+});
 
 export type Presence = typeof PresenceSchema.static;
 
 export async function getPlayerPresence(uuid: string): Promise<Presence | undefined> {
-	const instance = (await valkey.get(`presence:${uuid}:instance`))?.toString();
+	const id = (await valkey.get(`presence:${uuid}:instance`))?.toString();
 
-	if (!instance) return undefined;
+	if (!id) return undefined;
 
-	return await getInstanceById(instance);
+	const instance = await getInstanceById(id);
+
+	return {
+		game: instance.properties.game,
+		instance: {
+			id,
+			region: instance.properties.region,
+			type: instance.properties.type,
+			online: instance.online.length + instance.standby.length,
+			max: instance.properties.maxPlayers
+		}
+	};
 }

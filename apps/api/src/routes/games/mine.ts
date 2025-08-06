@@ -7,11 +7,7 @@ export default (app: ElysiaApp) =>
 	app.use(requireAccountAndPlayer).get(
 		'/',
 		async ({ user, query }) => {
-			const games = await getUserGamesByCreationDate(
-				user.account.id,
-				query.start,
-				query.limit
-			);
+			const games = await getUserGamesByCreationDate(user.account.id, query.start, query.limit);
 			return games;
 		},
 		{

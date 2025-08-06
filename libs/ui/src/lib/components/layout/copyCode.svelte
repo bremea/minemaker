@@ -26,7 +26,7 @@
 	};
 </script>
 
-<div class="group flex items-center space-x-2 w-full" {...others}>
+<div class="group flex w-full items-center space-x-2" {...others}>
 	<code class={className ?? ''}>{value}</code>
 	{#if canCopy}
 		<button onclick={copy}>

@@ -17,10 +17,7 @@ function parseEmailVerificationRequest(data: any): EmailVerificationRequest {
 	};
 }
 
-export async function createEmailVerificationRequest(
-	email: string,
-	code: string
-): Promise<EmailVerificationRequest> {
+export async function createEmailVerificationRequest(email: string, code: string): Promise<EmailVerificationRequest> {
 	const res = await pool.query({
 		text: `INSERT INTO email_verification_requests (code, email) VALUES($1, $2) RETURNING *`,
 		values: [code, email]

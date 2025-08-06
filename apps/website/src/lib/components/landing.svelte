@@ -7,7 +7,7 @@
 >
 	<div class="pointer-events-none absolute inset-0 z-0">
 		<div
-			class="h-full w-full backdrop-blur-2xl [mask-image:linear-gradient(to_right,black_25%,transparent_75%)]"
+			class="h-full w-full [mask-image:linear-gradient(to_right,black_25%,transparent_75%)] backdrop-blur-2xl"
 		></div>
 	</div>
 

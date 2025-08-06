@@ -1,14 +1,7 @@
 import { ElysiaApp } from '$src/app';
 import { InternalServerError, t } from 'elysia';
 import bcrypt from 'bcrypt';
-import {
-	AccountSchema,
-	createAccount,
-	createEmailVerificationRequest,
-	createSession,
-	InternalApiError,
-	trustIp
-} from '@minemaker/db';
+import { AccountSchema, createAccount, createEmailVerificationRequest, createSession, InternalApiError, trustIp } from '@minemaker/db';
 import * as disposableEmail from 'disposable-email-domains-js';
 import { randomUUID } from 'crypto';
 import { sendEmailConfirmation } from '$src/lib/email/signup';
@@ -56,7 +49,7 @@ export default (app: ElysiaApp) =>
 
 			await createEmailVerificationRequest(body.email, emailCode);
 
-		//	await sendEmailConfirmation(body.email, emailConfUrl);
+			//	await sendEmailConfirmation(body.email, emailConfUrl);
 
 			const sessionId = snowflake.nextId().toString();
 			const userAgent = headers['User-Agent'] ?? 'Unknown';

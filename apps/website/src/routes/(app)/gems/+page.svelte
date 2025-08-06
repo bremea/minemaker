@@ -8,16 +8,18 @@
 </svelte:head>
 
 <div class="h-full min-h-screen w-full">
-	<div class="-z-50 bg-[url(/starbg.png)] bg-cover bg-bottom bg-no-repeat absolute top-0 left-0 h-full w-full min-h-[110vh]"></div>
+	<div
+		class="absolute top-0 left-0 -z-50 h-full min-h-[110vh] w-full bg-[url(/starbg.png)] bg-cover bg-bottom bg-no-repeat"
+	></div>
 	<main class="flex flex-col items-center space-y-8 p-12">
 		<div class="relative flex h-[150px] w-full items-center justify-center text-center">
 			<img
 				src="/gemshoplogo.png"
 				alt="Gem Shop Logo"
-				class="drop-shadow-green-900/25 crisp-bg pointer-events-none absolute z-0 aspect-auto w-[500px] select-none drop-shadow-lg"
+				class="crisp-bg pointer-events-none absolute z-0 aspect-auto w-[500px] drop-shadow-lg drop-shadow-green-900/25 select-none"
 			/>
 			<div
-				class="mask-[url(/gemshoplogo.png)] mask-center mask-contain mask-no-repeat absolute z-10 h-full w-[500px]"
+				class="absolute z-10 h-full w-[500px] mask-[url(/gemshoplogo.png)] mask-contain mask-center mask-no-repeat"
 			>
 				<div class="shimmer h-full w-[500px] bg-white"></div>
 			</div>

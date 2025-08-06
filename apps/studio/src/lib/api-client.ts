@@ -7,15 +7,15 @@
  */
 import { customFetch } from './customFetch';
 export type CreateGameBody = {
-  /** @maxLength 255 */
-  name: string;
-  turnstileToken: string;
+	/** @maxLength 255 */
+	name: string;
+	turnstileToken: string;
 };
 
 export type CreateGame200Thumbnail = unknown | null | string;
 
 export type CreateGame200CurrentBuildAnyOf = {
-  id: string;
+	id: string;
 };
 
 export type CreateGame200CurrentBuild = unknown | null | CreateGame200CurrentBuildAnyOf;
@@ -25,34 +25,34 @@ export type CreateGame200LastUpdated = unknown | string | string | number;
 export type CreateGame200Flags = 0 | 1 | 2 | 4 | 7;
 
 export type CreateGame200 = {
-  id: string;
-  name: string;
-  thumbnail: CreateGame200Thumbnail;
-  description: string;
-  currentBuild: CreateGame200CurrentBuild;
-  discoverable: boolean;
-  lastUpdated: CreateGame200LastUpdated;
-  flags: CreateGame200Flags;
-  tags: string[];
-  online: number;
+	id: string;
+	name: string;
+	thumbnail: CreateGame200Thumbnail;
+	description: string;
+	currentBuild: CreateGame200CurrentBuild;
+	discoverable: boolean;
+	lastUpdated: CreateGame200LastUpdated;
+	flags: CreateGame200Flags;
+	tags: string[];
+	online: number;
 };
 
 export type GetMyGamesParams = {
-/**
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
-/**
- * @minimum 0
- */
-start?: number;
+	/**
+	 * @minimum 1
+	 * @maximum 100
+	 */
+	limit?: number;
+	/**
+	 * @minimum 0
+	 */
+	start?: number;
 };
 
 export type GetMyGames200ItemThumbnail = unknown | null | string;
 
 export type GetMyGames200ItemCurrentBuildAnyOf = {
-  id: string;
+	id: string;
 };
 
 export type GetMyGames200ItemCurrentBuild = unknown | null | GetMyGames200ItemCurrentBuildAnyOf;
@@ -62,38 +62,38 @@ export type GetMyGames200ItemLastUpdated = unknown | string | string | number;
 export type GetMyGames200ItemFlags = 0 | 1 | 2 | 4 | 7;
 
 export type GetMyGames200Item = {
-  id: string;
-  name: string;
-  thumbnail: GetMyGames200ItemThumbnail;
-  description: string;
-  currentBuild: GetMyGames200ItemCurrentBuild;
-  discoverable: boolean;
-  lastUpdated: GetMyGames200ItemLastUpdated;
-  flags: GetMyGames200ItemFlags;
-  tags: string[];
-  online: number;
+	id: string;
+	name: string;
+	thumbnail: GetMyGames200ItemThumbnail;
+	description: string;
+	currentBuild: GetMyGames200ItemCurrentBuild;
+	discoverable: boolean;
+	lastUpdated: GetMyGames200ItemLastUpdated;
+	flags: GetMyGames200ItemFlags;
+	tags: string[];
+	online: number;
 };
 
 export type RefreshAccess200 = {
-  refresh: string;
-  access: string;
+	refresh: string;
+	access: string;
 };
 
 export type LoginBody = {
-  /** @maxLength 255 */
-  email: string;
-  /** @maxLength 255 */
-  password: string;
+	/** @maxLength 255 */
+	email: string;
+	/** @maxLength 255 */
+	password: string;
 };
 
 export type Login200UserAccountLastLogin = unknown | string | string | number;
 
 export type Login200UserAccount = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: Login200UserAccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: Login200UserAccountLastLogin;
+	gems: number;
 };
 
 export type Login200UserPlayerFlags = 0 | 1 | 2 | 4 | 7;
@@ -105,37 +105,37 @@ export type Login200UserPlayerFirstLogin = unknown | string | string | number;
 export type Login200UserPlayerLastSeen = unknown | string | string | number;
 
 export type Login200UserPlayer = {
-  uuid: string;
-  username: string;
-  flags: Login200UserPlayerFlags;
-  permissions: Login200UserPlayerPermissions;
-  firstLogin: Login200UserPlayerFirstLogin;
-  lastSeen: Login200UserPlayerLastSeen;
+	uuid: string;
+	username: string;
+	flags: Login200UserPlayerFlags;
+	permissions: Login200UserPlayerPermissions;
+	firstLogin: Login200UserPlayerFirstLogin;
+	lastSeen: Login200UserPlayerLastSeen;
 };
 
 export type Login200User = {
-  account?: Login200UserAccount;
-  player?: Login200UserPlayer;
+	account?: Login200UserAccount;
+	player?: Login200UserPlayer;
 };
 
 export type Login200Tokens = {
-  refresh: string;
-  access: string;
+	refresh: string;
+	access: string;
 };
 
 export type Login200 = {
-  user: Login200User;
-  tokens: Login200Tokens;
+	user: Login200User;
+	tokens: Login200Tokens;
 };
 
 export type Me200AccountLastLogin = unknown | string | string | number;
 
 export type Me200Account = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: Me200AccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: Me200AccountLastLogin;
+	gems: number;
 };
 
 export type Me200PlayerFlags = 0 | 1 | 2 | 4 | 7;
@@ -147,64 +147,64 @@ export type Me200PlayerFirstLogin = unknown | string | string | number;
 export type Me200PlayerLastSeen = unknown | string | string | number;
 
 export type Me200Player = {
-  uuid: string;
-  username: string;
-  flags: Me200PlayerFlags;
-  permissions: Me200PlayerPermissions;
-  firstLogin: Me200PlayerFirstLogin;
-  lastSeen: Me200PlayerLastSeen;
+	uuid: string;
+	username: string;
+	flags: Me200PlayerFlags;
+	permissions: Me200PlayerPermissions;
+	firstLogin: Me200PlayerFirstLogin;
+	lastSeen: Me200PlayerLastSeen;
 };
 
 export type Me200 = {
-  account?: Me200Account;
-  player?: Me200Player;
+	account?: Me200Account;
+	player?: Me200Player;
 };
 
 export type SignupBody = {
-  /** @maxLength 255 */
-  email: string;
-  /**
-   * @minLength 8
-   * @maxLength 255
-   * @pattern ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,200}$
-   */
-  password: string;
-  birthday: string;
-  turnstileToken: string;
+	/** @maxLength 255 */
+	email: string;
+	/**
+	 * @minLength 8
+	 * @maxLength 255
+	 * @pattern ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,200}$
+	 */
+	password: string;
+	birthday: string;
+	turnstileToken: string;
 };
 
 export type Signup200AccountLastLogin = unknown | string | string | number;
 
 export type Signup200Account = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: Signup200AccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: Signup200AccountLastLogin;
+	gems: number;
 };
 
 export type Signup200Tokens = {
-  refresh: string;
-  access: string;
+	refresh: string;
+	access: string;
 };
 
 export type Signup200 = {
-  account: Signup200Account;
-  tokens: Signup200Tokens;
+	account: Signup200Account;
+	tokens: Signup200Tokens;
 };
 
 export type ConfirmLinkBody = {
-  code: string;
+	code: string;
 };
 
 export type ConfirmLink200AccountLastLogin = unknown | string | string | number;
 
 export type ConfirmLink200Account = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: ConfirmLink200AccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: ConfirmLink200AccountLastLogin;
+	gems: number;
 };
 
 export type ConfirmLink200PlayerFlags = 0 | 1 | 2 | 4 | 7;
@@ -216,31 +216,31 @@ export type ConfirmLink200PlayerFirstLogin = unknown | string | string | number;
 export type ConfirmLink200PlayerLastSeen = unknown | string | string | number;
 
 export type ConfirmLink200Player = {
-  uuid: string;
-  username: string;
-  flags: ConfirmLink200PlayerFlags;
-  permissions: ConfirmLink200PlayerPermissions;
-  firstLogin: ConfirmLink200PlayerFirstLogin;
-  lastSeen: ConfirmLink200PlayerLastSeen;
+	uuid: string;
+	username: string;
+	flags: ConfirmLink200PlayerFlags;
+	permissions: ConfirmLink200PlayerPermissions;
+	firstLogin: ConfirmLink200PlayerFirstLogin;
+	lastSeen: ConfirmLink200PlayerLastSeen;
 };
 
 export type ConfirmLink200 = {
-  account?: ConfirmLink200Account;
-  player?: ConfirmLink200Player;
+	account?: ConfirmLink200Account;
+	player?: ConfirmLink200Player;
 };
 
 export type LoginWithMicrosoftParams = {
-code: string;
+	code: string;
 };
 
 export type LoginWithMicrosoft200UserAccountLastLogin = unknown | string | string | number;
 
 export type LoginWithMicrosoft200UserAccount = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: LoginWithMicrosoft200UserAccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: LoginWithMicrosoft200UserAccountLastLogin;
+	gems: number;
 };
 
 export type LoginWithMicrosoft200UserPlayerFlags = 0 | 1 | 2 | 4 | 7;
@@ -252,41 +252,41 @@ export type LoginWithMicrosoft200UserPlayerFirstLogin = unknown | string | strin
 export type LoginWithMicrosoft200UserPlayerLastSeen = unknown | string | string | number;
 
 export type LoginWithMicrosoft200UserPlayer = {
-  uuid: string;
-  username: string;
-  flags: LoginWithMicrosoft200UserPlayerFlags;
-  permissions: LoginWithMicrosoft200UserPlayerPermissions;
-  firstLogin: LoginWithMicrosoft200UserPlayerFirstLogin;
-  lastSeen: LoginWithMicrosoft200UserPlayerLastSeen;
+	uuid: string;
+	username: string;
+	flags: LoginWithMicrosoft200UserPlayerFlags;
+	permissions: LoginWithMicrosoft200UserPlayerPermissions;
+	firstLogin: LoginWithMicrosoft200UserPlayerFirstLogin;
+	lastSeen: LoginWithMicrosoft200UserPlayerLastSeen;
 };
 
 export type LoginWithMicrosoft200User = {
-  account?: LoginWithMicrosoft200UserAccount;
-  player?: LoginWithMicrosoft200UserPlayer;
+	account?: LoginWithMicrosoft200UserAccount;
+	player?: LoginWithMicrosoft200UserPlayer;
 };
 
 export type LoginWithMicrosoft200Tokens = {
-  refresh: string;
-  access: string;
+	refresh: string;
+	access: string;
 };
 
 export type LoginWithMicrosoft200 = {
-  user: LoginWithMicrosoft200User;
-  tokens: LoginWithMicrosoft200Tokens;
+	user: LoginWithMicrosoft200User;
+	tokens: LoginWithMicrosoft200Tokens;
 };
 
 export type LinkOauthParams = {
-code: string;
+	code: string;
 };
 
 export type LinkOauth200AccountLastLogin = unknown | string | string | number;
 
 export type LinkOauth200Account = {
-  id: string;
-  email: string;
-  emailVerified: boolean;
-  lastLogin: LinkOauth200AccountLastLogin;
-  gems: number;
+	id: string;
+	email: string;
+	emailVerified: boolean;
+	lastLogin: LinkOauth200AccountLastLogin;
+	gems: number;
 };
 
 export type LinkOauth200PlayerFlags = 0 | 1 | 2 | 4 | 7;
@@ -298,17 +298,17 @@ export type LinkOauth200PlayerFirstLogin = unknown | string | string | number;
 export type LinkOauth200PlayerLastSeen = unknown | string | string | number;
 
 export type LinkOauth200Player = {
-  uuid: string;
-  username: string;
-  flags: LinkOauth200PlayerFlags;
-  permissions: LinkOauth200PlayerPermissions;
-  firstLogin: LinkOauth200PlayerFirstLogin;
-  lastSeen: LinkOauth200PlayerLastSeen;
+	uuid: string;
+	username: string;
+	flags: LinkOauth200PlayerFlags;
+	permissions: LinkOauth200PlayerPermissions;
+	firstLogin: LinkOauth200PlayerFirstLogin;
+	lastSeen: LinkOauth200PlayerLastSeen;
 };
 
 export type LinkOauth200 = {
-  account?: LinkOauth200Account;
-  player?: LinkOauth200Player;
+	account?: LinkOauth200Account;
+	player?: LinkOauth200Player;
 };
 
 export type GetGame200OwnerFlags = 0 | 1 | 2 | 4 | 7;
@@ -318,22 +318,22 @@ export type GetGame200OwnerFirstLogin = unknown | string | string | number;
 export type GetGame200OwnerLastSeen = unknown | string | string | number;
 
 export type GetGame200OwnerAccount = {
-  id: string;
+	id: string;
 };
 
 export type GetGame200Owner = {
-  uuid: string;
-  username: string;
-  flags: GetGame200OwnerFlags;
-  firstLogin: GetGame200OwnerFirstLogin;
-  lastSeen: GetGame200OwnerLastSeen;
-  account?: GetGame200OwnerAccount;
+	uuid: string;
+	username: string;
+	flags: GetGame200OwnerFlags;
+	firstLogin: GetGame200OwnerFirstLogin;
+	lastSeen: GetGame200OwnerLastSeen;
+	account?: GetGame200OwnerAccount;
 };
 
 export type GetGame200Thumbnail = unknown | null | string;
 
 export type GetGame200CurrentBuildAnyOf = {
-  id: string;
+	id: string;
 };
 
 export type GetGame200CurrentBuild = unknown | null | GetGame200CurrentBuildAnyOf;
@@ -343,17 +343,17 @@ export type GetGame200LastUpdated = unknown | string | string | number;
 export type GetGame200Flags = 0 | 1 | 2 | 4 | 7;
 
 export type GetGame200 = {
-  id: string;
-  owner: GetGame200Owner;
-  name: string;
-  thumbnail: GetGame200Thumbnail;
-  description: string;
-  currentBuild: GetGame200CurrentBuild;
-  discoverable: boolean;
-  lastUpdated: GetGame200LastUpdated;
-  flags: GetGame200Flags;
-  tags: string[];
-  online: number;
+	id: string;
+	owner: GetGame200Owner;
+	name: string;
+	thumbnail: GetGame200Thumbnail;
+	description: string;
+	currentBuild: GetGame200CurrentBuild;
+	discoverable: boolean;
+	lastUpdated: GetGame200LastUpdated;
+	flags: GetGame200Flags;
+	tags: string[];
+	online: number;
 };
 
 export type GetBuilds200ItemAuthorFlags = 0 | 1 | 2 | 4 | 7;
@@ -363,26 +363,26 @@ export type GetBuilds200ItemAuthorFirstLogin = unknown | string | string | numbe
 export type GetBuilds200ItemAuthorLastSeen = unknown | string | string | number;
 
 export type GetBuilds200ItemAuthorAccount = {
-  id: string;
+	id: string;
 };
 
 export type GetBuilds200ItemAuthor = {
-  uuid: string;
-  username: string;
-  flags: GetBuilds200ItemAuthorFlags;
-  firstLogin: GetBuilds200ItemAuthorFirstLogin;
-  lastSeen: GetBuilds200ItemAuthorLastSeen;
-  account?: GetBuilds200ItemAuthorAccount;
+	uuid: string;
+	username: string;
+	flags: GetBuilds200ItemAuthorFlags;
+	firstLogin: GetBuilds200ItemAuthorFirstLogin;
+	lastSeen: GetBuilds200ItemAuthorLastSeen;
+	account?: GetBuilds200ItemAuthorAccount;
 };
 
 export type GetBuilds200ItemDescription = unknown | null | string;
 
 export type GetBuilds200Item = {
-  id: string;
-  author: GetBuilds200ItemAuthor;
-  description: GetBuilds200ItemDescription;
-  authorIp: string;
-  live: boolean;
+	id: string;
+	author: GetBuilds200ItemAuthor;
+	description: GetBuilds200ItemDescription;
+	authorIp: string;
+	live: boolean;
 };
 
 export type GetBuild200GameOwnerFlags = 0 | 1 | 2 | 4 | 7;
@@ -392,22 +392,22 @@ export type GetBuild200GameOwnerFirstLogin = unknown | string | string | number;
 export type GetBuild200GameOwnerLastSeen = unknown | string | string | number;
 
 export type GetBuild200GameOwnerAccount = {
-  id: string;
+	id: string;
 };
 
 export type GetBuild200GameOwner = {
-  uuid: string;
-  username: string;
-  flags: GetBuild200GameOwnerFlags;
-  firstLogin: GetBuild200GameOwnerFirstLogin;
-  lastSeen: GetBuild200GameOwnerLastSeen;
-  account?: GetBuild200GameOwnerAccount;
+	uuid: string;
+	username: string;
+	flags: GetBuild200GameOwnerFlags;
+	firstLogin: GetBuild200GameOwnerFirstLogin;
+	lastSeen: GetBuild200GameOwnerLastSeen;
+	account?: GetBuild200GameOwnerAccount;
 };
 
 export type GetBuild200GameThumbnail = unknown | null | string;
 
 export type GetBuild200GameCurrentBuildAnyOf = {
-  id: string;
+	id: string;
 };
 
 export type GetBuild200GameCurrentBuild = unknown | null | GetBuild200GameCurrentBuildAnyOf;
@@ -417,17 +417,17 @@ export type GetBuild200GameLastUpdated = unknown | string | string | number;
 export type GetBuild200GameFlags = 0 | 1 | 2 | 4 | 7;
 
 export type GetBuild200Game = {
-  id: string;
-  owner: GetBuild200GameOwner;
-  name: string;
-  thumbnail: GetBuild200GameThumbnail;
-  description: string;
-  currentBuild: GetBuild200GameCurrentBuild;
-  discoverable: boolean;
-  lastUpdated: GetBuild200GameLastUpdated;
-  flags: GetBuild200GameFlags;
-  tags: string[];
-  online: number;
+	id: string;
+	owner: GetBuild200GameOwner;
+	name: string;
+	thumbnail: GetBuild200GameThumbnail;
+	description: string;
+	currentBuild: GetBuild200GameCurrentBuild;
+	discoverable: boolean;
+	lastUpdated: GetBuild200GameLastUpdated;
+	flags: GetBuild200GameFlags;
+	tags: string[];
+	online: number;
 };
 
 export type GetBuild200AuthorFlags = 0 | 1 | 2 | 4 | 7;
@@ -437,16 +437,16 @@ export type GetBuild200AuthorFirstLogin = unknown | string | string | number;
 export type GetBuild200AuthorLastSeen = unknown | string | string | number;
 
 export type GetBuild200AuthorAccount = {
-  id: string;
+	id: string;
 };
 
 export type GetBuild200Author = {
-  uuid: string;
-  username: string;
-  flags: GetBuild200AuthorFlags;
-  firstLogin: GetBuild200AuthorFirstLogin;
-  lastSeen: GetBuild200AuthorLastSeen;
-  account?: GetBuild200AuthorAccount;
+	uuid: string;
+	username: string;
+	flags: GetBuild200AuthorFlags;
+	firstLogin: GetBuild200AuthorFirstLogin;
+	lastSeen: GetBuild200AuthorLastSeen;
+	account?: GetBuild200AuthorAccount;
 };
 
 export type GetBuild200Description = unknown | null | string;
@@ -456,466 +456,359 @@ export type GetBuild200ArtifactsItemType = 'PLUGIN' | 'LEVEL' | 'RESOURCE_PACK' 
 export type GetBuild200ArtifactsItemUploaded = unknown | string | string | number;
 
 export type GetBuild200ArtifactsItem = {
-  uuid: string;
-  type: GetBuild200ArtifactsItemType;
-  key: string;
-  checksum: string;
-  uploaded: GetBuild200ArtifactsItemUploaded;
+	uuid: string;
+	type: GetBuild200ArtifactsItemType;
+	key: string;
+	checksum: string;
+	uploaded: GetBuild200ArtifactsItemUploaded;
 };
 
 export type GetBuild200 = {
-  id: string;
-  game: GetBuild200Game;
-  author: GetBuild200Author;
-  description: GetBuild200Description;
-  authorIp: string;
-  live: boolean;
-  manifest: unknown;
-  artifacts: GetBuild200ArtifactsItem[];
+	id: string;
+	game: GetBuild200Game;
+	author: GetBuild200Author;
+	description: GetBuild200Description;
+	authorIp: string;
+	live: boolean;
+	manifest: unknown;
+	artifacts: GetBuild200ArtifactsItem[];
 };
 
 /**
  * @summary Create a new game
  */
 export type createGameResponse200 = {
-  data: CreateGame200
-  status: 200
-}
-    
+	data: CreateGame200;
+	status: 200;
+};
+
 export type createGameResponseComposite = createGameResponse200;
-    
+
 export type createGameResponse = createGameResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getCreateGameUrl = () => {
-
-
-  
-
-  return `/api/games/create/`
-}
+	return `/api/games/create/`;
+};
 
 export const createGame = async (createGameBody: CreateGameBody, options?: RequestInit): Promise<createGameResponse> => {
-  
-  return customFetch<createGameResponse>(getCreateGameUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createGameBody,)
-  }
-);}
-
-
+	return customFetch<createGameResponse>(getCreateGameUrl(), {
+		...options,
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', ...options?.headers },
+		body: JSON.stringify(createGameBody)
+	});
+};
 
 /**
  * @summary Get games of current user
  */
 export type getMyGamesResponse200 = {
-  data: GetMyGames200Item[]
-  status: 200
-}
-    
+	data: GetMyGames200Item[];
+	status: 200;
+};
+
 export type getMyGamesResponseComposite = getMyGamesResponse200;
-    
+
 export type getMyGamesResponse = getMyGamesResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getGetMyGamesUrl = (params?: GetMyGamesParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getGetMyGamesUrl = (params?: GetMyGamesParams) => {
+	const normalizedParams = new URLSearchParams();
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? 'null' : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/games/mine/?${stringifiedParams}` : `/api/games/mine/`
-}
+	return stringifiedParams.length > 0 ? `/api/games/mine/?${stringifiedParams}` : `/api/games/mine/`;
+};
 
 export const getMyGames = async (params?: GetMyGamesParams, options?: RequestInit): Promise<getMyGamesResponse> => {
-  
-  return customFetch<getMyGamesResponse>(getGetMyGamesUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+	return customFetch<getMyGamesResponse>(getGetMyGamesUrl(params), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * Get a new access token if your current one expired. Use your refresh token instead of the expired access token for the Authorization header.
  * @summary Get a new access token
  */
 export type refreshAccessResponse200 = {
-  data: RefreshAccess200
-  status: 200
-}
-    
+	data: RefreshAccess200;
+	status: 200;
+};
+
 export type refreshAccessResponseComposite = refreshAccessResponse200;
-    
+
 export type refreshAccessResponse = refreshAccessResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getRefreshAccessUrl = () => {
+	return `/api/auth/refresh/`;
+};
 
-
-  
-
-  return `/api/auth/refresh/`
-}
-
-export const refreshAccess = async ( options?: RequestInit): Promise<refreshAccessResponse> => {
-  
-  return customFetch<refreshAccessResponse>(getRefreshAccessUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const refreshAccess = async (options?: RequestInit): Promise<refreshAccessResponse> => {
+	return customFetch<refreshAccessResponse>(getRefreshAccessUrl(), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Login to an account
  */
 export type loginResponse200 = {
-  data: Login200
-  status: 200
-}
-    
+	data: Login200;
+	status: 200;
+};
+
 export type loginResponseComposite = loginResponse200;
-    
+
 export type loginResponse = loginResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getLoginUrl = () => {
-
-
-  
-
-  return `/api/account/login/`
-}
+	return `/api/account/login/`;
+};
 
 export const login = async (loginBody: LoginBody, options?: RequestInit): Promise<loginResponse> => {
-  
-  return customFetch<loginResponse>(getLoginUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      loginBody,)
-  }
-);}
-
-
+	return customFetch<loginResponse>(getLoginUrl(), {
+		...options,
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', ...options?.headers },
+		body: JSON.stringify(loginBody)
+	});
+};
 
 /**
  * @summary Get current account info
  */
 export type meResponse200 = {
-  data: Me200
-  status: 200
-}
-    
+	data: Me200;
+	status: 200;
+};
+
 export type meResponseComposite = meResponse200;
-    
+
 export type meResponse = meResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getMeUrl = () => {
+	return `/api/account/me/`;
+};
 
-
-  
-
-  return `/api/account/me/`
-}
-
-export const me = async ( options?: RequestInit): Promise<meResponse> => {
-  
-  return customFetch<meResponse>(getMeUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const me = async (options?: RequestInit): Promise<meResponse> => {
+	return customFetch<meResponse>(getMeUrl(), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Create an account
  */
 export type signupResponse200 = {
-  data: Signup200
-  status: 200
-}
-    
+	data: Signup200;
+	status: 200;
+};
+
 export type signupResponseComposite = signupResponse200;
-    
+
 export type signupResponse = signupResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getSignupUrl = () => {
-
-
-  
-
-  return `/api/account/signup/`
-}
+	return `/api/account/signup/`;
+};
 
 export const signup = async (signupBody: SignupBody, options?: RequestInit): Promise<signupResponse> => {
-  
-  return customFetch<signupResponse>(getSignupUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      signupBody,)
-  }
-);}
-
-
+	return customFetch<signupResponse>(getSignupUrl(), {
+		...options,
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', ...options?.headers },
+		body: JSON.stringify(signupBody)
+	});
+};
 
 /**
  * @summary Confirm linking Minecraft & Minemaker accounts
  */
 export type confirmLinkResponse200 = {
-  data: ConfirmLink200
-  status: 200
-}
-    
+	data: ConfirmLink200;
+	status: 200;
+};
+
 export type confirmLinkResponseComposite = confirmLinkResponse200;
-    
+
 export type confirmLinkResponse = confirmLinkResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
 export const getConfirmLinkUrl = () => {
-
-
-  
-
-  return `/api/account/link/confirm/`
-}
+	return `/api/account/link/confirm/`;
+};
 
 export const confirmLink = async (confirmLinkBody: ConfirmLinkBody, options?: RequestInit): Promise<confirmLinkResponse> => {
-  
-  return customFetch<confirmLinkResponse>(getConfirmLinkUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      confirmLinkBody,)
-  }
-);}
-
-
+	return customFetch<confirmLinkResponse>(getConfirmLinkUrl(), {
+		...options,
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', ...options?.headers },
+		body: JSON.stringify(confirmLinkBody)
+	});
+};
 
 /**
  * @summary Login using Microsoft OAuth
  */
 export type loginWithMicrosoftResponse200 = {
-  data: LoginWithMicrosoft200
-  status: 200
-}
-    
+	data: LoginWithMicrosoft200;
+	status: 200;
+};
+
 export type loginWithMicrosoftResponseComposite = loginWithMicrosoftResponse200;
-    
+
 export type loginWithMicrosoftResponse = loginWithMicrosoftResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getLoginWithMicrosoftUrl = (params: LoginWithMicrosoftParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getLoginWithMicrosoftUrl = (params: LoginWithMicrosoftParams) => {
+	const normalizedParams = new URLSearchParams();
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? 'null' : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/account/link/login/?${stringifiedParams}` : `/api/account/link/login/`
-}
+	return stringifiedParams.length > 0 ? `/api/account/link/login/?${stringifiedParams}` : `/api/account/link/login/`;
+};
 
 export const loginWithMicrosoft = async (params: LoginWithMicrosoftParams, options?: RequestInit): Promise<loginWithMicrosoftResponse> => {
-  
-  return customFetch<loginWithMicrosoftResponse>(getLoginWithMicrosoftUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+	return customFetch<loginWithMicrosoftResponse>(getLoginWithMicrosoftUrl(params), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Link a Minecraft account via oauth code
  */
 export type linkOauthResponse200 = {
-  data: LinkOauth200
-  status: 200
-}
-    
+	data: LinkOauth200;
+	status: 200;
+};
+
 export type linkOauthResponseComposite = linkOauthResponse200;
-    
+
 export type linkOauthResponse = linkOauthResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getLinkOauthUrl = (params: LinkOauthParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getLinkOauthUrl = (params: LinkOauthParams) => {
+	const normalizedParams = new URLSearchParams();
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? 'null' : value.toString());
+		}
+	});
 
-  const stringifiedParams = normalizedParams.toString();
+	const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/account/link/oauth/?${stringifiedParams}` : `/api/account/link/oauth/`
-}
+	return stringifiedParams.length > 0 ? `/api/account/link/oauth/?${stringifiedParams}` : `/api/account/link/oauth/`;
+};
 
 export const linkOauth = async (params: LinkOauthParams, options?: RequestInit): Promise<linkOauthResponse> => {
-  
-  return customFetch<linkOauthResponse>(getLinkOauthUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+	return customFetch<linkOauthResponse>(getLinkOauthUrl(params), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Get a game by ID
  */
 export type getGameResponse200 = {
-  data: GetGame200
-  status: 200
-}
-    
+	data: GetGame200;
+	status: 200;
+};
+
 export type getGameResponseComposite = getGameResponse200;
-    
+
 export type getGameResponse = getGameResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getGetGameUrl = (id: string,) => {
-
-
-  
-
-  return `/api/games/${id}/`
-}
+export const getGetGameUrl = (id: string) => {
+	return `/api/games/${id}/`;
+};
 
 export const getGame = async (id: string, options?: RequestInit): Promise<getGameResponse> => {
-  
-  return customFetch<getGameResponse>(getGetGameUrl(id),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+	return customFetch<getGameResponse>(getGetGameUrl(id), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Gets a game's builds
  */
 export type getBuildsResponse200 = {
-  data: GetBuilds200Item[]
-  status: 200
-}
-    
+	data: GetBuilds200Item[];
+	status: 200;
+};
+
 export type getBuildsResponseComposite = getBuildsResponse200;
-    
+
 export type getBuildsResponse = getBuildsResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getGetBuildsUrl = (id: string,) => {
-
-
-  
-
-  return `/api/games/${id}/builds/`
-}
+export const getGetBuildsUrl = (id: string) => {
+	return `/api/games/${id}/builds/`;
+};
 
 export const getBuilds = async (id: string, options?: RequestInit): Promise<getBuildsResponse> => {
-  
-  return customFetch<getBuildsResponse>(getGetBuildsUrl(id),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+	return customFetch<getBuildsResponse>(getGetBuildsUrl(id), {
+		...options,
+		method: 'GET'
+	});
+};
 
 /**
  * @summary Gets a game build by its id
  */
 export type getBuildResponse200 = {
-  data: GetBuild200
-  status: 200
-}
-    
+	data: GetBuild200;
+	status: 200;
+};
+
 export type getBuildResponseComposite = getBuildResponse200;
-    
+
 export type getBuildResponse = getBuildResponseComposite & {
-  headers: Headers;
-}
+	headers: Headers;
+};
 
-export const getGetBuildUrl = (id: string,
-    buildId: string,) => {
+export const getGetBuildUrl = (id: string, buildId: string) => {
+	return `/api/games/${id}/builds/${buildId}/`;
+};
 
-
-  
-
-  return `/api/games/${id}/builds/${buildId}/`
-}
-
-export const getBuild = async (id: string,
-    buildId: string, options?: RequestInit): Promise<getBuildResponse> => {
-  
-  return customFetch<getBuildResponse>(getGetBuildUrl(id,buildId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export const getBuild = async (id: string, buildId: string, options?: RequestInit): Promise<getBuildResponse> => {
+	return customFetch<getBuildResponse>(getGetBuildUrl(id, buildId), {
+		...options,
+		method: 'GET'
+	});
+};

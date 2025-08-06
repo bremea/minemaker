@@ -7,8 +7,6 @@
 </script>
 
 <Button {...props}>
-	<FluentChevronLeft24Filled
-		class="absolute left-6 transition-all group-hover:left-4"
-	/>
+	<FluentChevronLeft24Filled class="absolute left-6 transition-all group-hover:left-4" />
 	<span class="ml-6">{@render props.children?.()}</span>
 </Button>

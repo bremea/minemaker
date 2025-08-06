@@ -1,13 +1,5 @@
 import { ElysiaApp } from '$src/app';
-import {
-	Game,
-	GameSchema,
-	getPlayerPresence,
-	getProfileByPlayerUsername,
-	getUserDiscoverableGamesByCreationDate,
-	PresenceSchema,
-	ProfileSchema
-} from '@minemaker/db';
+import { Game, GameSchema, getPlayerPresence, getProfileByPlayerUsername, getUserDiscoverableGamesByCreationDate, PresenceSchema, ProfileSchema } from '@minemaker/db';
 import { t } from 'elysia';
 
 export default (app: ElysiaApp) =>
@@ -23,9 +15,7 @@ export default (app: ElysiaApp) =>
 			};
 
 			if (profile.account) {
-				profile.creations = await getUserDiscoverableGamesByCreationDate(
-					profile.account.id
-				);
+				profile.creations = await getUserDiscoverableGamesByCreationDate(profile.account.id);
 			}
 
 			return profile;

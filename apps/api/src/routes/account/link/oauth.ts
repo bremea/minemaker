@@ -1,13 +1,6 @@
 import type { ElysiaApp } from '$src/app';
 import { requireAccountOrPlayer } from '$src/lib/middleware/auth';
-import {
-	createLinkRequest,
-	createOrUpdatePlayer,
-	InternalApiError,
-	Player,
-	UnauthorizedApiError,
-	UserSchema
-} from '@minemaker/db';
+import { createLinkRequest, createOrUpdatePlayer, InternalApiError, Player, UnauthorizedApiError, UserSchema } from '@minemaker/db';
 import { t } from 'elysia';
 
 export default (app: ElysiaApp) =>
@@ -22,16 +15,13 @@ export default (app: ElysiaApp) =>
 				throw new InternalApiError(400, 'Missing oauth code');
 			}
 
-			const accessTokenRequest = await fetch(
-				'https://login.microsoftonline.com/consumers/oauth2/v2.0/token',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: `client_id=${process.env.MICROSOFT_CLIENT_ID}&scope=XboxLive.signin%20XboxLive.offline_access&code=${query.code}&redirect_uri=${process.env.MICROSOFT_CLIENT_LINK_REDIRECT_URI}&grant_type=authorization_code&client_secret=${process.env.MICROSOFT_CLIENT_SECRET}`
-				}
-			);
+			const accessTokenRequest = await fetch('https://login.microsoftonline.com/consumers/oauth2/v2.0/token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: `client_id=${process.env.MICROSOFT_CLIENT_ID}&scope=XboxLive.signin%20XboxLive.offline_access&code=${query.code}&redirect_uri=${process.env.MICROSOFT_CLIENT_LINK_REDIRECT_URI}&grant_type=authorization_code&client_secret=${process.env.MICROSOFT_CLIENT_SECRET}`
+			});
 
 			try {
 				var accessTokenResponse = await accessTokenRequest.json();
@@ -104,19 +94,16 @@ export default (app: ElysiaApp) =>
 
 			const xtsToken = xtsTokenResponse['Token'];
 
-			const minecraftAuthRequest = await fetch(
-				'https://api.minecraftservices.com/authentication/login_with_xbox',
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json'
-					},
-					body: JSON.stringify({
-						identityToken: `XBL3.0 x=${userHash};${xtsToken}`
-					})
-				}
-			);
+			const minecraftAuthRequest = await fetch('https://api.minecraftservices.com/authentication/login_with_xbox', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				},
+				body: JSON.stringify({
+					identityToken: `XBL3.0 x=${userHash};${xtsToken}`
+				})
+			});
 
 			if (!minecraftAuthRequest.ok) {
 				throw new InternalApiError(500, 'Minecraft API returned an error');
@@ -130,17 +117,14 @@ export default (app: ElysiaApp) =>
 
 			const minecraftAccessToken = minecraftAuthResponse['access_token'];
 
-			const minecraftProfileRequest = await fetch(
-				'https://api.minecraftservices.com/minecraft/profile',
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
-						Authorization: `Bearer ${minecraftAccessToken}`
-					}
+			const minecraftProfileRequest = await fetch('https://api.minecraftservices.com/minecraft/profile', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+					Authorization: `Bearer ${minecraftAccessToken}`
 				}
-			);
+			});
 
 			if (!minecraftProfileRequest.ok) {
 				throw new InternalApiError(500, 'Minecraft API returned an error');

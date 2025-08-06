@@ -20,7 +20,7 @@
 		red: 'bg-red-500 enabled:hover:bg-red-400 outline-red-500 text-black',
 		gray: 'bg-gray-600 enabled:hover:bg-gray-500 outline-gray-600 text-white',
 		darkgray: 'bg-gray-800 enabled:hover:bg-gray-700 outline-gray-800 text-white',
-		green: 'bg-mm-green enabled:hover:bg-mm-green-light outline-mm-green text-black',
+		green: 'bg-mm-green enabled:hover:bg-mm-green-light outline-mm-green text-black'
 	};
 
 	const sizeClasses: { [K in Props['size']]: string } = {
@@ -41,16 +41,16 @@
 </script>
 
 <button
-	class={`${colorClasses[color]} group relative flex h-min w-min cursor-pointer items-center space-x-2 rounded-lg ${sizeClasses[size]} text-nowrap outline-0 transition-all enabled:hover:shadow-lg enabled:focus:outline-2 enabled:focus:outline-offset-2 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 font-bold ${className}`}
+	class={`${colorClasses[color]} group relative flex h-min w-min cursor-pointer items-center space-x-2 rounded-lg ${sizeClasses[size]} font-bold text-nowrap outline-0 transition-all enabled:hover:shadow-lg enabled:focus:outline-2 enabled:focus:outline-offset-2 enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
 	disabled={loading || others.disabled}
 	{...others}
 >
 	{#if loading}
-		<div class="flex w-full h-full justify-center items-center left-0 top-0 absolute z-10">
+		<div class="absolute top-0 left-0 z-10 flex h-full w-full items-center justify-center">
 			<SvgSpinnersBlocksShuffle3 />
 		</div>
 	{/if}
-	<div class={`${loading ? 'opacity-0' : 'opacity-100'} flex items-center text-nowrap space-x-2`}>
+	<div class={`${loading ? 'opacity-0' : 'opacity-100'} flex items-center space-x-2 text-nowrap`}>
 		{@render children?.()}
 	</div>
 </button>

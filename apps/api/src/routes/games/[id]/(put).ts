@@ -1,11 +1,5 @@
 import { ElysiaApp } from '$src/app';
-import {
-	GameSchema,
-	getGameById,
-	InternalApiError,
-	UnauthorizedApiError,
-	updateGame
-} from '@minemaker/db';
+import { GameSchema, getGameById, InternalApiError, UnauthorizedApiError, updateGame } from '@minemaker/db';
 import { requireAccountAndPlayer } from '$src/lib/middleware/auth';
 import { t } from 'elysia';
 

@@ -1,11 +1,6 @@
 import { ElysiaApp } from '$src/app';
 import { t } from 'elysia';
-import {
-	BuildSchema,
-	checkGameOwner,
-	getBuildsByGameId,
-	UnauthorizedApiError
-} from '@minemaker/db';
+import { BuildSchema, checkGameOwner, getBuildsByGameId, UnauthorizedApiError } from '@minemaker/db';
 import { requireAccountAndPlayer } from '$src/lib/middleware/auth';
 
 export default (app: ElysiaApp) =>

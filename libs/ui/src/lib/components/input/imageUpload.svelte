@@ -34,7 +34,7 @@
 <div class={`group relative ${className}`}>
 	{@render children?.()}
 	<div
-		class="absolute left-0 top-0 z-10 h-full w-full bg-black/75 opacity-0 transition-all group-hover:opacity-100"
+		class="absolute top-0 left-0 z-10 h-full w-full bg-black/75 opacity-0 transition-all group-hover:opacity-100"
 		ondrop={dropHandler}
 		ondragover={dragOverHandler}
 	>

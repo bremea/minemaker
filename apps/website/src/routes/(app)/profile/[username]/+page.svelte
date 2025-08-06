@@ -2,7 +2,7 @@
 	import { Button, GameTile } from '@minemaker/ui';
 	import FluentCircle20Filled from '~icons/fluent/circle-20-filled';
 	import FluentPersonAdd20Filled from '~icons/fluent/person-add-20-filled';
-	import { PlayerFlags } from '@minemaker/db/src/enums';
+	import { PlayerFlags } from '@minemaker/db/src/types/enums.js';
 
 	let { data } = $props();
 </script>
@@ -11,11 +11,11 @@
 	<div class="w-full rounded-lg bg-gray-600 px-8">
 		<div class="relative flex h-32 w-full space-x-8">
 			<div class="relative h-full w-32">
-				<div class="h-42 absolute -top-10 flex w-36 justify-center overflow-hidden">
+				<div class="absolute -top-10 flex h-42 w-36 justify-center overflow-hidden">
 					<img
 						src={`https://mc-heads.net/body/${data.profile.uuid}`}
 						alt={`Skin for player ${data.profile.username}`}
-						class="drop-shadow-black/75 pointer-events-none absolute w-full select-none p-4 drop-shadow-[0_0_8px_rgba(0,0,0,1)]"
+						class="pointer-events-none absolute w-full p-4 drop-shadow-[0_0_8px_rgba(0,0,0,1)] drop-shadow-black/75 select-none"
 					/>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 										class="pointer-events-none size-6 select-none"
 									/>
 									<div
-										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 select-none whitespace-nowrap rounded-lg bg-black px-2 py-1 text-xs opacity-0 transition-all group-hover:opacity-100"
+										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 rounded-lg bg-black px-2 py-1 text-xs whitespace-nowrap opacity-0 transition-all select-none group-hover:opacity-100"
 									>
 										Minemaker Staff
 									</div>
@@ -47,7 +47,7 @@
 										class="pointer-events-none size-6 select-none"
 									/>
 									<div
-										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 select-none whitespace-nowrap rounded-lg bg-black px-2 py-1 text-xs opacity-0 transition-all group-hover:opacity-100"
+										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 rounded-lg bg-black px-2 py-1 text-xs whitespace-nowrap opacity-0 transition-all select-none group-hover:opacity-100"
 									>
 										Partner
 									</div>
@@ -62,7 +62,7 @@
 										class="pointer-events-none size-6 select-none"
 									/>
 									<div
-										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 select-none whitespace-nowrap rounded-lg bg-gray-800 px-2 py-1 text-xs opacity-0 transition-all group-hover:opacity-100"
+										class="pointer-events-none absolute -top-8 left-1/2 z-10 -translate-x-1/2 rounded-lg bg-gray-800 px-2 py-1 text-xs whitespace-nowrap opacity-0 transition-all select-none group-hover:opacity-100"
 									>
 										Contributor
 									</div>

@@ -8,7 +8,5 @@
 
 <Button {...props}>
 	<span class="mr-6">{@render props.children?.()}</span>
-	<FluentChevronRight24Filled
-		class="absolute right-6 transition-all group-hover:right-4"
-	/>
+	<FluentChevronRight24Filled class="absolute right-6 transition-all group-hover:right-4" />
 </Button>

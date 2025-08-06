@@ -22,16 +22,16 @@
 <div class="flex w-full flex-col space-y-2">
 	{@render children?.()}
 	{#each options as { value, label }}
-		<div class="flex w-full items-center space-x-2 cursor-pointer">
+		<div class="flex w-full cursor-pointer items-center space-x-2">
 			<input
 				bind:group={selected}
 				type="radio"
 				{value}
 				id={slugify(label)}
-				class={`size-6 appearance-none cursor-pointer border-2 accent-gray-500 border-gray-600 bg-transparent hover:border-gray-500 focus:ring-0 focus:ring-offset-0 focus:border-mm-blue ${className}`}
+				class={`focus:border-mm-blue size-6 cursor-pointer appearance-none border-2 border-gray-600 bg-transparent accent-gray-500 hover:border-gray-500 focus:ring-0 focus:ring-offset-0 ${className}`}
 				{...others}
 			/>
-			<label class="text-base cursor-pointer" for={slugify(label)}>{label}</label>
+			<label class="cursor-pointer text-base" for={slugify(label)}>{label}</label>
 		</div>
 	{/each}
 </div>

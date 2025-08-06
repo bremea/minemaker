@@ -11,6 +11,6 @@
 >
 	{@render children?.()}
 	{#if others.target == '_blank'}
-		<FluentOpen20Filled/>
+		<FluentOpen20Filled />
 	{/if}
 </a>

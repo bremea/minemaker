@@ -1,14 +1,7 @@
 import { ElysiaApp } from '$src/app';
 import { TokenSchema } from '$src/lib/types';
 import bearer from '@elysiajs/bearer';
-import {
-	createSession,
-	getSessionById,
-	getUserByAccountId,
-	InternalApiError,
-	invalidateSession,
-	updateTrustedIpLastLogin
-} from '@minemaker/db';
+import { createSession, getSessionById, getUserByAccountId, InternalApiError, invalidateSession, updateTrustedIpLastLogin } from '@minemaker/db';
 import { t } from 'elysia';
 
 export default (app: ElysiaApp) =>
@@ -72,8 +65,7 @@ export default (app: ElysiaApp) =>
 		{
 			detail: {
 				summary: 'Get a new access token',
-				description:
-					'Get a new access token if your current one expired. Use your refresh token instead of the expired access token for the Authorization header.',
+				description: 'Get a new access token if your current one expired. Use your refresh token instead of the expired access token for the Authorization header.',
 				operationId: 'RefreshAccess'
 			},
 			headers: t.Any(),

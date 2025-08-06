@@ -68,7 +68,7 @@
 	<div class="flex space-x-2">
 		<select
 			placeholder="Month"
-			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue text-nowrap border-2 border-gray-600 bg-gray-900 outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue border-2 border-gray-600 bg-gray-900 text-nowrap outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
 			bind:value={month}
 			{...others}
 		>
@@ -78,7 +78,7 @@
 		</select>
 		<select
 			placeholder="Day"
-			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue text-nowrap border-2 border-gray-600 bg-gray-900 outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue border-2 border-gray-600 bg-gray-900 text-nowrap outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
 			bind:value={day}
 			{...others}
 		>
@@ -88,7 +88,7 @@
 		</select>
 		<select
 			placeholder="Year"
-			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue text-nowrap border-2 border-gray-600 bg-gray-900 outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} focus:border-mm-blue border-2 border-gray-600 bg-gray-900 text-nowrap outline-0 transition-all hover:border-gray-500 hover:shadow-lg focus:bg-gray-900 ${className}`}
 			bind:value={year}
 			{...others}
 		>

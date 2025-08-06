@@ -63,13 +63,13 @@
 		<input
 			bind:value
 			type={showing ? 'text' : 'password'}
-			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} text-nowrap border-2 ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all hover:shadow-lg focus:bg-gray-900 autofill:bg-gray-900! ${className}`}
+			class={`group relative flex h-min w-full items-center space-x-2 rounded-lg ${sizeClasses[componentSize]} border-2 text-nowrap ${regexError ? 'border-red-400 hover:border-red-300' : 'border-gray-600 hover:border-gray-500'} focus:border-mm-blue bg-gray-900 outline-0 transition-all autofill:bg-gray-900! hover:shadow-lg focus:bg-gray-900 ${className}`}
 			{...others}
 		/>
 		<button
 			type="button"
 			onclick={() => (showing = !showing)}
-			class="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-400/50 active:scale-95"
+			class="absolute top-1.5 right-1.5 flex h-8 w-8 items-center justify-center rounded-full transition-all hover:bg-gray-400/50 active:scale-95"
 		>
 			{#if showing}
 				<FluentEyeHide20Filled />
@@ -78,7 +78,7 @@
 			{/if}
 		</button>
 	</div>
-	<ul class="pl-2 pt-2">
+	<ul class="pt-2 pl-2">
 		{#each rules as rule}
 			<li class="flex items-end space-x-1 text-sm">
 				{#if rule.pattern.test(value)}
@@ -93,7 +93,7 @@
 	</ul>
 	{#if maxlength}
 		<span
-			class={`mr-2 mt-0.5 w-full text-right text-xs ${value.length == maxlength ? 'text-red-500' : 'text-gray-400'}`}
+			class={`mt-0.5 mr-2 w-full text-right text-xs ${value.length == maxlength ? 'text-red-500' : 'text-gray-400'}`}
 		>
 			{value.length}/{maxlength}
 		</span>

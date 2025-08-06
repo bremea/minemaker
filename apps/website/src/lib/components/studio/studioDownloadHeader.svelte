@@ -12,6 +12,6 @@
 			Download the free Minemaker Studio app to build and test your projects.
 		</p>
 		<Button color="purple"><UilWindows /> <span>Download</span></Button>
-		<Link class="hover:text-gray-300! text-xs !text-gray-400">Other downloads</Link>
+		<Link class="text-xs !text-gray-400 hover:text-gray-300!">Other downloads</Link>
 	</div>
 </section>

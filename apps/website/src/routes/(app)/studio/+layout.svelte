@@ -23,7 +23,7 @@
 </script>
 
 <div class="relative flex h-full min-h-screen">
-	<nav class="border-r-1 sticky top-0 h-full min-h-screen w-[300px] border-r-gray-600 shadow-lg">
+	<nav class="sticky top-0 h-full min-h-screen w-[300px] border-r-1 border-r-gray-600 shadow-lg">
 		<div class="flex flex-col items-center space-y-2 pt-4">
 			<NavLink href="/studio/projects">
 				<FluentGrid20Filled class="h-6 w-6" />

@@ -1,9 +1,9 @@
-import { pool } from '../connection';
-import { InternalApiError, Nullable } from '../utils';
 import { t } from 'elysia';
+import { pool } from '../connection';
+import { ArtifactType, ArtifactUploadStatus } from '../types/enums';
+import { InternalApiError, Nullable } from '../utils';
 import { GameSchema, parseDatabaseGame } from './game';
 import { parseProfileFromUser, ProfileSchema } from './user';
-import { ArtifactType, ArtifactUploadStatus } from '../enums';
 
 export const ArtifactMetadataSchema = Nullable(t.Union([t.String(), t.Array(t.String())]));
 
@@ -36,7 +36,7 @@ export type BuildOmitGameArtifacts = Omit<Build, 'game' | 'artifacts'>;
 async function parseDatabaseBuild(data: any): Promise<Build> {
 	return {
 		...parseDatabasePartialBuild(data),
-		game: (await parseDatabaseGame(data['game'])),
+		game: await parseDatabaseGame(data['game']),
 		artifacts: data['artifacts'].map((a: any) => parseDatabaseArtifact(a))
 	};
 }
@@ -59,11 +59,7 @@ function parseDatabaseArtifact(data: any): Artifact {
 		key: data['key'],
 		checksum: data['checksum'],
 		status: data['status'],
-		uploaded: data['uploaded']
-			? typeof data['uploaded'] == 'string'
-				? new Date(data['uploaded'])
-				: data['uploaded']
-			: undefined,
+		uploaded: data['uploaded'] ? (typeof data['uploaded'] == 'string' ? new Date(data['uploaded']) : data['uploaded']) : undefined,
 		metadata: data['metadata']
 	};
 }
@@ -154,13 +150,7 @@ export async function getBuildsByGameId(id: string): Promise<BuildOmitGameArtifa
 	return res.rows.map((b) => parseDatabasePartialBuild(b));
 }
 
-export async function createBuild(
-	id: string,
-	gameId: string,
-	authorId: string,
-	authorIp: string,
-	description: string | null
-): Promise<BuildOmitGameArtifacts> {
+export async function createBuild(id: string, gameId: string, authorId: string, authorIp: string, description: string | null): Promise<BuildOmitGameArtifacts> {
 	const res = await pool.query({
 		text: `WITH build AS 
 					(INSERT INTO builds (id, game_id, author_id, author_ip, description) VALUES($1, $2, $3, $4, $5) RETURNING *) 
@@ -183,14 +173,7 @@ export async function createBuild(
 	return parseDatabasePartialBuild(res.rows[0]);
 }
 
-export async function createArtifact(
-	buildId: string,
-	uuid: string,
-	name: string,
-	type: string,
-	key: string,
-	metadata: any | null
-): Promise<Artifact> {
+export async function createArtifact(buildId: string, uuid: string, name: string, type: string, key: string, metadata: any | null): Promise<Artifact> {
 	const res = await pool.query({
 		text: `INSERT INTO artifacts (uuid, name, type, key, metadata) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
 		values: [uuid, name, type, key, metadata]

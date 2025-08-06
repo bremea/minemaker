@@ -9,7 +9,7 @@
 	}
 
 	$effect(() => {
-		active = href ? $page.url.pathname.endsWith(href) : false; 
+		active = href ? $page.url.pathname.endsWith(href) : false;
 	});
 
 	let {

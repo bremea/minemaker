@@ -1,14 +1,6 @@
 import { ElysiaApp } from '$src/app';
 import { t } from 'elysia';
-import {
-	checkAccountPassword,
-	checkIpTrusted,
-	createSession,
-	getUserByAccountEmail,
-	InternalApiError,
-	updateTrustedIpLastLogin,
-	UserSchema
-} from '@minemaker/db';
+import { checkAccountPassword, checkIpTrusted, createSession, getUserByAccountEmail, InternalApiError, updateTrustedIpLastLogin, UserSchema } from '@minemaker/db';
 import { TokenSchema } from '$src/lib/types';
 
 export default (app: ElysiaApp) =>

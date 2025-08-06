@@ -62,7 +62,7 @@
 						<tr class="group relative h-12 border-b-2 border-gray-600/25">
 							<td class="h-12">
 								<div
-									class="absolute left-0 top-2 h-8 w-full animate-pulse rounded bg-gray-700/50"
+									class="absolute top-2 left-0 h-8 w-full animate-pulse rounded bg-gray-700/50"
 								></div>
 							</td>
 						</tr>
@@ -72,7 +72,7 @@
 						<tr class="group h-12 border-b-2 border-gray-600/25 transition-all hover:bg-gray-700">
 							<td class="flex h-12 items-center space-x-2 pl-4">
 								{#if build.live}
-									<span class="bg-mm-blue rounded-lg p-1 px-2 text-sm font-bold text-black">
+									<span class="rounded-lg bg-mm-blue p-1 px-2 text-sm font-bold text-black">
 										LIVE
 									</span>
 								{/if}
@@ -82,7 +82,7 @@
 								{#if build.description}
 									{build.description}
 								{:else}
-									<span class="select-none text-gray-500">&mdash;</span>
+									<span class="text-gray-500 select-none">&mdash;</span>
 								{/if}
 							</td>
 							<td>
@@ -97,17 +97,17 @@
 								</div>
 							</td>
 							<td>{getRelativeTime(getTimeFromSnowflake(build.id))}</td>
-							<td class="w-42 h-12">
+							<td class="h-12 w-42">
 								<a
-									class="group/link w-42 flex h-12 items-center justify-end transition-all"
+									class="group/link flex h-12 w-42 items-center justify-end transition-all"
 									href={`builds/${build.id}`}
 								>
-									<span class="group-hover/link:text-mm-blue text-nowrap italic text-gray-400">
+									<span class="text-nowrap text-gray-400 italic group-hover/link:text-mm-blue">
 										View details
 									</span>
 									<div class="relative mr-4 flex h-12 w-8 items-center justify-start">
 										<FluentChevronRight20Filled
-											class="group-hover:text-mm-blue absolute right-0 size-6 text-gray-400 transition-all group-hover/link:-right-2"
+											class="absolute right-0 size-6 text-gray-400 transition-all group-hover:text-mm-blue group-hover/link:-right-2"
 										/>
 									</div>
 								</a>
