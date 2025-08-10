@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { HTMLAnchorAttributes } from 'svelte/elements';
-	import FluentCircle20Filled from '~icons/fluent/circle-20-filled';
 	import { type Game } from '@minemaker/db';
+	import type { HTMLAnchorAttributes } from 'svelte/elements';
+	import { GameOnlineCount } from '../misc';
 	import GameThumbnail from './gameThumbnail.svelte';
 
 	export interface GameTileProps extends HTMLAnchorAttributes {
@@ -20,11 +20,5 @@
 >
 	<GameThumbnail {game} class="w-full rounded" />
 	<p class="mt-1 text-lg font-bold">{game.name}</p>
-	<p class="mt-1 flex items-center space-x-1.5 text-xs text-gray-400">
-		<FluentCircle20Filled class="size-2.5 text-green-400" />
-		<span>
-			<span class="text-white">{game.online}</span>
-			{game.online == 1 ? 'player' : 'players'} online
-		</span>
-	</p>
+	<GameOnlineCount online={game.online} />
 </a>

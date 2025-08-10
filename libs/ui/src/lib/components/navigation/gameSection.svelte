@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { HTMLAttributes } from 'svelte/elements';
 	import { type Game } from '@minemaker/db';
+	import type { HTMLAttributes } from 'svelte/elements';
+	import FluentErrorCircle20Filled from '~icons/fluent/error-circle-20-filled';
 	import { GameTile } from '.';
 	import { Loader } from '../misc';
-	import FluentErrorCircle20Filled from '~icons/fluent/error-circle-20-filled';
 
 	export interface GameSectionProps extends HTMLAttributes<HTMLDivElement> {
 		label?: string;
@@ -24,7 +24,7 @@
 	}: GameSectionProps = $props();
 </script>
 
-<section class={`space-y-4 ${className}`}>
+<section class={`w-full space-y-4 ${className}`}>
 	{#if label}
 		<h2 class="text-2xl font-bold">{label}</h2>
 	{:else}
@@ -38,7 +38,7 @@
 	{:else if error}
 		<div class="flex h-[200px] w-full flex-col items-center justify-center space-y-2">
 			<FluentErrorCircle20Filled class="size-10 text-gray-400" />
-			<p class="text-center text-sm text-gray-400 italic">
+			<p class="text-center text-sm italic text-gray-400">
 				{error}
 			</p>
 		</div>
@@ -50,7 +50,7 @@
 		</div>
 	{:else}
 		<div class="flex h-[200px] w-full items-center justify-center">
-			<p class="text-sm text-gray-400 italic select-none">Nothing here!</p>
+			<p class="select-none text-sm italic text-gray-400">Nothing here!</p>
 		</div>
 	{/if}
 </section>
