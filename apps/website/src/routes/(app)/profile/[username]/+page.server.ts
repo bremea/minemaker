@@ -12,8 +12,6 @@ export const load = async ({ parent, params }) => {
 			throw res.data;
 		}
 
-		console.log(res.data);
-
 		return {
 			profile: res.data as unknown as Profile & {
 				creations: Omit<Game, 'owner'>[];
