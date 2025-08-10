@@ -1,0 +1,5 @@
+name: lobby
+version: '1.0-SNAPSHOT'
+main: net.minemaker.lobby.Lobby
+api-version: '1.21'
+website: minemaker.net
