@@ -1,7 +1,8 @@
 import { Build, GameInstanceProperties, GameInstanceStatus } from '@minemaker/db';
 import { valkey } from '@minemaker/valkey';
 import Docker from 'dockerode';
-import { GameInstanceOptions, Region } from './types/instance';
+import { Socket } from './socket';
+import { GameInstanceOptions, Region } from './types/instances';
 import { calcInstanceScore } from './utils';
 
 export class Instance {
@@ -9,6 +10,7 @@ export class Instance {
 	public name: string;
 	public network: string;
 	public build: Build;
+	public socket: Socket;
 	public docker: Docker;
 	public properties: GameInstanceProperties;
 	public online: string[];
@@ -23,6 +25,7 @@ export class Instance {
 		this.build = options.build;
 		this.region = options.region;
 		this.docker = options.docker;
+		this.socket = new Socket(`/tmp/${this.name}.sock`);
 		this.online = [];
 		this.standby = [];
 
@@ -40,33 +43,39 @@ export class Instance {
 	}
 
 	public async init(player?: string) {
-		await this.updateValkeyProperties();
-		await this.updateMatchmakingScore();
-		if (player) await this.pushPlayerStandby(player);
+		try {
+			await this.updateValkeyProperties();
+			await this.updateMatchmakingScore();
+			if (player) await this.pushPlayerStandby(player);
 
-		this.container = await this.docker.createContainer({
-			name: this.name,
-			Image: `registry.digitalocean.com/minemaker/server:1.21.7`,
-			HostConfig: {
-				NetworkMode: this.network
-			},
-			NetworkingConfig: {
-				EndpointsConfig: {
-					[this.network]: {
-						IPAMConfig: {
-							IPv6Address: this.properties.ip
+			this.socket.start();
+
+			this.container = await this.docker.createContainer({
+				name: this.name,
+				Image: `registry.digitalocean.com/minemaker/server:1.21.7`,
+				HostConfig: {
+					NetworkMode: this.network
+				},
+				NetworkingConfig: {
+					EndpointsConfig: {
+						[this.network]: {
+							IPAMConfig: {
+								IPv6Address: this.properties.ip
+							}
 						}
 					}
 				}
-			}
-		});
-
-		this.container.start();
+			});
+			this.container.start();
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
 	}
 
 	private async pushPlayerStandby(player: string) {
 		this.standby.push(player);
-		await valkey.sadd(`instances:${this.name}:standby`, [player]);
+		await valkey.sadd(`instance:${this.name}:standby`, [player]);
 	}
 
 	private async updateMatchmakingScore() {
@@ -75,6 +84,6 @@ export class Instance {
 
 	private async updateValkeyProperties(properties?: GameInstanceProperties) {
 		if (properties) this.properties = properties;
-		await valkey.hset(`instances:${this.name}`, this.properties);
+		await valkey.hset(`instance:${this.name}`, { ...this.properties, game: this.properties.game.id });
 	}
 }

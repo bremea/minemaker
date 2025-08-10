@@ -2,13 +2,16 @@ import { GameInstanceType, getBuildById, getGameById } from '@minemaker/db';
 import { Handler, valkey } from '@minemaker/valkey';
 import Docker from 'dockerode';
 import { Instance } from './instance';
-import { CommanderOptions, GameInstanceOptions } from './types/instance';
+import { Proxy } from './proxy';
+import { CommanderOptions, GameInstanceOptions } from './types/instances';
 import { CreateInstanceRequest } from './types/requests';
-import { calcServerScore, generateInstanceId } from './utils';
+import { calcServerScore, generateInstanceId, getContainerIPv6 } from './utils';
 
 export default class Commander {
 	public id: number;
 	public name: string;
+	public baseIp: string;
+	public proxy: Proxy;
 	public docker: Docker;
 	public network: Docker.Network;
 	public region: { name: string; id: number };
@@ -19,15 +22,19 @@ export default class Commander {
 	constructor(options: CommanderOptions) {
 		this.id = options.id;
 		this.name = options.name;
+		this.baseIp = options.baseIp;
 		this.region = options.region;
 		this.maxInstances = options.maxInstances ?? 64;
 		this.instances = {};
 		this.docker = options.docker;
 		this.network = options.network;
+		this.proxy = new Proxy(this.docker, this.network);
 
 		this.handler = new Handler().handle(`request:${this.name}:instance-create`, this.createInstance.bind(this)).start();
 
 		this.updateServerScore();
+		this.proxy.init();
+
 		console.log('Commander started');
 	}
 
@@ -58,7 +65,7 @@ export default class Commander {
 			type: data.type,
 			region: this.region,
 			network: this.network.id,
-			ip: '',
+			ip: getContainerIPv6(this.baseIp, this.region.id, this.id, id),
 			max
 		};
 
