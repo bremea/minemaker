@@ -38,6 +38,10 @@
 	onMount(updateGames);
 </script>
 
+<svelte:head>
+	<title>Your Projects | Minemaker</title>
+</svelte:head>
+
 <StudioDownloadHeader />
 
 <GameSection {games} {loading} {error} hrefPrefix="/studio/projects">

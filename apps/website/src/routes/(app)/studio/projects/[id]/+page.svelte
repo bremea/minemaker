@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { GameThumbnail } from '@minemaker/ui';
+	import { GameOnlineCount, GameThumbnail } from '@minemaker/ui';
 	import type { PageProps } from './$types';
 
-	import FluentCircle20Filled from '~icons/fluent/circle-20-filled';
+	import Checklist from '$lib/components/studio/releaseSteps/checklist.svelte';
 	import ReadyToRelease from '$lib/components/studio/releaseSteps/readyToRelease.svelte';
 	import Released from '$lib/components/studio/releaseSteps/released.svelte';
-	import Checklist from '$lib/components/studio/releaseSteps/checklist.svelte';
 
 	let { data }: PageProps = $props();
 </script>
@@ -16,13 +15,7 @@
 			<h1 class="text-3xl font-bold">{data.project.name}</h1>
 		</div>
 
-		<p class="mt-1 flex items-center space-x-1.5 text-xs text-gray-400">
-			<FluentCircle20Filled class="size-2.5 text-green-400" />
-			<span>
-				<span class="text-white">{data.project.online}</span>
-				{data.project.online == 1 ? 'player' : 'players'} online
-			</span>
-		</p>
+		<GameOnlineCount online={data.project.online} />
 
 		<GameThumbnail game={data.project} class="max-w-[384px]" alt="Project icon" />
 	</div>
