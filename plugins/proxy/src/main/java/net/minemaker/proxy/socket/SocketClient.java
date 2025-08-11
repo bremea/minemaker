@@ -1,7 +1,13 @@
-package net.minemaker.proxy;
+package net.minemaker.proxy.socket;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minemaker.proxy.Proxy;
+import net.minemaker.proxy.socket.messages.SocketMessage;
+import net.minemaker.proxy.socket.messages.SocketMessageType;
+import org.newsclub.net.unix.AFUNIXServerSocket;
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
@@ -9,23 +15,26 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class SocketClient {
+    public final Gson gson = new Gson();
     private final File socketFile;
-    private final Gson gson = new Gson();
+    private final Proxy proxy;
     private final ExecutorService readExecutor = Executors.newSingleThreadExecutor();
     private AFUNIXSocket socket;
     private BufferedReader reader;
     private BufferedWriter writer;
     private Consumer<Void> onConnect;
-    private Consumer<Message> onMessage;
+    private BiConsumer<SocketMessageType, JsonObject> onMessage;
     private Consumer<Exception> onError;
     private Consumer<Void> onDisconnect;
 
     private volatile boolean running = false;
 
-    public SocketClient(File socketFile) {
+    public SocketClient(File socketFile, Proxy proxy) {
+        this.proxy = proxy;
         this.socketFile = socketFile;
     }
 
@@ -33,7 +42,7 @@ public class SocketClient {
         this.onConnect = onConnect;
     }
 
-    public void setOnMessage(Consumer<Message> onMessage) {
+    public void setOnMessage(BiConsumer<SocketMessageType, JsonObject> onMessage) {
         this.onMessage = onMessage;
     }
 
@@ -52,7 +61,7 @@ public class SocketClient {
             }
 
             socket = AFUNIXSocket.newInstance();
-            socket.connect(new AFUNIXSocketAddress(socketFile));
+            socket.connect(AFUNIXSocketAddress.of(socketFile));
 
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8));
@@ -62,7 +71,6 @@ public class SocketClient {
             if (onConnect != null) onConnect.accept(null);
 
             readExecutor.submit(this::readLoop);
-
         } catch (IOException e) {
             if (onError != null) onError.accept(e);
         }
@@ -70,13 +78,17 @@ public class SocketClient {
 
     private void readLoop() {
         try {
-            String line;
+            String line = null;
             while (running && (line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
 
                 try {
-                    Message msg = gson.fromJson(line, Message.class);
-                    if (onMessage != null) onMessage.accept(msg);
+                    JsonObject obj = gson.fromJson(line, JsonObject.class);
+                    String tString = obj.get("t").getAsString();
+                    SocketMessageType t = SocketMessageType.valueOf(tString);
+                    JsonElement d = obj.get("d");
+
+                    if (onMessage != null) onMessage.accept(t, d.getAsJsonObject());
                 } catch (JsonSyntaxException ex) {
                     if (onError != null) onError.accept(new IOException("failed to parse JSON line: " + line, ex));
                 }
@@ -90,14 +102,13 @@ public class SocketClient {
         }
     }
 
-    public void send(String type, Object data) throws IOException {
+    public void send(SocketMessage msg) throws IOException {
         if (socket == null || socket.isClosed()) {
             throw new IOException("socket is not connected");
         }
-        Message msg = new Message(type, data);
-        String json = gson.toJson(msg);
+
         synchronized (writer) {
-            writer.write(json);
+            writer.write(msg.getJsonString());
             writer.write('\n');
             writer.flush();
         }
@@ -117,16 +128,6 @@ public class SocketClient {
         try {
             if (socket != null && !socket.isClosed()) socket.close();
         } catch (IOException ignored) {
-        }
-    }
-
-    public static class Message {
-        public String t;
-        public Object d;
-
-        public Message(String t, Object d) {
-            this.t = t;
-            this.d = d;
         }
     }
 }

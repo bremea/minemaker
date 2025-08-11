@@ -1,4 +1,4 @@
-package net.minemaker.proxy.Events;
+package net.minemaker.proxy.events;
 
 public abstract class EventHandler {
     protected final EventHandlerRegister register;

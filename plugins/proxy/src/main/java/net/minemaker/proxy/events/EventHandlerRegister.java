@@ -1,4 +1,4 @@
-package net.minemaker.proxy.Events;
+package net.minemaker.proxy.events;
 
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.minemaker.proxy.Proxy;
@@ -13,7 +13,8 @@ public class EventHandlerRegister {
     }
 
     public void registerEvents() {
-        PlayerJoinHandler playerJoinHandler = new PlayerJoinHandler(this);
-        server.getEventManager().register(proxy, playerJoinHandler);
+        server.getEventManager().register(proxy, new PlayerJoinHandler(this));
+        server.getEventManager().register(proxy, new PlayerLeaveHandler(this));
+        server.getEventManager().register(proxy, new PostConnectHandler(this));
     }
 }
