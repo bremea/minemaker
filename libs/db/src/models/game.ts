@@ -28,13 +28,55 @@ export async function parseDatabaseGame(data: any): Promise<Game> {
 	};
 }
 
-export async function parseDatabaseGameExcludeOwner(data: any): Promise<Omit<Game, 'owner'>> {
-	let online = 0;
-	const instances = await valkey.smembers(`game:${data.id.toString()}:instances`);
+export async function getGameOnlineCount(id: string): Promise<number> {
+	const cachedValue = await valkey.get(`game:${id}:online`);
 
-	for (const instance of instances) {
-		online += await valkey.scard(`instances:${instance.toString()}:online`);
+	if (cachedValue) {
+		return parseInt(cachedValue);
 	}
+
+	let online = 0;
+
+	const keys = await valkey.keys(`matchmaking:${id}:*:*:instances`);
+	if (keys.length == 0) return 0;
+
+	const instancePipeline = valkey.pipeline();
+	for (const key of keys) {
+		instancePipeline.zrange(key, 0, -1);
+	}
+
+	const instances: string[] = [];
+	await instancePipeline.exec((err, res) => {
+		if (err || !res) throw err;
+
+		for (const [err, members] of res) {
+			if (err || !members) continue;
+			instances.push(...(members as string[]));
+		}
+	});
+	if (instances.length == 0) return 0;
+
+	const onlinePipeline = valkey.pipeline();
+	for (const instance of instances) {
+		onlinePipeline.scard(`instance:${instance}:online`);
+	}
+
+	await onlinePipeline.exec((err, res) => {
+		if (err || !res) throw err;
+
+		for (const [err, count] of res) {
+			if (err || typeof count != 'number') continue;
+			online += count;
+		}
+	});
+
+	await valkey.set(`game:${id}:online`, online, 'EX', 60);
+
+	return online;
+}
+
+export async function parseDatabaseGameExcludeOwner(data: any): Promise<Omit<Game, 'owner'>> {
+	const online = await getGameOnlineCount(data.id.toString());
 
 	return {
 		id: data.id.toString(),
