@@ -1,4 +1,4 @@
--- KEYS[1] = matchmaking:{gameid}:{region}:instances
+-- KEYS[1] = matchmaking:{build}:{region}:instances
 -- ARGV[1] = player UUID
 local player = ARGV[1]
 
@@ -7,13 +7,13 @@ local total = server.call("ZCARD", instances)
 
 for i = 0, total - 1 do
     local id = server.call("ZREVRANGE", instances, i, i)[1]
-    local propertiesKey = "instances:" .. id
+    local propertiesKey = "instance:" .. id
     local onlineKey = propertiesKey .. ":online"
     local standbyKey = propertiesKey .. ":standby"
 
     local status = server.call("HGET", propertiesKey, "status")
 
-    if status == "STOPPING" then
+    if not status or status == "STOPPING" then
         server.call("ZREM", instances, id)
     else
         local onlineCount = server.call("SCARD", onlineKey)
@@ -21,11 +21,6 @@ for i = 0, total - 1 do
         local maxPlayers = tonumber(server.call("HGET", propertiesKey, "max"))
 
         if onlineCount + standbyCount < maxPlayers then
-            local putInStandby = standby
-            if status == "STARTING" then
-                putInStandby = true
-            end
-
             server.call("SADD", standbyKey, player)
 
             if onlineCount + standbyCount + 1 >= maxPlayers then
@@ -33,6 +28,8 @@ for i = 0, total - 1 do
             end
 
             return id
+        else
+            server.call("ZREM", instances, id)
         end
     end
 end

@@ -1,9 +1,16 @@
-import { GameInstance, GameInstanceType, getInstanceById, MatchmakingRequest } from '@minemaker/db';
+import { GameInstance, GameInstanceType, getGameById, getInstanceById, MatchmakingRequest } from '@minemaker/db';
 import { request, valkey } from '@minemaker/valkey';
 import 'dotenv/config';
 
 export async function getGameInstance(data: MatchmakingRequest): Promise<GameInstance> {
-	const result = (await valkey.matchmaker(`matchmaking:${data.game}:${data.region}:instances`, data.player)) as string | null;
+	let build = data.build;
+	if (!build) {
+		const game = await getGameById(data.game);
+		if (!game.currentBuild) throw new Error(`No build available for game ${game.id}`);
+		build = game.currentBuild.id;
+	}
+
+	const result = (await valkey.matchmaker(`matchmaking:${data.game}:${build}:${data.region}:instances`, data.player)) as string | null;
 
 	if (result != null) {
 		return await getInstanceById(result);
