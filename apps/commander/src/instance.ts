@@ -36,7 +36,7 @@ export class Instance {
 			status: GameInstanceStatus.Starting,
 			started: Math.floor(Date.now() / 1000),
 			region: options.region.name,
-			maxPlayers: options.max,
+			max: options.max,
 			ip: options.ip,
 			owner: options.owner
 		};
@@ -52,7 +52,7 @@ export class Instance {
 
 			this.container = await this.docker.createContainer({
 				name: this.name,
-				Image: `registry.digitalocean.com/minemaker/server:1.21.7`,
+				Image: `registry.digitalocean.com/minemaker/server:1.21.8`,
 				HostConfig: {
 					NetworkMode: this.network
 				},
@@ -79,7 +79,7 @@ export class Instance {
 	}
 
 	private async updateMatchmakingScore() {
-		await valkey.zadd(`matchmaking:${this.build.game.id}:${this.properties.region}:instances`, calcInstanceScore(1, this.properties.maxPlayers), this.name);
+		await valkey.zadd(`matchmaking:${this.build.game.id}:${this.build.id}:${this.properties.region}:instances`, calcInstanceScore(1, this.properties.max), this.name);
 	}
 
 	private async updateValkeyProperties(properties?: GameInstanceProperties) {

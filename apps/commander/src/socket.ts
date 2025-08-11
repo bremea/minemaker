@@ -44,6 +44,7 @@ export class Socket extends EventEmitter {
 			});
 
 			conn.on('end', () => {
+				console.log('client disconnected!');
 				this.clients.delete(conn);
 				this.emit('disconnect', conn);
 			});
@@ -66,7 +67,6 @@ export class Socket extends EventEmitter {
 		if (target) {
 			target.write(serialized);
 		} else {
-			// Broadcast to all clients
 			for (const client of this.clients) {
 				client.write(serialized);
 			}

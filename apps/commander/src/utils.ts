@@ -17,7 +17,8 @@ export function getServerGateway(base: string, region: number, id: number): stri
 }
 
 export function getContainerIPv6(base: string, region: number, server: number, id: number): string {
-	return `${base}:${region.toString(16)}:${server.toString(16)}:${id.toString(16)}::`;
+	const segment = ((region << 8) | server).toString(16);
+	return `${base}:${segment}:${id}::`;
 }
 
 export function generateServerId(region: number, id: number): string {

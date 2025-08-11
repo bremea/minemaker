@@ -54,7 +54,7 @@ export default class Commander {
 		if (!game.currentBuild) throw new Error('No current build?');
 		const build = await getBuildById(game.currentBuild.id);
 
-		const id = 1;
+		const id = 640;
 		const name = generateInstanceId(this.name, id);
 		const max = 25;
 
