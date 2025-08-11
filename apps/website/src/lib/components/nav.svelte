@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { Input, Link, LinkButton, NavLink } from '@minemaker/ui';
-	import { type User } from '@minemaker/db';
 	import { page } from '$app/state';
+	import { type User } from '@minemaker/db';
+	import { Input, Link, LinkButton, NavLink } from '@minemaker/ui';
 	import GemDisplay from './gemDisplay.svelte';
 
-	import FluentTextAlignJustify20Filled from '~icons/fluent/text-align-justify-20-filled';
+	import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled';
+	import FluentBuildingShop20Filled from '~icons/fluent/building-shop-20-filled';
+	import FluentChat20Filled from '~icons/fluent/chat-20-filled';
 	import FluentDismiss20Filled from '~icons/fluent/dismiss-20-filled';
 	import FluentHome20Filled from '~icons/fluent/home-20-filled';
 	import FluentPaintBrush20Filled from '~icons/fluent/paint-brush-20-filled';
-	import FluentSettings20Filled from '~icons/fluent/settings-20-filled';
-	import FluentSearch20Filled from '~icons/fluent/search-20-filled';
-	import FluentArrowExit20Filled from '~icons/fluent/arrow-exit-20-filled';
-	import FluentChat20Filled from '~icons/fluent/chat-20-filled';
 	import FluentPeople20Filled from '~icons/fluent/people-20-filled';
-	import FluentBuildingShop20Filled from '~icons/fluent/building-shop-20-filled';
+	import FluentSearch20Filled from '~icons/fluent/search-20-filled';
+	import FluentSettings20Filled from '~icons/fluent/settings-20-filled';
+	import FluentTextAlignJustify20Filled from '~icons/fluent/text-align-justify-20-filled';
 
 	let { user }: { user: User } = $props();
 
@@ -46,13 +46,13 @@
 		class="absolute left-12 flex transition-all hover:scale-105 focus:scale-105 active:scale-95"
 	>
 		<img src="/mmlogo.png" alt="Minemaker Logo" class="h-10" />
-		<span class="text-xs text-mm-blue">beta</span>
+		<span class="text-mm-blue text-xs">beta</span>
 	</a>
 
-	<div class="pointer-events-none flex h-10 w-full flex-1 items-center justify-center pl-62">
+	<div class="pl-62 pointer-events-none flex h-10 w-full flex-1 items-center justify-center">
 		<div class="pointer-events-auto flex h-full w-full items-center justify-center space-x-2">
 			<Input
-				class="h-full! w-64! border-gray-800 bg-gray-800! text-white outline-gray-800 hover:bg-gray-700"
+				class="h-full! w-64! bg-gray-800! border-gray-800 text-white outline-gray-800 hover:bg-gray-700"
 				componentSize="sm"
 				stretchHeight={true}
 				placeholder="Search..."
@@ -94,7 +94,7 @@
 			</a>
 			<LinkButton color="darkgray" size="md" href="/link">Link</LinkButton>
 		{:else}
-			<Link href="/login" class="text-white no-underline! hover:underline!">Login</Link>
+			<Link href="/login" class="no-underline! hover:underline! text-white">Login</Link>
 			<LinkButton color="darkgray" size="md" href="/signup">Sign Up</LinkButton>
 		{/if}
 		{#if !sideNavOpen}
@@ -134,7 +134,7 @@
 		</NavLink>
 
 		{#if user.player}
-			<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">CONNECT</span>
+			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CONNECT</span>
 			<NavLink href="/friends">
 				<FluentPeople20Filled class="h-6 w-6" />
 				<span>Friends</span>
@@ -145,7 +145,7 @@
 			</NavLink>
 		{/if}
 
-		<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">CREATE</span>
+		<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">CREATE</span>
 		<NavLink href="/studio/projects">
 			<FluentPaintBrush20Filled class="h-6 w-6" />
 			<span>Studio</span>
@@ -156,7 +156,7 @@
 		</NavLink>
 
 		{#if user.account || user.player}
-			<span class="mt-4 mb-2 w-full px-2 text-left text-sm text-gray-400 select-none">ACCOUNT</span>
+			<span class="mb-2 mt-4 w-full select-none px-2 text-left text-sm text-gray-400">ACCOUNT</span>
 		{/if}
 		{#if user.player}
 			<NavLink href="/profile">
