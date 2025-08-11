@@ -1,8 +1,8 @@
-import { t } from 'elysia';
-import { getInstanceById } from './instances';
-import { GameSchema } from './game';
-import { GameInstanceType } from '../types';
 import { valkey } from '@minemaker/valkey';
+import { t } from 'elysia';
+import { GameInstanceType } from '../types';
+import { GameSchema } from './game';
+import { getInstanceById } from './instances';
 
 export const PresenceSchema = t.Object({
 	game: GameSchema,
@@ -32,7 +32,15 @@ export async function getPlayerPresence(uuid: string): Promise<Presence | undefi
 			region: instance.properties.region,
 			type: instance.properties.type,
 			online: instance.online.length + instance.standby.length,
-			max: instance.properties.maxPlayers
+			max: instance.properties.max
 		}
 	};
+}
+
+export async function updatePlayerPresence(uuid: string, instance?: string | null): Promise<void> {
+	if (instance) {
+		await valkey.set(`presence:${uuid}:instance`, instance);
+	} else {
+		await valkey.del(`presence:${uuid}:instance`);
+	}
 }
