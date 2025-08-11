@@ -1,5 +1,5 @@
 import Redis, { Callback, Result } from 'ioredis';
-import { getMatchmakerScript } from './scripts';
+import { getMatchmakerScript, getTransferScript } from './scripts';
 
 export const valkey = new Redis({
 	host: process.env.VALKEY_HOST ?? '127.0.0.1',
@@ -8,6 +8,10 @@ export const valkey = new Redis({
 		matchmaker: {
 			lua: await getMatchmakerScript(),
 			numberOfKeys: 1
+		},
+		transfer: {
+			lua: await getTransferScript(),
+			numberOfKeys: 2
 		}
 	}
 });
@@ -20,5 +24,6 @@ export const subscriber = new Redis({
 declare module 'ioredis' {
 	interface RedisCommander<Context> {
 		matchmaker(instancesKey: string, player: string, callback?: Callback<string>): Result<string, Context>;
+		transfer(from: string, to: string, value: string, callback?: Callback<string>): Result<string, Context>;
 	}
 }
