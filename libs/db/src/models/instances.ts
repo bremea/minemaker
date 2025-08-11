@@ -10,7 +10,7 @@ export const GameInstancePropertiesSchema = t.Object({
 	type: t.Enum(GameInstanceType),
 	status: t.Enum(GameInstanceStatus),
 	started: t.Number(),
-	maxPlayers: t.Number(),
+	max: t.Number(),
 	region: t.String(),
 	ip: t.String(),
 	owner: t.Optional(t.String())
@@ -33,7 +33,7 @@ export async function parseGameInstanceProperties(properties: Record<string, str
 		type: properties['type'] as GameInstanceType,
 		status: properties['status'] as GameInstanceStatus,
 		started: parseInt(properties['started']),
-		maxPlayers: parseInt(properties['max']),
+		max: parseInt(properties['max']),
 		region: properties['region'],
 		ip: properties['ip']
 	};
@@ -46,12 +46,20 @@ export async function getInstanceById(id: string): Promise<GameInstance> {
 
 	const online: Player[] = [];
 	for (const player of onlinePlayers) {
-		online.push(await getPlayerByUUID(player.toString()));
+		try {
+			online.push(await getPlayerByUUID(player.toString()));
+		} catch {
+			continue;
+		}
 	}
 
 	const standby: Player[] = [];
 	for (const player of standbyPlayers) {
-		standby.push(await getPlayerByUUID(player.toString()));
+		try {
+			standby.push(await getPlayerByUUID(player.toString()));
+		} catch {
+			continue;
+		}
 	}
 
 	return { id, online, standby, properties: await parseGameInstanceProperties(properties) };
